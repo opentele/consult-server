@@ -3,6 +3,7 @@ package org.opentele.consult.domain.security;
 import com.sun.istack.NotNull;
 import org.opentele.consult.domain.Organisation;
 import org.opentele.consult.domain.framework.AbstractEntity;
+import org.opentele.consult.domain.framework.OrganisationalEntity;
 import org.springframework.data.annotation.Transient;
 
 import javax.persistence.*;
@@ -13,7 +14,7 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "users")
-public class User extends AbstractEntity {
+public class User extends OrganisationalEntity {
     @Column(name = "email")
     private String email;
 
@@ -34,11 +35,6 @@ public class User extends AbstractEntity {
     @ManyToMany
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
-
-    @ManyToOne(targetEntity = Organisation.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "organisation_id")
-    @NotNull
-    private Organisation organisation;
 
     public String getPassword() {
         return password;
@@ -90,10 +86,6 @@ public class User extends AbstractEntity {
         return phone;
     }
 
-    public Organisation getOrganisation() {
-        return organisation;
-    }
-
     public void setPhone(String phone) {
         this.phone = phone;
     }
@@ -104,9 +96,5 @@ public class User extends AbstractEntity {
 
     public void setUserType(UserType userType) {
         this.userType = userType;
-    }
-
-    public void setOrganisation(Organisation organisation) {
-        this.organisation = organisation;
     }
 }
