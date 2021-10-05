@@ -18,6 +18,7 @@ postgres_user := $(shell id -un)
 define _build_db
 	-psql -h localhost -U $(SU) -d postgres -c "create user $(ADMIN_USER) with password 'password' createrole";
 	-psql -h localhost -U $(SU) -d postgres -c 'create database $1 with owner $(ADMIN_USER)';
+	-psql -h localhost -U $(SU) -d $1 -c 'create extension if not exists "uuid-ossp"';
 endef
 
 define _drop_db
