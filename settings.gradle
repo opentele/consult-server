@@ -1,0 +1,3 @@
+rootProject.name = 'consult-server'
+include 'core'
+include 'server'

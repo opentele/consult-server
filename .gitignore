@@ -1,0 +1,8 @@
+.idea
+**/.DS_Store
+build
+.gradle
+out
+consult-server.iml
+logs
+dump.sql
