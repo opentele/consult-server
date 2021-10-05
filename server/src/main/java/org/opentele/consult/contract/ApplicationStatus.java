@@ -22,4 +22,16 @@ public class ApplicationStatus {
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
     }
+
+    public static ApplicationStatus createSuccess(String message) {
+        ApplicationStatus applicationStatus = new ApplicationStatus();
+        applicationStatus.setMessage(message);
+        return applicationStatus;
+    }
+
+    public static ApplicationStatus createFailure(String message) {
+        ApplicationStatus applicationStatus = new ApplicationStatus();
+        applicationStatus.setErrorMessage(message);
+        return applicationStatus;
+    }
 }

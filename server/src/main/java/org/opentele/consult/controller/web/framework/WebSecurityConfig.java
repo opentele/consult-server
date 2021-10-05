@@ -34,7 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private DataSource dataSource;
 
     private static final String usersQuery = "select email, password, true as active from users where email=?";
-    private static final String privilegesQuery = "select u.email, 'ROLE_USER' from users u where u.email=?";
+    private static final String privilegesQuery = "select u.email, 'ROLE_' || u.user_type from users u where u.email=?";
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth)

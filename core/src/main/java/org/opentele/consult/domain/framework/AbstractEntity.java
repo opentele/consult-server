@@ -3,7 +3,6 @@ package org.opentele.consult.domain.framework;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.AbstractPersistable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -19,7 +18,7 @@ public abstract class AbstractEntity {
     private UUID uuid;
 
     @Column(name = "inactive")
-    private Boolean inactive;
+    private boolean inactive;
 
     @CreatedDate
     @Column(name = "created_date", updatable = false, nullable = false)

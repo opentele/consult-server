@@ -1,11 +1,14 @@
 package org.opentele.consult.contract;
 
-public class OrganisationCreateRequest {
+import org.opentele.consult.domain.security.UserType;
+
+public class UserCreateRequest {
     private String name;
-    private String userName;
     private String email;
     private String phone;
     private String password;
+    private UserType userType;
+    private int organisationId;
 
     public String getName() {
         return name;
@@ -39,11 +42,19 @@ public class OrganisationCreateRequest {
         this.password = password;
     }
 
-    public String getUserName() {
-        return userName;
+    public int getOrganisationId() {
+        return organisationId;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setOrganisationId(int organisationId) {
+        this.organisationId = organisationId;
+    }
+
+    public UserType getUserType() {
+        return userType;
+    }
+
+    public void setUserType(UserType userType) {
+        this.userType = userType;
     }
 }

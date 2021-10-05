@@ -4,6 +4,7 @@ create table users
     email              varchar(255)                         not null unique,
     name               varchar(255)                         not null,
     password           varchar(255)                         not null,
+    user_type          varchar(100)                         not null,
     inactive           boolean   default false              not null,
     uuid               uuid      default uuid_generate_v4() not null unique,
     created_date       timestamp default (now()):: timestamp without time zone not null,
