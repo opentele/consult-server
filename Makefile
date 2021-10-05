@@ -10,8 +10,9 @@ help:
 	done
 
 SU:=$(shell id -un)
-DB=bahmni_avni
-ADMIN_USER=bahmni_avni_admin
+DB=consult
+TEST_DB=consult_test
+ADMIN_USER=consult
 postgres_user := $(shell id -un)
 
 define _build_db
@@ -25,13 +26,9 @@ define _drop_db
 endef
 
 define _run_server
-	java -jar --enable-preview integrator/build/libs/integrator-0.0.1-SNAPSHOT.jar --app.cron.main="0/3 * * * * ?" --app.cron.full.error="0 1 * * * ?" --avni.api.url=https://staging.avniproject.org/ --avni.impl.username=test-user@bahmni_ashwini --avni.impl.password=password
+	java -jar --enable-preview server/build/libs/server-0.0.1-SNAPSHOT.jar --app.cron.main="0/3 * * * * ?" --app.cron.full.error="0 1 * * * ?"
 endef
 
-define _run_migrator
-    . ./conf/local-test.conf
-	java -jar --enable-preview metadata-migrator/build/libs/metadata-migrator-0.0.1-SNAPSHOT.jar run
-endef
 
 ######## DATABASE LOCAL
 # hashed password when password is password = $2a$10$RipvsoEJg4PtXOExTjg7Eu2WzHH1SBntIkuR.bzmZeU2TrbQoFtMW
@@ -39,20 +36,20 @@ endef
 rebuild-db: drop-db build-db
 
 build-db:
-	$(call _build_db,bahmni_avni)
+	$(call _build_db,$(DB))
 	./gradlew migrateDb
 
 drop-db:
-	$(call _drop_db,bahmni_avni)
+	$(call _drop_db,$(DB))
 
 create-test-db:
-	$(call _build_db,bahmni_avni_test)
+	$(call _build_db,$(TEST_DB))
 
 build-test-db: create-test-db
 	./gradlew migrateTestDb
 
 drop-test-db:
-	$(call _drop_db,bahmni_avni_test)
+	$(call _drop_db,$(TEST_DB))
 
 rebuild-test-db: drop-test-db build-test-db
 
@@ -72,25 +69,19 @@ run-server: build-db build-server
 	$(call _run_server)
 
 run-server-without-background: build-server
-	java -jar --enable-preview integrator/build/libs/integrator-0.0.1-SNAPSHOT.jar --app.cron.main="0 0 6 6 9 ? 2035" --avni.api.url=https://example.com/ --avni.impl.username=foo --avni.impl.password=bar
-
-run-migrator: build-server
-	$(call _run_migrator)
+	java -jar --enable-preview server/build/libs/server-0.0.1-SNAPSHOT.jar --app.cron.main="0 0 6 6 9 ? 2035"
 
 test-server: drop-test-db build-test-db build-server
 	./gradlew unitTest
 
 setup-external-test-db: drop-test-db create-test-db
-	sudo -u ${postgres_user} psql bahmni_avni_test -f dump.sql
+	sudo -u ${postgres_user} psql $(DB) -f dump.sql
 
 test-server-external: drop-test-db setup-external-test-db
 	./gradlew clean build
 
-open-unit-test-results-integrator:
-	open integrator/build/reports/tests/unitTest/index.html
-
-open-unit-test-results-migrator:
-	open metadata-migrator/build/reports/tests/unitTest/index.html
+open-unit-test-results-server:
+	open server/build/reports/tests/unitTest/index.html
 #######
 
 
@@ -113,33 +104,7 @@ endif
 ####### Deployment
 deploy-to-vagrant-only:
 	echo vagrant | pbcopy
-	scp -P 2222 -i ~/.vagrant.d/insecure_private_key integrator/build/libs/integrator-0.0.1-SNAPSHOT.jar root@127.0.0.1:/root/source/abi-host/
+	scp -P 2222 -i ~/.vagrant.d/insecure_private_key server/build/libs/server-0.0.1-SNAPSHOT.jar root@127.0.0.1:/root
 
 deploy-to-vagrant: build-server deploy-to-vagrant-only
-
-deploy-all-to-ashwini-prod: deploy-integrator-to-ashwini-prod deploy-migrator-to-ashwini-prod
-
-deploy-integrator-to-ashwini-prod: build-server
-	scp integrator/build/libs/integrator-0.0.1-SNAPSHOT.jar dspace-auto:/tmp/
-	ssh dspace-auto "scp /tmp/integrator-0.0.1-SNAPSHOT.jar ashwini:/root/source/abi-host/"
-
-deploy-migrator-to-ashwini-prod: build-server
-	scp metadata-migrator/build/libs/metadata-migrator-0.0.1-SNAPSHOT.jar dspace-auto:/tmp/
-	ssh dspace-auto "scp /tmp/metadata-migrator-0.0.1-SNAPSHOT.jar ashwini:/root/source/abi-host/"
-#######
-
-# SERVICE MANAGEMENT
-restart-ashwini-service:
-	ssh dspace-auto "ssh ashwini \"systemctl restart abi.service\""
-
-tail-ashwini-service:
-	ssh dspace-auto "ssh ashwini \"tail -f /var/log/abi/integration-service.log\""
-
-####### DATABASE ENVIRONMENT
-download-ashwini-backup:
-	ssh dspace-auto "scp ashwini:/root/source/abi-host/backup/backup.sql /tmp/"
-	scp dspace-auto:/tmp/backup.sql /tmp/abi-backup.sql
-
-copy-backup-to-vagrant:
-	scp -P 2222 -i ~/.vagrant.d/insecure_private_key /tmp/abi-backup.sql root@127.0.0.1:/tmp/
 #######

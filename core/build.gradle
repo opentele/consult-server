@@ -18,13 +18,13 @@ jar {
 }
 
 task migrateTestDb(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
-    url = 'jdbc:postgresql://localhost:5432/consult_db_test'
+    url = 'jdbc:postgresql://localhost:5432/consult_test'
     user = 'consult'
     password = 'password'
 }
 
 task migrateDb(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
-    url = 'jdbc:postgresql://localhost:5432/consult_db'
+    url = 'jdbc:postgresql://localhost:5432/consult'
     user = 'consult'
     password = 'password'
 }
