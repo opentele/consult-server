@@ -1,6 +1,7 @@
 package org.opentele.consult.domain.consultation;
 
 import com.sun.istack.NotNull;
+import org.hibernate.annotations.FetchMode;
 import org.opentele.consult.domain.client.Client;
 import org.opentele.consult.domain.facility.AppointmentToken;
 import org.opentele.consult.domain.framework.OrganisationalEntity;
@@ -19,4 +20,9 @@ public class ClientToken extends OrganisationalEntity {
     @JoinColumn(name = "appointment_token_id")
     @NotNull
     private AppointmentToken appointmentToken;
+
+    @ManyToOne(targetEntity = ConsultationSession.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "consultation_session_id")
+    @NotNull
+    private ConsultationSession consultation;
 }
