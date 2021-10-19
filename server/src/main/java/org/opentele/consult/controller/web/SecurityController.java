@@ -32,23 +32,6 @@ public class SecurityController extends AbstractController {
         this.organisationRepository = organisationRepository;
     }
 
-    @RequestMapping(value = "/web/organisation", method = {RequestMethod.POST, RequestMethod.PUT})
-    @PreAuthorize("hasRole('Admin')")
-    @Transactional
-    public ResponseEntity<ApplicationStatus> createOrganisation(OrganisationCreateRequest request) {
-        Organisation organisation = organisationRepository.findByName(request.getName());
-        if (organisation != null) {
-            return createFailedResponse(String.format("Organisation with name %s already exists", organisation));
-        }
-
-        organisation = new Organisation();
-        organisation.setName(request.getName());
-        organisationRepository.save(organisation);
-
-        saveUser(organisation, request.getUserName(), request.getEmail(), request.getPhone(), UserType.OrgAdmin, request.getPassword());
-        return createSuccessResponse();
-    }
-
     private User saveUser(Organisation organisation, String userName, String email, String phone, UserType userType, String password) {
         User user = new User();
         user.setName(userName);
