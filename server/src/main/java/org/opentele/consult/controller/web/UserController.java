@@ -27,7 +27,6 @@ import java.util.Set;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/")
 public class UserController {
     private final UserService userService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -40,7 +39,7 @@ public class UserController {
         this.entityManager = entityManager;
     }
 
-    @RequestMapping(value = "users", method = {RequestMethod.PUT})
+    @RequestMapping(value = "/api/app/organisation", method = {RequestMethod.PUT})
     @Transactional
     @PreAuthorize("hasRole('Users_Write')")
     public ResponseEntity<String> save(@RequestBody OrganisationCreateRequest organisationCreateRequest) {

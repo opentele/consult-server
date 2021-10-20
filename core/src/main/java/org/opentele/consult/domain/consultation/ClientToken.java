@@ -24,5 +24,5 @@ public class ClientToken extends OrganisationalEntity {
     @ManyToOne(targetEntity = ConsultationSession.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "consultation_session_id")
     @NotNull
-    private ConsultationSession consultation;
+    private ConsultationSession consultationSession;
 }

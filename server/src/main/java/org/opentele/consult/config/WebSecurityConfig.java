@@ -50,7 +50,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry expressionInterceptUrlRegistry = http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/web").permitAll();
+                .antMatchers("/web").permitAll()
+                .antMatchers("/api/message").permitAll();
 
         handleLogin(expressionInterceptUrlRegistry);
     }

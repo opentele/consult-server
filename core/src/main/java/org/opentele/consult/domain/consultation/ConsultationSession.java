@@ -12,7 +12,7 @@ import java.util.Set;
 @Entity
 @Table(name = "consultation_session")
 public class ConsultationSession extends OrganisationalEntity {
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "clientTokens")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "consultationSession")
     private Set<ClientToken> clientTokens = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.EAGER)

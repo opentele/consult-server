@@ -1,7 +1,5 @@
 package org.opentele.consult.domain.security;
 
-import com.sun.istack.NotNull;
-import org.opentele.consult.domain.Organisation;
 import org.opentele.consult.domain.framework.AbstractEntity;
 import org.opentele.consult.domain.framework.OrganisationalEntity;
 import org.springframework.data.annotation.Transient;
