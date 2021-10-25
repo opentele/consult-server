@@ -41,7 +41,6 @@ public class UserController {
 
     @RequestMapping(value = "/api/app/organisation", method = {RequestMethod.PUT})
     @Transactional
-    @PreAuthorize("hasRole('Users_Write')")
     public ResponseEntity<String> save(@RequestBody OrganisationCreateRequest organisationCreateRequest) {
         Set<String> errors = userService.validateNewOrganisation(organisationCreateRequest.getName(), organisationCreateRequest.getEmail());
         if (errors.size() != 0)
