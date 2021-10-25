@@ -1,6 +1,7 @@
 package org.opentele.consult.controller.web;
 
 import org.opentele.consult.contract.OrganisationCreateRequest;
+import org.opentele.consult.contract.UserResponse;
 import org.opentele.consult.domain.Organisation;
 import org.opentele.consult.domain.security.User;
 import org.opentele.consult.domain.security.UserType;
@@ -61,10 +62,17 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "currentUser", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('User')")
-    public User loggedInUser(Principal principal) {
+    @RequestMapping(value = "/api/currentUser", method = RequestMethod.GET)
+    @PreAuthorize("hasAnyRole('User','OrgAdmin')")
+    public UserResponse loggedInUser(Principal principal) {
         String name = principal.getName();
-        return userService.findUserByEmail(name);
+        User user = userService.findUserByEmail(name);
+        UserResponse userResponse = new UserResponse();
+        userResponse.setUserType(user.getUserType().name());
+        userResponse.setPhone(user.getPhone());
+        userResponse.setEmail(user.getEmail());
+        userResponse.setOrganisationName(user.getOrganisation().getName());
+        userResponse.setName(user.getName());
+        return userResponse;
     }
 }

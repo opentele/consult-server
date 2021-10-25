@@ -95,4 +95,8 @@ public class User extends OrganisationalEntity {
     public void setUserType(UserType userType) {
         this.userType = userType;
     }
+
+    public UserType getUserType() {
+        return userType;
+    }
 }

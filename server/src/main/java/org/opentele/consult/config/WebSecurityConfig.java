@@ -51,7 +51,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry expressionInterceptUrlRegistry = http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/api/message").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/message", "/api/login").permitAll()
                 .antMatchers(HttpMethod.PUT, "/api/app/organisation").permitAll();
 
         handleLogin(expressionInterceptUrlRegistry);
@@ -59,7 +59,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private void handleLogin(ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry) throws Exception {
         registry.anyRequest().authenticated().and().csrf().disable()
-                .formLogin().loginPage("/web/login").successHandler((request, response, authentication) -> {
+                .formLogin().loginPage("/api/login").successHandler((request, response, authentication) -> {
             response.setStatus(HttpServletResponse.SC_OK);
             logger.info("Login Successful");
         }).failureHandler((request, response, exception) -> {
@@ -69,7 +69,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .and().logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/web/logout")).addLogoutHandler((request, response, authentication) -> {
+                .logoutRequestMatcher(new AntPathRequestMatcher("/api/logout")).addLogoutHandler((request, response, authentication) -> {
             request.getSession().invalidate();
         })
                 .and().exceptionHandling().authenticationEntryPoint(unauthenticatedRequestHandler());
