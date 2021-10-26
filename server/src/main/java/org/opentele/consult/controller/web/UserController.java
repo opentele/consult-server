@@ -2,6 +2,7 @@ package org.opentele.consult.controller.web;
 
 import org.opentele.consult.contract.OrganisationCreateRequest;
 import org.opentele.consult.contract.PasswordChangeRequest;
+import org.opentele.consult.contract.ResetPasswordRequest;
 import org.opentele.consult.contract.UserResponse;
 import org.opentele.consult.domain.Organisation;
 import org.opentele.consult.domain.security.PasswordResetToken;
@@ -75,8 +76,8 @@ public class UserController {
 
     @PostMapping("/api/user/resetPassword")
     public ResponseEntity<String> resetPassword(HttpServletRequest request,
-                                                @RequestParam("email") String userEmail) {
-        User user = userService.findUserByEmail(userEmail);
+                                                @RequestBody ResetPasswordRequest resetPasswordRequest) {
+        User user = userService.findUserByEmail(resetPasswordRequest.getEmail());
         if (user == null)
             return new ResponseEntity<>(Translator.toLocale(MessageCodes.NO_USER_WITH_ID), HttpStatus.BAD_REQUEST);
 
