@@ -1,12 +1,14 @@
 package org.opentele.consult.contract;
 
-public class OrganisationCreateRequest {
-    private int organisationId;
+public class OrganisationPutPostRequest {
     private String organisationName;
     private String name;
-    private int userId;
     private String email;
+    private String mobile;
     private String password;
+
+    private int organisationId;
+    private int userId;
 
     public String getName() {
         return name;
@@ -14,14 +16,6 @@ public class OrganisationCreateRequest {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getPassword() {
@@ -54,5 +48,21 @@ public class OrganisationCreateRequest {
 
     public void setOrganisationName(String organisationName) {
         this.organisationName = organisationName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 }

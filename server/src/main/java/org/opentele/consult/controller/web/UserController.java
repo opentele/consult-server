@@ -1,6 +1,6 @@
 package org.opentele.consult.controller.web;
 
-import org.opentele.consult.contract.OrganisationCreateRequest;
+import org.opentele.consult.contract.OrganisationPutPostRequest;
 import org.opentele.consult.contract.PasswordChangeRequest;
 import org.opentele.consult.contract.ResetPasswordRequest;
 import org.opentele.consult.contract.UserResponse;
@@ -40,20 +40,20 @@ public class UserController {
 
     @RequestMapping(value = "/api/app/organisation", method = {RequestMethod.PUT})
     @Transactional
-    public ResponseEntity<String> save(@RequestBody OrganisationCreateRequest organisationCreateRequest) {
-        Set<String> errors = userService.validateNewOrganisation(organisationCreateRequest.getName(), organisationCreateRequest.getEmail());
-        if (errors.size() != 0)
-            return new ResponseEntity<>(Translator.fromErrors(errors), HttpStatus.CONFLICT);
+    public ResponseEntity<String> save(@RequestBody OrganisationPutPostRequest request) {
+        String error = userService.validateNewOrganisation(request.getEmail(), request.getMobile());
+        if (error != null)
+            return new ResponseEntity<>(error, HttpStatus.CONFLICT);
 
         Organisation organisation = new Organisation();
-        organisation.setName(organisationCreateRequest.getOrganisationName());
-
+        organisation.setName(request.getOrganisationName());
 
         User user = new User();
         user.setUuid(UUID.randomUUID());
-        user.setPassword(bCryptPasswordEncoder.encode(organisationCreateRequest.getPassword()));
-        user.setEmail(organisationCreateRequest.getEmail());
-        user.setName(organisationCreateRequest.getName());
+        user.setPassword(bCryptPasswordEncoder.encode(request.getPassword()));
+        user.setEmail(request.getEmail());
+        user.setMobile(request.getMobile());
+        user.setName(request.getName());
         user.setUserType(UserType.OrgAdmin);
 
         userService.createNewOrganisation(user, organisation);
@@ -67,7 +67,7 @@ public class UserController {
         User user = userService.findUserByEmail(name);
         UserResponse userResponse = new UserResponse();
         userResponse.setUserType(user.getUserType().name());
-        userResponse.setPhone(user.getPhone());
+        userResponse.setPhone(user.getMobile());
         userResponse.setEmail(user.getEmail());
         userResponse.setOrganisationName(user.getOrganisation().getName());
         userResponse.setName(user.getName());
@@ -75,16 +75,16 @@ public class UserController {
     }
 
     @PostMapping("/api/user/resetPassword")
-    public ResponseEntity<String> resetPassword(HttpServletRequest request,
-                                                @RequestBody ResetPasswordRequest resetPasswordRequest) {
-        User user = userService.findUserByEmail(resetPasswordRequest.getEmail());
-        if (user == null)
-            return new ResponseEntity<>(Translator.toLocale(MessageCodes.NO_USER_WITH_ID), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<String> resetPassword(HttpServletRequest servletRequest,
+                                                @RequestBody ResetPasswordRequest request) {
+        String error = userService.validateResetPassword(request.getEmail(), request.getMobile());
+        if (error != null)
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
 
-        String token = UUID.randomUUID().toString();
-        userService.createPasswordResetTokenForUser(user, token);
+        User user = userService.getUser(request.getEmail(), request.getMobile());
+        PasswordResetToken tokenForUser = userService.createPasswordResetTokenForUser(user);
 
-        String url = request.getContextPath() + "/api/user/changePassword?token=" + token;
+        String url = servletRequest.getContextPath() + "/api/user/changePassword?token=" + tokenForUser.getToken();
         String message = Translator.toLocale(MessageCodes.RESET_PASSWORD_BODY);
         String subject = Translator.toLocale(MessageCodes.RESET_PASSWORD_SUBJECT);
         mailService.sendEmail(subject, message, user);

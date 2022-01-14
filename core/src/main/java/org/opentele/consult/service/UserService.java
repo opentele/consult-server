@@ -11,8 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -27,11 +26,17 @@ public class UserService {
         this.passwordResetTokenRepositoryRepository = passwordResetTokenRepositoryRepository;
     }
 
-    public Set<String> validateNewOrganisation(String name, String email) {
-        User user = userRepository.findByEmail(email);
-        Set<String> errors = new HashSet<>();
-        if (user != null) errors.add(MessageCodes.CREATE_OR_USER_EXISTS);
-        return errors;
+    public String validateNewOrganisation(String email, String mobile) {
+        User userByEmail = userRepository.getUserByEmail(email);
+        if (userByEmail != null) {
+            return MessageCodes.CREATE_ORG_EMAIL_USER_EXISTS;
+        }
+
+        User userByMobile = userRepository.getUserByMobile(mobile);
+        if (userByMobile != null) {
+            return MessageCodes.CREATE_ORG_MOBILE_USER_EXISTS;
+        }
+        return null;
     }
 
     public User findUserByEmail(String email) {
@@ -44,9 +49,11 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void createPasswordResetTokenForUser(User user, String token) {
+    public PasswordResetToken createPasswordResetTokenForUser(User user) {
+        String token = UUID.randomUUID().toString();
         PasswordResetToken resetToken = new PasswordResetToken(token, user);
         passwordResetTokenRepositoryRepository.save(resetToken);
+        return resetToken;
     }
 
     public PasswordResetToken.TokenStatus validateToken(String token) {
@@ -69,5 +76,18 @@ public class UserService {
         User user = passwordResetToken.getUser();
         user.setPassword(newPassword);
         userRepository.save(user);
+    }
+
+    public String validateResetPassword(String email, String mobile) {
+        if (userRepository.findByEmail(email) == null && userRepository.findByMobile(mobile) == null)
+            return MessageCodes.NO_USER_WITH_ID;
+        return null;
+    }
+
+    public User getUser(String email, String mobile) {
+        User byEmail = userRepository.getUserByEmail(email);
+        if (byEmail != null)
+            return byEmail;
+        return userRepository.getUserByMobile(mobile);
     }
 }

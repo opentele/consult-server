@@ -1,7 +1,6 @@
 package org.opentele.consult.controller.web;
 
 import org.opentele.consult.contract.ApplicationStatus;
-import org.opentele.consult.contract.OrganisationCreateRequest;
 import org.opentele.consult.contract.UserCreateRequest;
 import org.opentele.consult.controller.web.framework.AbstractController;
 import org.opentele.consult.domain.Organisation;
@@ -36,15 +35,15 @@ public class SecurityController extends AbstractController {
         User user = new User();
         user.setName(userName);
         user.setEmail(email);
-        user.setPhone(phone);
+        user.setMobile(phone);
         user.setUserType(userType);
         user.setPassword(bCryptPasswordEncoder.encode(password));
         user.setOrganisation(organisation);
         return userRepository.save(user);
     }
 
-    @RequestMapping(value = "/web/user", method = {RequestMethod.POST, RequestMethod.PUT})
-    @PreAuthorize("hasAnyRole('OrgAdmin', 'Admin')")
+    @RequestMapping(value = "/api/app/user", method = {RequestMethod.POST, RequestMethod.PUT})
+    @PreAuthorize("hasAnyRole('OrgAdmin')")
     @Transactional
     public ResponseEntity<ApplicationStatus> createUser(UserCreateRequest request) {
         Organisation organisation = organisationRepository.findEntity(request.getOrganisationId());
