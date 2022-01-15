@@ -22,8 +22,4 @@ public class Translator {
         Locale locale = LocaleContextHolder.getLocale();
         return messageSource.getMessage(msgCode, null, locale);
     }
-
-    public static String fromErrors(Set<String> errors) {
-        return errors.stream().map(Translator::toLocale).collect(Collectors.joining(". "));
-    }
 }

@@ -13,15 +13,19 @@ import org.opentele.consult.message.MessageCodes;
 import org.opentele.consult.service.MailService;
 import org.opentele.consult.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.context.Context;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.security.Principal;
+import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 
@@ -85,9 +89,10 @@ public class UserController {
         PasswordResetToken tokenForUser = userService.createPasswordResetTokenForUser(user);
 
         String url = servletRequest.getContextPath() + "/api/user/changePassword?token=" + tokenForUser.getToken();
-        String message = Translator.toLocale(MessageCodes.RESET_PASSWORD_BODY);
         String subject = Translator.toLocale(MessageCodes.RESET_PASSWORD_SUBJECT);
-        mailService.sendEmail(subject, message, user);
+        Context context = new Context();
+        context.setVariable("RESET_URL", url);
+        mailService.sendEmail(subject, "reset-password", context, user);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

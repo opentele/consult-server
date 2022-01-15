@@ -81,6 +81,9 @@ setup-external-test-db: drop-test-db create-test-db
 test-server-external: drop-test-db setup-external-test-db
 	./gradlew clean build
 
+open-unit-test-results-core:
+	open core/build/reports/tests/unitTest/index.html
+
 open-unit-test-results-server:
 	open server/build/reports/tests/unitTest/index.html
 #######

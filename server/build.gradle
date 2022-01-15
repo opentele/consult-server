@@ -55,6 +55,8 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.security:spring-security-test'
+
+    compile('org.thymeleaf:thymeleaf:3.0.14.RELEASE')
 }
 
 sourceSets {
@@ -73,11 +75,9 @@ sourceSets {
 task unitTest( type: Test ) {
     useJUnitPlatform()
     exclude ("**/**ExternalTest.class")
-    exclude ("**/**FullRunTest.class")
 }
 
 test {
     useJUnitPlatform()
     include ("**/**ExternalTest.class")
-    exclude ("**/**FullRunTest.class")
 }

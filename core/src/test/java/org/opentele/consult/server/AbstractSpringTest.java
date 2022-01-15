@@ -6,8 +6,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @EnableAutoConfiguration
-@EntityScan(basePackages = {"org.bahmni_avni_integration.integration_data.domain"})
-@EnableJpaRepositories(basePackages = "org.bahmni_avni_integration.integration_data.repository")
-@ComponentScan(basePackages = "org.bahmni_avni_integration.integration_data")
+@EntityScan(basePackages = {"org.opentele.consult.domain"})
+@EnableJpaRepositories(basePackages = "org.opentele.consult.repository")
+@ComponentScan(basePackages = "org.opentele.consult")
 public abstract class AbstractSpringTest {
 }
