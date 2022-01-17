@@ -86,12 +86,9 @@ open-test-results-core:
 
 open-test-results-server:
 	open server/build/reports/tests/test/index.html
-#######
 
-
-####### Tunnels
-tunnel-server-debug-vagrant:
-	ssh -p 2222 -i ~/.vagrant.d/insecure_private_key vagrant@127.0.0.1 -L 6031:localhost:6031
+create-super-admin:
+	cat superadmin.sql | psql -Uconsult consult
 #######
 
 
@@ -102,13 +99,4 @@ ifndef version
 endif
 	git tag -a v$(version) -m "version $(version)"
 	git push origin --tags
-#######
-
-
-####### Deployment
-deploy-to-vagrant-only:
-	echo vagrant | pbcopy
-	scp -P 2222 -i ~/.vagrant.d/insecure_private_key server/build/libs/server-0.0.1-SNAPSHOT.jar root@127.0.0.1:/root
-
-deploy-to-vagrant: build-server deploy-to-vagrant-only
 #######

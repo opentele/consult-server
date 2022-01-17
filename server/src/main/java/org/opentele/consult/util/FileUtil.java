@@ -1,5 +1,6 @@
 package org.opentele.consult.util;
 
+import org.opentele.consult.config.ApplicationConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -24,16 +25,17 @@ import java.util.Locale;
 @Component
 public class FileUtil {
     private final TemplateEngine templateEngine;
-    @Value("${consult.email.location}")
-    private String emailLocation;
+
     private final ResourcePatternResolver resourceResolver;
+    private final ApplicationConfig applicationConfig;
 
     @Autowired
-    public FileUtil(ResourcePatternResolver resourceResolver) {
+    public FileUtil(ResourcePatternResolver resourceResolver, ApplicationConfig applicationConfig) {
         this.resourceResolver = resourceResolver;
+        this.applicationConfig = applicationConfig;
         templateEngine = new TemplateEngine();
         ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-        templateResolver.setPrefix(String.format("%s/", emailLocation));
+        templateResolver.setPrefix(String.format("%s/", applicationConfig.getEmailLocation()));
         templateResolver.setSuffix(".html");
         templateResolver.setTemplateMode(TemplateMode.HTML);
         templateEngine.setTemplateResolver(templateResolver);
@@ -48,7 +50,7 @@ public class FileUtil {
     }
 
     public void associateEmailAttachments(String emailTemplateName) throws MessagingException, IOException {
-        Resource[] resources = resourceResolver.getResources(String.format("classpath:%s/%s/images/*", emailLocation, emailTemplateName));
+        Resource[] resources = resourceResolver.getResources(String.format("classpath:%s/%s/images/*", applicationConfig.getEmailLocation(), emailTemplateName));
         for (Resource resource : resources) {
             MimeBodyPart attachmentPart = new MimeBodyPart();
             attachmentPart.setDataHandler(new DataHandler(resource.getURL()));

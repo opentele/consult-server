@@ -12,9 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 
@@ -49,5 +47,10 @@ public class SecurityController extends AbstractController {
         Organisation organisation = organisationRepository.findEntity(request.getOrganisationId());
         saveUser(organisation, toString(), request.getEmail(), request.getPhone(), request.getUserType(), request.getPassword());
         return createSuccessResponse();
+    }
+
+    @GetMapping("/api/test/passwordHash")
+    public String getPasswordHash(@RequestParam("password") String password) {
+        return bCryptPasswordEncoder.encode(password);
     }
 }

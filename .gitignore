@@ -6,3 +6,4 @@ out
 consult-server.iml
 logs
 dump.sql
+superadmin.sql
