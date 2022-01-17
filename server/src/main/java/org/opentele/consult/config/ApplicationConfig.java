@@ -8,8 +8,14 @@ public class ApplicationConfig {
     @Value("${consult.email.location}")
     private String emailLocation;
 
-    @Value("${email.sender}")
+    @Value("${consult.email.sender}")
     private String emailSender;
+
+    @Value("${consult.email.host}")
+    private String emailHost;
+
+    @Value("${consult.email.port}")
+    private int emailPort;
 
     public String getEmailLocation() {
         return emailLocation;
@@ -17,5 +23,13 @@ public class ApplicationConfig {
 
     public String getEmailSender() {
         return emailSender;
+    }
+
+    public String getEmailHost() {
+        return emailHost;
+    }
+
+    public int getEmailPort() {
+        return emailPort;
     }
 }

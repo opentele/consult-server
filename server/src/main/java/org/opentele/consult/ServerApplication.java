@@ -1,5 +1,6 @@
 package org.opentele.consult;
 
+import org.opentele.consult.config.ApplicationConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,20 +16,20 @@ import java.util.Properties;
 @EnableJpaAuditing
 public class ServerApplication {
     private Environment environment;
+    private ApplicationConfig applicationConfig;
 
     @Autowired
-	public ServerApplication(Environment environment) {
+	public ServerApplication(Environment environment, ApplicationConfig applicationConfig) {
         this.environment = environment;
+        this.applicationConfig = applicationConfig;
     }
 
     @Bean
     public JavaMailSender javaMailService() {
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
-//
-//        javaMailSender.setHost("myHost");
-//        javaMailSender.setPort(25);
-//
-//        javaMailSender.setJavaMailProperties(getMailProperties());
+        javaMailSender.setHost(applicationConfig.getEmailHost());
+        javaMailSender.setPort(applicationConfig.getEmailPort());
+        javaMailSender.setJavaMailProperties(getMailProperties());
 
         return javaMailSender;
     }

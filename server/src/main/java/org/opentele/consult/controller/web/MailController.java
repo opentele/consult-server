@@ -32,6 +32,6 @@ public class MailController {
         Context templateContext = new Context();
         templateContext.setVariables(context);
         mailService.sendEmail(subject, mailType, templateContext, to);
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

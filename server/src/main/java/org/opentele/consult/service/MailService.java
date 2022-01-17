@@ -10,8 +10,11 @@ import org.thymeleaf.context.Context;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.Multipart;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
@@ -38,9 +41,15 @@ public class MailService {
         msg.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
         msg.setFrom(applicationConfig.getEmailSender());
         msg.setSubject(subject);
-        msg.setContent(emailBody, "text/html");
-        fileUtil.associateEmailAttachments(emailTemplateName);
 
+        MimeBodyPart messageBodyPart = new MimeBodyPart();
+        messageBodyPart.setContent(emailBody, "text/html; charset=utf8");
+
+        Multipart multipart = new MimeMultipart();
+        multipart.addBodyPart(messageBodyPart);
+        msg.setContent(multipart);
+
+        fileUtil.associateEmailAttachments(emailTemplateName, multipart);
         javaMailSender.send(msg);
     }
 }

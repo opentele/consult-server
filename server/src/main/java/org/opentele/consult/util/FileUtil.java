@@ -14,6 +14,7 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 import javax.activation.DataHandler;
 import javax.mail.MessagingException;
+import javax.mail.Multipart;
 import javax.mail.Part;
 import javax.mail.internet.MimeBodyPart;
 import java.io.IOException;
@@ -49,7 +50,7 @@ public class FileUtil {
         return stringWriter.toString();
     }
 
-    public void associateEmailAttachments(String emailTemplateName) throws MessagingException, IOException {
+    public void associateEmailAttachments(String emailTemplateName, Multipart multipart) throws MessagingException, IOException {
         Resource[] resources = resourceResolver.getResources(String.format("classpath:%s/%s/images/*", applicationConfig.getEmailLocation(), emailTemplateName));
         for (Resource resource : resources) {
             MimeBodyPart attachmentPart = new MimeBodyPart();
@@ -58,6 +59,7 @@ public class FileUtil {
             String fileName = path.substring(path.lastIndexOf('/') + 1);
             attachmentPart.setDisposition(Part.ATTACHMENT);
             attachmentPart.setFileName(fileName);
+            multipart.addBodyPart(attachmentPart);
         }
     }
 }
