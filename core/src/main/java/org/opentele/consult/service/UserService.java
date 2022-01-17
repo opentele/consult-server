@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -50,6 +51,10 @@ public class UserService {
     }
 
     public PasswordResetToken createPasswordResetTokenForUser(User user) {
+        List<PasswordResetToken> previousTokens = passwordResetTokenRepositoryRepository.findAllByUserAndInactiveFalse(user);
+        previousTokens.forEach(passwordResetToken -> passwordResetToken.setInactive(true));
+        passwordResetTokenRepositoryRepository.saveAll(previousTokens);
+
         String token = UUID.randomUUID().toString();
         PasswordResetToken resetToken = new PasswordResetToken(token, user);
         passwordResetTokenRepositoryRepository.save(resetToken);

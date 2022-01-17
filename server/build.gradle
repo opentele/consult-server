@@ -59,25 +59,6 @@ dependencies {
     compile('org.thymeleaf:thymeleaf:3.0.14.RELEASE')
 }
 
-sourceSets {
-    main {
-        resources {
-            srcDir '../core/src/main/resources'
-        }
-    }
-    test {
-        resources {
-            srcDir '../core/src/main/resources'
-        }
-    }
-}
-
-task unitTest( type: Test ) {
-    useJUnitPlatform()
-    exclude ("**/**ExternalTest.class")
-}
-
 test {
     useJUnitPlatform()
-    include ("**/**ExternalTest.class")
 }

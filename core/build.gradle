@@ -56,6 +56,6 @@ dependencies {
     compile "log4j:log4j:1.2.16"
 }
 
-task unitTest( type: Test ) {
+test {
     useJUnitPlatform()
 }

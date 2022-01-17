@@ -72,8 +72,8 @@ run-server: build-db build-server
 run-server-without-background: build-server
 	java -jar --enable-preview server/build/libs/server-0.0.1-SNAPSHOT.jar --app.cron.main="0 0 6 6 9 ? 2035"
 
-test-server: drop-test-db build-test-db build-server
-	./gradlew unitTest
+test-server: drop-test-db build-test-db
+	./gradlew clean build
 
 setup-external-test-db: drop-test-db create-test-db
 	sudo -u ${postgres_user} psql $(DB) -f dump.sql
@@ -81,11 +81,11 @@ setup-external-test-db: drop-test-db create-test-db
 test-server-external: drop-test-db setup-external-test-db
 	./gradlew clean build
 
-open-unit-test-results-core:
-	open core/build/reports/tests/unitTest/index.html
+open-test-results-core:
+	open core/build/reports/tests/test/index.html
 
-open-unit-test-results-server:
-	open server/build/reports/tests/unitTest/index.html
+open-test-results-server:
+	open server/build/reports/tests/test/index.html
 #######
 
 

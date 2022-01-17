@@ -32,14 +32,16 @@ public class MailService {
     }
 
     public void sendEmail(String subject, String emailTemplateName, Context context, User user) throws MessagingException, IOException, URISyntaxException {
+        this.sendEmail(subject, emailTemplateName, context, user.getEmail());
+    }
+
+    public void sendEmail(String subject, String emailTemplateName, Context context, String to) throws MessagingException, IOException, URISyntaxException {
         String emailBody = fileUtil.getEmailBody(emailTemplateName, context);
         MimeMessage msg = javaMailSender.createMimeMessage();
-        msg.addRecipient(Message.RecipientType.TO, new InternetAddress(user.getEmail()));
+        msg.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
         msg.setFrom(emailSender);
         msg.setSubject(subject);
-        msg.setText(emailBody);
         msg.setContent(emailBody, "text/html");
-
         fileUtil.associateEmailAttachments(emailTemplateName);
 
         javaMailSender.send(msg);

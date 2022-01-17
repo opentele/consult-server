@@ -47,19 +47,15 @@ public class FileUtil {
         return stringWriter.toString();
     }
 
-    public void associateEmailAttachments(String emailTemplateName) throws MessagingException, URISyntaxException, IOException {
-        Resource[] resources = resourceResolver.getResources(String.format("classpath:%s/%s-attachments/*", emailLocation, emailTemplateName));
-        Arrays.stream(resources).forEach(resource -> {
-            try {
-                MimeBodyPart attachmentPart = new MimeBodyPart();
-                attachmentPart.setDataHandler(new DataHandler(resource.getURL()));
-                String path = resource.getURL().getPath();
-                String fileName = path.substring(path.lastIndexOf('/') + 1);
-                attachmentPart.setDisposition(Part.ATTACHMENT);
-                attachmentPart.setFileName(fileName);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+    public void associateEmailAttachments(String emailTemplateName) throws MessagingException, IOException {
+        Resource[] resources = resourceResolver.getResources(String.format("classpath:%s/%s/images/*", emailLocation, emailTemplateName));
+        for (Resource resource : resources) {
+            MimeBodyPart attachmentPart = new MimeBodyPart();
+            attachmentPart.setDataHandler(new DataHandler(resource.getURL()));
+            String path = resource.getURL().getPath();
+            String fileName = path.substring(path.lastIndexOf('/') + 1);
+            attachmentPart.setDisposition(Part.ATTACHMENT);
+            attachmentPart.setFileName(fileName);
+        }
     }
 }
