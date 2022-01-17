@@ -13,8 +13,6 @@ import org.opentele.consult.message.MessageCodes;
 import org.opentele.consult.service.MailService;
 import org.opentele.consult.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,11 +20,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.context.Context;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.security.Principal;
-import java.util.Locale;
-import java.util.Set;
 import java.util.UUID;
 
 @RestController
@@ -80,7 +79,7 @@ public class UserController {
 
     @PostMapping("/api/user/resetPassword")
     public ResponseEntity<String> resetPassword(HttpServletRequest servletRequest,
-                                                @RequestBody ResetPasswordRequest request) {
+                                                @RequestBody ResetPasswordRequest request) throws MessagingException, IOException, URISyntaxException {
         String error = userService.validateResetPassword(request.getEmail(), request.getMobile());
         if (error != null)
             return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);

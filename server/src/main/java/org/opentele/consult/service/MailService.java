@@ -9,6 +9,15 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+
 @Service
 public class MailService {
     private final JavaMailSender javaMailSender;
@@ -22,14 +31,17 @@ public class MailService {
         this.fileUtil = fileUtil;
     }
 
-    public void sendEmail(String subject, String emailTemplateName, Context context, User user) {
+    public void sendEmail(String subject, String emailTemplateName, Context context, User user) throws MessagingException, IOException, URISyntaxException {
         String emailBody = fileUtil.getEmailBody(emailTemplateName, context);
-
-        SimpleMailMessage msg = new SimpleMailMessage();
-        msg.setTo(user.getEmail());
+        MimeMessage msg = javaMailSender.createMimeMessage();
+        msg.addRecipient(Message.RecipientType.TO, new InternetAddress(user.getEmail()));
         msg.setFrom(emailSender);
         msg.setSubject(subject);
         msg.setText(emailBody);
+        msg.setContent(emailBody, "text/html");
+
+        fileUtil.associateEmailAttachments(emailTemplateName);
+
         javaMailSender.send(msg);
     }
 }
