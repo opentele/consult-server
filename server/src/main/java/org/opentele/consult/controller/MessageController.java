@@ -1,4 +1,4 @@
-package org.opentele.consult.controller.web;
+package org.opentele.consult.controller;
 
 import org.opentele.consult.framework.Translator;
 import org.springframework.web.bind.annotation.GetMapping;

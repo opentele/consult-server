@@ -1,5 +1,6 @@
-package org.opentele.consult.controller.web;
+package org.opentele.consult.controller;
 
+import org.opentele.consult.config.ApplicationConfig;
 import org.opentele.consult.contract.OrganisationPutPostRequest;
 import org.opentele.consult.contract.PasswordChangeRequest;
 import org.opentele.consult.contract.ResetPasswordRequest;
@@ -11,6 +12,7 @@ import org.opentele.consult.domain.security.UserType;
 import org.opentele.consult.framework.Translator;
 import org.opentele.consult.message.MessageCodes;
 import org.opentele.consult.service.MailService;
+import org.opentele.consult.service.TemplateContextFactory;
 import org.opentele.consult.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,12 +35,14 @@ public class UserController {
     private final UserService userService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final MailService mailService;
+    private TemplateContextFactory templateContextFactory;
 
     @Autowired
-    public UserController(UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder, MailService mailService) {
+    public UserController(UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder, MailService mailService, TemplateContextFactory templateContextFactory) {
         this.userService = userService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.mailService = mailService;
+        this.templateContextFactory = templateContextFactory;
     }
 
     @RequestMapping(value = "/api/app/organisation", method = {RequestMethod.PUT})
@@ -86,12 +90,10 @@ public class UserController {
 
         User user = userService.getUser(request.getEmail(), request.getMobile());
         PasswordResetToken tokenForUser = userService.createPasswordResetTokenForUser(user);
-
         String url = servletRequest.getContextPath() + "/api/user/changePassword?token=" + tokenForUser.getToken();
+        Context resetPasswordContext = templateContextFactory.createResetPasswordContext(url);
         String subject = Translator.toLocale(MessageCodes.RESET_PASSWORD_SUBJECT);
-        Context context = new Context();
-        context.setVariable("RESET_URL", url);
-        mailService.sendEmail(subject, "reset-password", context, user);
+        mailService.sendEmail(subject, "reset-password", resetPasswordContext, user);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

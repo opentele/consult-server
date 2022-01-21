@@ -1,4 +1,4 @@
-package org.opentele.consult.controller.web.framework;
+package org.opentele.consult.controller.framework;
 
 import org.opentele.consult.contract.ApplicationStatus;
 import org.springframework.http.HttpStatus;

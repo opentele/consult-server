@@ -1,4 +1,4 @@
-package org.opentele.consult.controller.web;
+package org.opentele.consult.controller;
 
 import org.opentele.consult.service.MailService;
 import org.springframework.beans.factory.annotation.Autowired;

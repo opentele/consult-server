@@ -1,4 +1,4 @@
-package org.opentele.consult.util;
+package org.opentele.consult.framework;
 
 import org.opentele.consult.config.ApplicationConfig;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,11 +42,11 @@ public class FileUtil {
         templateEngine.setTemplateResolver(templateResolver);
     }
 
-    public String getEmailBody(String emailTemplateName, Context context) {
+    public String processTemplate(String templateName, Context context) {
         Locale locale = LocaleContextHolder.getLocale();
         String language = locale.getLanguage();
         StringWriter stringWriter = new StringWriter();
-        templateEngine.process(String.format("%s_%s", emailTemplateName, language), context, stringWriter);
+        templateEngine.process(String.format("%s_%s", templateName, language), context, stringWriter);
         return stringWriter.toString();
     }
 

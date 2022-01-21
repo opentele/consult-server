@@ -1,8 +1,8 @@
-package org.opentele.consult.controller.web;
+package org.opentele.consult.controller;
 
 import org.opentele.consult.contract.ApplicationStatus;
 import org.opentele.consult.contract.UserCreateRequest;
-import org.opentele.consult.controller.web.framework.AbstractController;
+import org.opentele.consult.controller.framework.AbstractController;
 import org.opentele.consult.domain.Organisation;
 import org.opentele.consult.domain.security.User;
 import org.opentele.consult.domain.security.UserType;

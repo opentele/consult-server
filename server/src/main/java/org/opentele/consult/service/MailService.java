@@ -2,7 +2,7 @@ package org.opentele.consult.service;
 
 import org.opentele.consult.config.ApplicationConfig;
 import org.opentele.consult.domain.security.User;
-import org.opentele.consult.util.FileUtil;
+import org.opentele.consult.framework.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -36,7 +36,7 @@ public class MailService {
     }
 
     public void sendEmail(String subject, String emailTemplateName, Context context, String to) throws MessagingException, IOException, URISyntaxException {
-        String emailBody = fileUtil.getEmailBody(emailTemplateName, context);
+        String emailBody = fileUtil.processTemplate(emailTemplateName, context);
         MimeMessage msg = javaMailSender.createMimeMessage();
         msg.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
         msg.setFrom(applicationConfig.getEmailSender());

@@ -17,6 +17,9 @@ public class ApplicationConfig {
     @Value("${consult.email.port}")
     private int emailPort;
 
+    @Value("${server.origin}")
+    private String serverOrigin;
+
     public String getEmailLocation() {
         return emailLocation;
     }
@@ -31,5 +34,13 @@ public class ApplicationConfig {
 
     public int getEmailPort() {
         return emailPort;
+    }
+
+    public String getServerOrigin() {
+        return serverOrigin;
+    }
+
+    public String getImagesDirectory() {
+        return "static/images";
     }
 }
