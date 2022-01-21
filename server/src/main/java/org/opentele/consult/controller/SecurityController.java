@@ -48,9 +48,4 @@ public class SecurityController extends AbstractController {
         saveUser(organisation, toString(), request.getEmail(), request.getPhone(), request.getUserType(), request.getPassword());
         return createSuccessResponse();
     }
-
-    @GetMapping("/api/test/passwordHash")
-    public String getPasswordHash(@RequestParam("password") String password) {
-        return bCryptPasswordEncoder.encode(password);
-    }
 }

@@ -17,7 +17,7 @@ public class TemplateContextFactory {
     public Context createResetPasswordContext(String resetPasswordUrl) {
         Context context = new Context();
         context.setVariable("reset_url", resetPasswordUrl);
-        context.setVariable("image_base_path", String.format("%s/%s/%s/", applicationConfig.getServerOrigin(), applicationConfig.getImagesDirectory(), "/resetPassword"));
+        context.setVariable("image_base_path", String.format("%s/%s/%s/", applicationConfig.getServerOrigin(), applicationConfig.getImagesDirectory(), "resetPassword"));
         return context;
     }
 }
