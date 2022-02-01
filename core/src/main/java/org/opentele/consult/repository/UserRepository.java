@@ -4,6 +4,8 @@ import org.opentele.consult.domain.security.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface UserRepository extends CrudRepository<User, Integer> {
     User findByEmail(String email);
@@ -17,4 +19,6 @@ public interface UserRepository extends CrudRepository<User, Integer> {
         if (mobile == null) return null;
         return findByMobile(mobile);
     }
+
+    List<User> findAllByOrganisationName(String orgName);
 }

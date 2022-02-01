@@ -95,4 +95,10 @@ public class UserService {
             return byEmail;
         return userRepository.getUserByMobile(mobile);
     }
+
+    public void deleteOrganisation(String orgName) {
+        List<User> users = userRepository.findAllByOrganisationName(orgName);
+        userRepository.deleteAll(users);
+        organisationRepository.delete(organisationRepository.findByName(orgName));
+    }
 }
