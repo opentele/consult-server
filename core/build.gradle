@@ -54,6 +54,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     compile "log4j:log4j:1.2.16"
+    compile "org.dmfs:lib-recur:0.12.2"
 }
 
 test {

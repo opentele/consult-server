@@ -1,9 +1,10 @@
 package org.opentele.consult.domain.consultationRoom;
 
 import org.opentele.consult.domain.framework.OrganisationalEntity;
-import org.opentele.consult.domain.security.User;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,21 +14,17 @@ public class ConsultationRoom  extends OrganisationalEntity {
     @Column
     private String title;
 
-    @Column(name = "scheduled_start_time", nullable = true)
-    @Temporal(TemporalType.TIMESTAMP)
-    private java.util.Date scheduledStartTime;
+    @Column
+    private LocalDateTime scheduledStartAt;
 
-    @Column(name = "scheduled_end_time", nullable = true)
-    @Temporal(TemporalType.TIMESTAMP)
-    private java.util.Date scheduledEndTime;
+    @Column
+    private LocalDateTime scheduledEndAt;
 
-    @Column(name = "start_time", nullable = true)
-    @Temporal(TemporalType.TIMESTAMP)
-    private java.util.Date startTime;
+    @Column
+    private LocalTime startedAt;
 
-    @Column(name = "end_time", nullable = true)
-    @Temporal(TemporalType.TIMESTAMP)
-    private java.util.Date endTime;
+    @Column
+    private LocalTime endedAt;
 
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, mappedBy = "consultationRoom")
     private Set<ConsultationRoomUser> providers = new HashSet<>();
@@ -37,4 +34,31 @@ public class ConsultationRoom  extends OrganisationalEntity {
 
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, mappedBy = "consultationRoom")
     private Set<AppointmentToken> appointmentTokens = new HashSet<>();
+
+    @Column
+    private int totalSlots;
+
+    public LocalDateTime getScheduledStartAt() {
+        return scheduledStartAt;
+    }
+
+    public void setScheduledStartAt(LocalDateTime scheduledStartAt) {
+        this.scheduledStartAt = scheduledStartAt;
+    }
+
+    public LocalDateTime getScheduledEndAt() {
+        return scheduledEndAt;
+    }
+
+    public void setScheduledEndAt(LocalDateTime scheduledEndAt) {
+        this.scheduledEndAt = scheduledEndAt;
+    }
+
+    public LocalTime getStartedAt() {
+        return startedAt;
+    }
+
+    public LocalTime getEndedAt() {
+        return endedAt;
+    }
 }
