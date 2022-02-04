@@ -10,7 +10,7 @@ import java.util.Date;
 public class PasswordResetToken extends AbstractEntity {
     private static final int EXPIRATION = 3 * 24;
 
-    @Column
+    @Column(nullable = false)
     private String token;
 
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
@@ -18,7 +18,7 @@ public class PasswordResetToken extends AbstractEntity {
     private User user;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column
+    @Column(nullable = false)
     private Date expiryDate;
 
     protected PasswordResetToken() {

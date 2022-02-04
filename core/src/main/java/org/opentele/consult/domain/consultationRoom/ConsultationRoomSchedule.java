@@ -18,22 +18,25 @@ import java.util.Set;
 @Entity
 @Table(name = "consultation_room_schedule")
 public class ConsultationRoomSchedule extends OrganisationalEntity {
-    @Column
+    @Column(nullable = false)
     private String title;
 
-    @Column
+    @Column(nullable = false)
+    private LocalDate startDate;
+
+    @Column(nullable = false)
     private LocalTime startTime;
 
-    @Column
+    @Column(nullable = false)
     private LocalTime endTime;
 
-    @Column
+    @Column(nullable = false)
     private String recurrenceRule;
 
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, mappedBy = "consultationRoomSchedule")
     private Set<ConsultationRoomScheduleUser> providers = new HashSet<>();
 
-    @Column
+    @Column(nullable = false)
     private int totalSlots;
 
     public void setRecurrenceRule(String recurrenceRule) {
@@ -68,5 +71,41 @@ public class ConsultationRoomSchedule extends OrganisationalEntity {
 
     public void setEndTime(LocalTime endTime) {
         this.endTime = endTime;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setProviders(Set<ConsultationRoomScheduleUser> providers) {
+        this.providers = providers;
+    }
+
+    public String getRecurrenceRule() {
+        return recurrenceRule;
+    }
+
+    public Set<ConsultationRoomScheduleUser> getProviders() {
+        return providers;
+    }
+
+    public int getTotalSlots() {
+        return totalSlots;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public void setTotalSlots(int totalSlots) {
+        this.totalSlots = totalSlots;
     }
 }

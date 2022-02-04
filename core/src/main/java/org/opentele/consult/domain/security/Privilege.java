@@ -9,6 +9,6 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "privilege")
 public class Privilege extends AbstractEntity {
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 }

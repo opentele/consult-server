@@ -14,8 +14,8 @@ public class AppointmentToken extends OrganisationalEntity {
     @NotNull
     private ConsultationRoom consultationRoom;
 
-    @Column
-    private int order;
+    @Column(nullable = false)
+    private int queueNumber;
 
     @ManyToOne(targetEntity = Client.class, fetch = FetchType.LAZY)
     private Client client;

@@ -11,13 +11,13 @@ import java.util.Set;
 @Entity
 @Table(name = "consultation_room")
 public class ConsultationRoom  extends OrganisationalEntity {
-    @Column
+    @Column(nullable = false)
     private String title;
 
-    @Column
+    @Column(nullable = false)
     private LocalDateTime scheduledStartAt;
 
-    @Column
+    @Column(nullable = false)
     private LocalDateTime scheduledEndAt;
 
     @Column

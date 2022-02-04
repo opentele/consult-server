@@ -14,14 +14,14 @@ public class User extends OrganisationalEntity {
     @Column(name = "mobile")
     private String mobile;
 
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     @Transient
     private String password;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "user_type")
+    @Column(name = "user_type", nullable = false)
     @Enumerated(EnumType.STRING)
     private UserType userType;
 

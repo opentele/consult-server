@@ -16,4 +16,12 @@ public class ConsultationRoomScheduleUser extends OrganisationalEntity {
     @JoinColumn(name = "consultation_room_schedule_id")
     @NotNull
     private ConsultationRoomSchedule consultationRoomSchedule;
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setConsultationRoomSchedule(ConsultationRoomSchedule consultationRoomSchedule) {
+        this.consultationRoomSchedule = consultationRoomSchedule;
+    }
 }

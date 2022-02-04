@@ -14,7 +14,7 @@ public class Role extends AbstractEntity {
     public static final String USER = "USER";
     public static final String ADMIN = "ADMIN";
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
     @ManyToMany(cascade = CascadeType.ALL)

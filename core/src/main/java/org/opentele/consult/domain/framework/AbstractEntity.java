@@ -14,19 +14,19 @@ import java.util.UUID;
 public abstract class AbstractEntity {
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
-    @Column(name = "uuid", updatable = false, unique = true, nullable = false)
+    @Column(name = "uuid", updatable = false, unique = true, nullable = false, columnDefinition = "uuid default uuid_generate_v4()")
     private UUID uuid;
 
     @Column(name = "inactive")
     private boolean inactive;
 
     @CreatedDate
-    @Column(name = "created_date", updatable = false, nullable = false)
+    @Column(name = "created_date", updatable = false, nullable = false, columnDefinition = "timestamp default (now()):: timestamp without time zone")
     @Temporal(TemporalType.TIMESTAMP)
     private java.util.Date createdDate;
 
     @LastModifiedDate
-    @Column(name = "last_modified_date", nullable = false)
+    @Column(name = "last_modified_date", nullable = false, columnDefinition = "timestamp default (now()):: timestamp without time zone")
     @Temporal(TemporalType.TIMESTAMP)
     private java.util.Date lastModifiedDate;
 

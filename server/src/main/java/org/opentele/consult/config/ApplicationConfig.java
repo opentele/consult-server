@@ -20,6 +20,9 @@ public class ApplicationConfig {
     @Value("${server.origin}")
     private String serverOrigin;
 
+    @Value("${spring.flyway.enabled}")
+    private boolean flywayEnabled;
+
     public String getEmailLocation() {
         return emailLocation;
     }
@@ -42,5 +45,9 @@ public class ApplicationConfig {
 
     public String getImagesDirectory() {
         return "static/images";
+    }
+
+    public boolean isFlywayEnabled() {
+        return flywayEnabled;
     }
 }

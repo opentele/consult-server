@@ -10,6 +10,7 @@ import org.opentele.consult.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
@@ -100,5 +101,14 @@ public class UserService {
         List<User> users = userRepository.findAllByOrganisationName(orgName);
         userRepository.deleteAll(users);
         organisationRepository.delete(organisationRepository.findByName(orgName));
+    }
+
+    public User getUser(int userId) {
+        return userRepository.findById(userId).orElse(null);
+    }
+
+    public User getUser(Principal principal) {
+        String name = principal.getName();
+        return getUser(name, name);
     }
 }
