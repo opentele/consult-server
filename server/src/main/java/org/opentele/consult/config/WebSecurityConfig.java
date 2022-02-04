@@ -34,7 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private DataSource dataSource;
 
     private static final String usersQuery = "select * from (select concat(email,mobile) foo, password, true as active from users) x where x.foo = ?";
-    private static final String privilegesQuery = "select * from (select concat(email,mobile) foo, 'ROLE_' || u.user_type from users u) x where x.foo = ?";
+    private static final String privilegesQuery = "select * from (select concat(email,mobile) foo, 'ROLE_' || u.user_type from users u union select concat(email,mobile) foo, 'ROLE_User' from users u) x where x.foo = ?";
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth)

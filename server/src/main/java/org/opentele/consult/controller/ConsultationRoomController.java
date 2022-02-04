@@ -10,7 +10,6 @@ import org.opentele.consult.domain.consultationRoom.ConsultationRoomScheduleUser
 import org.opentele.consult.mapper.ConsultationRoomScheduleMapper;
 import org.opentele.consult.repository.ConsultationRoomRepository;
 import org.opentele.consult.repository.ConsultationRoomScheduleRepository;
-import org.opentele.consult.repository.framework.Repository;
 import org.opentele.consult.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -65,7 +64,7 @@ public class ConsultationRoomController {
     public List<ConsultationRoomScheduleResponse> getScheduledConsultations(Principal principal) {
         Organisation organisation = userService.getOrganisation(principal);
         List<ConsultationRoomSchedule> list = consultationRoomScheduleRepository.findAllByOrganisation(organisation);
-        return new ArrayList<>();
+        return list.stream().map(ConsultationRoomScheduleMapper::map).collect(Collectors.toList());
     }
 
     @PutMapping(value = "/api/consultationRoomSchedule")

@@ -21,6 +21,14 @@ public class ConsultationRoomScheduleUser extends OrganisationalEntity {
         this.user = user;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public ConsultationRoomSchedule getConsultationRoomSchedule() {
+        return consultationRoomSchedule;
+    }
+
     public void setConsultationRoomSchedule(ConsultationRoomSchedule consultationRoomSchedule) {
         this.consultationRoomSchedule = consultationRoomSchedule;
     }
