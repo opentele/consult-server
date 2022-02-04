@@ -58,6 +58,9 @@ rebuild-test-db: drop-test-db build-test-db
 
 drop-roles:
 	-psql -h localhost -U $(SU) -d postgres -c 'drop role $(ADMIN_USER)';
+
+delete-all-data:
+	psql -h localhost -U $(SU) -d $(DB) < core/src/main/resources/db/util/delete-all-data.sql
 #######
 
 ####### BUILD, TEST, LOCAL RUN
@@ -81,12 +84,6 @@ run-server-without-background: build-server
 test-schema-generation: generate-schema rebuild-db migrate-db
 
 test-server: drop-test-db build-test-db
-	./gradlew clean build
-
-setup-external-test-db: drop-test-db create-test-db
-	sudo -u ${postgres_user} psql $(DB) -f dump.sql
-
-test-server-external: drop-test-db setup-external-test-db
 	./gradlew clean build
 
 open-test-results-core:

@@ -57,6 +57,7 @@ dependencies {
     implementation 'org.springframework.security:spring-security-test'
 
     compile('org.thymeleaf:thymeleaf:3.0.14.RELEASE')
+    runtimeOnly('com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.1')
 }
 
 test {

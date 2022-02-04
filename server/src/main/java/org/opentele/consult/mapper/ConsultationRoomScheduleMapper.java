@@ -13,6 +13,8 @@ public class ConsultationRoomScheduleMapper {
         consultationRoomSchedule.setStartTime(request.getStartTime());
         consultationRoomSchedule.setEndTime(request.getEndTime());
         consultationRoomSchedule.setOrganisation(user.getOrganisation());
+        consultationRoomSchedule.setStartDate(request.getStartDate());
+        consultationRoomSchedule.setTotalSlots(request.getTotalSlots());
         return consultationRoomSchedule;
     }
 

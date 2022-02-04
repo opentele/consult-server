@@ -3,6 +3,7 @@ package org.opentele.consult.controller;
 import org.opentele.consult.contract.consultationRoom.ConsultationRoomResponse;
 import org.opentele.consult.contract.consultationRoom.ConsultationRoomScheduleRequest;
 import org.opentele.consult.contract.consultationRoom.ConsultationRoomScheduleResponse;
+import org.opentele.consult.domain.Organisation;
 import org.opentele.consult.domain.consultationRoom.ConsultationRoom;
 import org.opentele.consult.domain.consultationRoom.ConsultationRoomSchedule;
 import org.opentele.consult.domain.consultationRoom.ConsultationRoomScheduleUser;
@@ -61,8 +62,9 @@ public class ConsultationRoomController {
 
     @GetMapping(value = "/api/consultationRoomSchedule")
     @PreAuthorize("hasRole('User')")
-    public List<ConsultationRoomScheduleResponse> getScheduledConsultations() {
-        Iterable<ConsultationRoomSchedule> consultationRoomSchedules = consultationRoomScheduleRepository.findAll();
+    public List<ConsultationRoomScheduleResponse> getScheduledConsultations(Principal principal) {
+        Organisation organisation = userService.getOrganisation(principal);
+        List<ConsultationRoomSchedule> list = consultationRoomScheduleRepository.findAllByOrganisation(organisation);
         return new ArrayList<>();
     }
 

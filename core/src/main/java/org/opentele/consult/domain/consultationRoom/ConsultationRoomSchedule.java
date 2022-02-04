@@ -36,7 +36,7 @@ public class ConsultationRoomSchedule extends OrganisationalEntity {
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, mappedBy = "consultationRoomSchedule")
     private Set<ConsultationRoomScheduleUser> providers = new HashSet<>();
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "int4 check (total_slots > 0)")
     private int totalSlots;
 
     public void setRecurrenceRule(String recurrenceRule) {

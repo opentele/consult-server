@@ -1,5 +1,6 @@
 package org.opentele.consult.contract.consultationRoom;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -10,6 +11,7 @@ public class ConsultationRoomScheduleRequest {
     private String recurrenceRule;
     private LocalTime startTime;
     private LocalTime endTime;
+    private LocalDate startDate;
 
     public String getTitle() {
         return title;
@@ -57,5 +59,13 @@ public class ConsultationRoomScheduleRequest {
 
     public void setEndTime(LocalTime endTime) {
         this.endTime = endTime;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
     }
 }

@@ -111,4 +111,9 @@ public class UserService {
         String name = principal.getName();
         return getUser(name, name);
     }
+
+    public Organisation getOrganisation(Principal principal) {
+        User user = getUser(principal);
+        return user.getOrganisation();
+    }
 }
