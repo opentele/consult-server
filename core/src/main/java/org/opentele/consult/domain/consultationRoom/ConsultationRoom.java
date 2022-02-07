@@ -61,4 +61,52 @@ public class ConsultationRoom  extends OrganisationalEntity {
     public LocalTime getEndedAt() {
         return endedAt;
     }
+
+    public ConsultationRoomSchedule getSchedule() {
+        return consultationRoomSchedule;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setStartedAt(LocalTime startedAt) {
+        this.startedAt = startedAt;
+    }
+
+    public void setEndedAt(LocalTime endedAt) {
+        this.endedAt = endedAt;
+    }
+
+    public Set<ConsultationRoomUser> getProviders() {
+        return providers;
+    }
+
+    public void setProviders(Set<ConsultationRoomUser> providers) {
+        this.providers = providers;
+    }
+
+    public void setConsultationRoomSchedule(ConsultationRoomSchedule consultationRoomSchedule) {
+        this.consultationRoomSchedule = consultationRoomSchedule;
+    }
+
+    public Set<AppointmentToken> getAppointmentTokens() {
+        return appointmentTokens;
+    }
+
+    public void setAppointmentTokens(Set<AppointmentToken> appointmentTokens) {
+        this.appointmentTokens = appointmentTokens;
+    }
+
+    public int getTotalSlots() {
+        return totalSlots;
+    }
+
+    public void setTotalSlots(int totalSlots) {
+        this.totalSlots = totalSlots;
+    }
 }

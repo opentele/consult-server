@@ -16,4 +16,12 @@ public class ConsultationRoomUser extends OrganisationalEntity {
     @JoinColumn(name = "consultation_room_id")
     @NotNull
     private ConsultationRoom consultationRoom;
+
+    public User getUser() {
+        return user;
+    }
+
+    public ConsultationRoom getConsultationRoom() {
+        return consultationRoom;
+    }
 }

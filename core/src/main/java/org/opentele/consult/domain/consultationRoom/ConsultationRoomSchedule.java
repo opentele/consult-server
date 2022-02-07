@@ -10,6 +10,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -43,18 +44,24 @@ public class ConsultationRoomSchedule extends OrganisationalEntity {
         this.recurrenceRule = recurrenceRule;
     }
 
-    public List<ConsultationRoom> getConsultationRooms(int numberOfRooms, LocalDate fromDate) throws InvalidRecurrenceRuleException {
-        RecurrenceRule rule = new RecurrenceRule(recurrenceRule);
-        int max = numberOfRooms;
-        RecurrenceRuleIterator it = rule.iterator(new DateTime(fromDate.getYear(), fromDate.getMonthValue(), fromDate.getDayOfMonth()));
-        List<ConsultationRoom> consultationRooms = new ArrayList<>();
-        while (it.hasNext() && (!rule.isInfinite() || max-- > 0)) {
-            ConsultationRoom consultationRoom = new ConsultationRoom();
-            DateTime next = it.nextDateTime();
-            consultationRoom.setScheduledStartAt(LocalDateTime.of(next.getYear(), next.getMonth(), next.getDayOfMonth(), startTime.getHour(), startTime.getMinute()));
-            consultationRooms.add(consultationRoom);
+    public List<LocalDate> getNextConsultationDates(LocalDate startDate, LocalDate endDate) {
+        return getNextConsultationDates((int) (ChronoUnit.DAYS.between(startDate, endDate) + 1), startDate);
+    }
+
+    public List<LocalDate> getNextConsultationDates(int numberOfRooms, LocalDate fromDate) {
+        try {
+            RecurrenceRule rule = new RecurrenceRule(recurrenceRule);
+            int max = numberOfRooms;
+            RecurrenceRuleIterator it = rule.iterator(new DateTime(fromDate.getYear(), fromDate.getMonthValue(), fromDate.getDayOfMonth()));
+            List<LocalDate> dates = new ArrayList<>();
+            while (it.hasNext() && (!rule.isInfinite() || max-- > 0)) {
+                DateTime next = it.nextDateTime();
+                dates.add(LocalDate.of(next.getYear(), next.getMonth(), next.getDayOfMonth()));
+            }
+            return dates;
+        } catch (InvalidRecurrenceRuleException e) {
+            throw new RuntimeException(e);
         }
-        return consultationRooms;
     }
 
     public LocalTime getStartTime() {

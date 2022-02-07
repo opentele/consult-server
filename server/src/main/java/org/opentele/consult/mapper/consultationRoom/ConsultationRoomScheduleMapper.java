@@ -1,4 +1,4 @@
-package org.opentele.consult.mapper;
+package org.opentele.consult.mapper.consultationRoom;
 
 import org.opentele.consult.contract.consultationRoom.ConsultationRoomScheduleRequest;
 import org.opentele.consult.contract.consultationRoom.ConsultationRoomScheduleResponse;
