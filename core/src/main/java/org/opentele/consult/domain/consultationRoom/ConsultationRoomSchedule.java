@@ -45,23 +45,45 @@ public class ConsultationRoomSchedule extends OrganisationalEntity {
     }
 
     public List<LocalDate> getNextConsultationDates(LocalDate startDate, LocalDate endDate) {
-        return getNextConsultationDates((int) (ChronoUnit.DAYS.between(startDate, endDate) + 1), startDate);
+        try {
+            List<LocalDate> dates = new ArrayList<>();
+            RecurrenceRule rule = new RecurrenceRule(recurrenceRule);
+            RecurrenceRuleIterator it = rule.iterator(getRRDateTime(startDate));
+            while (it.hasNext()) {
+                DateTime next = it.nextDateTime();
+                LocalDate date = getDate(next);
+                if (date.isAfter(endDate)) break;
+
+                dates.add(getDate(next));
+            }
+            return dates;
+        } catch (InvalidRecurrenceRuleException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public List<LocalDate> getNextConsultationDates(int numberOfRooms, LocalDate fromDate) {
         try {
             RecurrenceRule rule = new RecurrenceRule(recurrenceRule);
             int max = numberOfRooms;
-            RecurrenceRuleIterator it = rule.iterator(new DateTime(fromDate.getYear(), fromDate.getMonthValue(), fromDate.getDayOfMonth()));
+            RecurrenceRuleIterator it = rule.iterator(getRRDateTime(fromDate));
             List<LocalDate> dates = new ArrayList<>();
             while (it.hasNext() && (!rule.isInfinite() || max-- > 0)) {
                 DateTime next = it.nextDateTime();
-                dates.add(LocalDate.of(next.getYear(), next.getMonth(), next.getDayOfMonth()));
+                dates.add(getDate(next));
             }
             return dates;
         } catch (InvalidRecurrenceRuleException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private LocalDate getDate(DateTime dateTime) {
+        return LocalDate.of(dateTime.getYear(), dateTime.getMonth(), dateTime.getDayOfMonth());
+    }
+
+    private DateTime getRRDateTime(LocalDate fromDate) {
+        return new DateTime(fromDate.getYear(), fromDate.getMonthValue(), fromDate.getDayOfMonth());
     }
 
     public LocalTime getStartTime() {
