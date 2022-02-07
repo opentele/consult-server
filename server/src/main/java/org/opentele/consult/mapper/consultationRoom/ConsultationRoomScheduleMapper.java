@@ -16,7 +16,7 @@ public class ConsultationRoomScheduleMapper {
         consultationRoomSchedule.setRecurrenceRule(request.getRecurrenceRule());
         consultationRoomSchedule.setStartDate(request.getStartDate());
         consultationRoomSchedule.setStartTime(request.getStartTime());
-        consultationRoomSchedule.setTitle(request.getRecurrenceRule());
+        consultationRoomSchedule.setTitle(request.getTitle());
         consultationRoomSchedule.setTotalSlots(request.getTotalSlots());
         return consultationRoomSchedule;
     }

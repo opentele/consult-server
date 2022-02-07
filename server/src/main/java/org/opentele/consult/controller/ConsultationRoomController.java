@@ -43,18 +43,8 @@ public class ConsultationRoomController {
     @GetMapping(value = "/api/consultationRoom/active")
     @PreAuthorize("hasRole('User')")
     public List<ConsultationRoomResponse> getActiveRooms(Principal principal) {
-        LocalDateTime today = LocalDate.now().atStartOfDay();
-        LocalDateTime tomorrow = LocalDate.now().plus(1, DAYS).atStartOfDay();
-        ConsultationRooms consultationRooms = consultationRoomRepository.findAllBetween(today, tomorrow, userService.getOrganisation(principal));
-        ConsultationRoomSchedules schedules = consultationRoomScheduleRepository.findAllOtherThan(consultationRooms.getScheduleIds(), userService.getOrganisation(principal));
-        Map<ConsultationRoomSchedule, List<LocalDate>> scheduledDates = schedules.getScheduledDates(today);
-        List<ConsultationRoomResponse> consultationRoomResponses = consultationRooms.stream().map(ConsultationRoomMapper::map).collect(Collectors.toList());
-        scheduledDates.forEach((consultationRoomSchedule, dates) -> {
-            dates.forEach(localDate -> {
-                consultationRoomResponses.add(ConsultationRoomMapper.map(consultationRoomSchedule, localDate));
-            });
-        });
-        return consultationRoomResponses;
+        LocalDate today = LocalDate.now();
+        return getConsultationsBetween(today, today, principal).get(today);
     }
 
     @GetMapping(value = "/api/consultationRoom/between")
