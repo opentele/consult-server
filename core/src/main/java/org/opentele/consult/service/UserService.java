@@ -5,7 +5,7 @@ import org.opentele.consult.domain.security.PasswordResetToken;
 import org.opentele.consult.domain.security.User;
 import org.opentele.consult.message.MessageCodes;
 import org.opentele.consult.repository.OrganisationRepository;
-import org.opentele.consult.repository.PasswordResetTokenRepositoryRepository;
+import org.opentele.consult.repository.PasswordResetTokenRepository;
 import org.opentele.consult.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,13 +19,13 @@ import java.util.UUID;
 public class UserService {
     private final UserRepository userRepository;
     private final OrganisationRepository organisationRepository;
-    private final PasswordResetTokenRepositoryRepository passwordResetTokenRepositoryRepository;
+    private final PasswordResetTokenRepository passwordResetTokenRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository, OrganisationRepository organisationRepository, PasswordResetTokenRepositoryRepository passwordResetTokenRepositoryRepository) {
+    public UserService(UserRepository userRepository, OrganisationRepository organisationRepository, PasswordResetTokenRepository passwordResetTokenRepository) {
         this.userRepository = userRepository;
         this.organisationRepository = organisationRepository;
-        this.passwordResetTokenRepositoryRepository = passwordResetTokenRepositoryRepository;
+        this.passwordResetTokenRepository = passwordResetTokenRepository;
     }
 
     public String validateNewOrganisation(String email, String mobile) {
@@ -52,18 +52,18 @@ public class UserService {
     }
 
     public PasswordResetToken createPasswordResetTokenForUser(User user) {
-        List<PasswordResetToken> previousTokens = passwordResetTokenRepositoryRepository.findAllByUserAndInactiveFalse(user);
+        List<PasswordResetToken> previousTokens = passwordResetTokenRepository.findAllByUserAndInactiveFalse(user);
         previousTokens.forEach(passwordResetToken -> passwordResetToken.setInactive(true));
-        passwordResetTokenRepositoryRepository.saveAll(previousTokens);
+        passwordResetTokenRepository.saveAll(previousTokens);
 
         String token = UUID.randomUUID().toString();
         PasswordResetToken resetToken = new PasswordResetToken(token, user);
-        passwordResetTokenRepositoryRepository.save(resetToken);
+        passwordResetTokenRepository.save(resetToken);
         return resetToken;
     }
 
     public PasswordResetToken.TokenStatus validateToken(String token) {
-        final PasswordResetToken passToken = passwordResetTokenRepositoryRepository.findByToken(token);
+        final PasswordResetToken passToken = passwordResetTokenRepository.findByToken(token);
         return isTokenFound(passToken) ? (isTokenExpired(passToken) ? PasswordResetToken.TokenStatus.Expired
                 : PasswordResetToken.TokenStatus.Valid) : PasswordResetToken.TokenStatus.NotFound;
     }
@@ -78,7 +78,7 @@ public class UserService {
     }
 
     public void updatePassword(String token, String newPassword) {
-        PasswordResetToken passwordResetToken = passwordResetTokenRepositoryRepository.findByToken(token);
+        PasswordResetToken passwordResetToken = passwordResetTokenRepository.findByToken(token);
         User user = passwordResetToken.getUser();
         user.setPassword(newPassword);
         userRepository.save(user);

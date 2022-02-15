@@ -3,7 +3,7 @@ package org.opentele.consult.domain.consultationRoom;
 import org.opentele.consult.domain.framework.OrganisationalEntity;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -15,16 +15,19 @@ public class ConsultationRoom  extends OrganisationalEntity {
     private String title;
 
     @Column(nullable = false)
-    private LocalDateTime scheduledStartAt;
+    private LocalDate scheduledOn;
 
     @Column(nullable = false)
-    private LocalDateTime scheduledEndAt;
+    private LocalTime scheduledStartTime;
+
+    @Column(nullable = false)
+    private LocalTime scheduledEndTime;
 
     @Column
-    private LocalTime startedAt;
+    private LocalTime startTime;
 
     @Column
-    private LocalTime endedAt;
+    private LocalTime endTime;
 
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, mappedBy = "consultationRoom")
     private Set<ConsultationRoomUser> providers = new HashSet<>();
@@ -38,28 +41,44 @@ public class ConsultationRoom  extends OrganisationalEntity {
     @Column
     private int totalSlots;
 
-    public LocalDateTime getScheduledStartAt() {
-        return scheduledStartAt;
+    public LocalDate getScheduledOn() {
+        return scheduledOn;
     }
 
-    public void setScheduledStartAt(LocalDateTime scheduledStartAt) {
-        this.scheduledStartAt = scheduledStartAt;
+    public void setScheduledOn(LocalDate scheduledOn) {
+        this.scheduledOn = scheduledOn;
     }
 
-    public LocalDateTime getScheduledEndAt() {
-        return scheduledEndAt;
+    public LocalTime getScheduledStartTime() {
+        return scheduledStartTime;
     }
 
-    public void setScheduledEndAt(LocalDateTime scheduledEndAt) {
-        this.scheduledEndAt = scheduledEndAt;
+    public void setScheduledStartTime(LocalTime scheduledStartTime) {
+        this.scheduledStartTime = scheduledStartTime;
     }
 
-    public LocalTime getStartedAt() {
-        return startedAt;
+    public LocalTime getScheduledEndTime() {
+        return scheduledEndTime;
     }
 
-    public LocalTime getEndedAt() {
-        return endedAt;
+    public void setScheduledEndTime(LocalTime scheduledEndTime) {
+        this.scheduledEndTime = scheduledEndTime;
+    }
+
+    public LocalTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalTime endTime) {
+        this.endTime = endTime;
     }
 
     public ConsultationRoomSchedule getSchedule() {
@@ -72,14 +91,6 @@ public class ConsultationRoom  extends OrganisationalEntity {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public void setStartedAt(LocalTime startedAt) {
-        this.startedAt = startedAt;
-    }
-
-    public void setEndedAt(LocalTime endedAt) {
-        this.endedAt = endedAt;
     }
 
     public Set<ConsultationRoomUser> getProviders() {
@@ -108,5 +119,9 @@ public class ConsultationRoom  extends OrganisationalEntity {
 
     public void setTotalSlots(int totalSlots) {
         this.totalSlots = totalSlots;
+    }
+
+    public void addProvider(ConsultationRoomUser consultationRoomUser) {
+        this.providers.add(consultationRoomUser);
     }
 }

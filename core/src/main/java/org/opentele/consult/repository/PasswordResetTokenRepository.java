@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface PasswordResetTokenRepositoryRepository extends CrudRepository<PasswordResetToken, Integer> {
+public interface PasswordResetTokenRepository extends CrudRepository<PasswordResetToken, Integer> {
     PasswordResetToken findByToken(String token);
     List<PasswordResetToken> findAllByUserAndInactiveFalse(User user);
 }

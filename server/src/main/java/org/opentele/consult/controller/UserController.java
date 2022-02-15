@@ -80,6 +80,12 @@ public class UserController {
         return userResponse;
     }
 
+    @RequestMapping(value = "/api/user/loggedIn", method = RequestMethod.GET)
+    @PreAuthorize("hasAnyRole('User','OrgAdmin')")
+    public boolean loggedIn() {
+        return true;
+    }
+
     @PostMapping("/api/user/resetPassword")
     public ResponseEntity<String> resetPassword(HttpServletRequest servletRequest,
                                                 @RequestBody ResetPasswordRequest request) throws MessagingException, IOException, URISyntaxException {

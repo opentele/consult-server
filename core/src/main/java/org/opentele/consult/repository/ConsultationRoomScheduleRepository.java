@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface ConsultationRoomScheduleRepository extends PagingAndSortingRepository<ConsultationRoomSchedule, Integer> {
     List<ConsultationRoomSchedule> findAllByOrganisation(Organisation organisation);
+    List<ConsultationRoomSchedule> findAllBy();
 
     default ConsultationRoomSchedules findAllOtherThan(List<Integer> ids, Organisation organisation) {
         if (ids.size() == 0) return new ConsultationRoomSchedules(this.findAllByOrganisation(organisation));

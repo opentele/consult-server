@@ -4,7 +4,9 @@ import org.opentele.consult.contract.consultationRoom.ConsultationRoomResponse;
 import org.opentele.consult.contract.consultationRoom.ConsultationRoomScheduleRequest;
 import org.opentele.consult.contract.consultationRoom.ConsultationRoomScheduleResponse;
 import org.opentele.consult.domain.Organisation;
-import org.opentele.consult.domain.consultationRoom.*;
+import org.opentele.consult.domain.consultationRoom.ConsultationRoomSchedule;
+import org.opentele.consult.domain.consultationRoom.ConsultationRoomScheduleUser;
+import org.opentele.consult.domain.consultationRoom.ConsultationRooms;
 import org.opentele.consult.mapper.consultationRoom.ConsultationRoomMapper;
 import org.opentele.consult.mapper.consultationRoom.ConsultationRoomScheduleMapper;
 import org.opentele.consult.repository.ConsultationRoomRepository;
@@ -19,11 +21,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static java.time.temporal.ChronoUnit.DAYS;
 
 @RestController
 public class ConsultationRoomController {
@@ -40,35 +39,32 @@ public class ConsultationRoomController {
         this.userService = userService;
     }
 
-    @GetMapping(value = "/api/consultationRoom/active")
+    @GetMapping(value = "/api/consultationRoom/today")
     @PreAuthorize("hasRole('User')")
     public List<ConsultationRoomResponse> getActiveRooms(Principal principal) {
         LocalDate today = LocalDate.now();
-        return getConsultationsBetween(today, today, principal).get(today);
+        List<ConsultationRoomResponse> consultationRoomResponses = getConsultations(today, today, principal).get(today);
+        if (consultationRoomResponses == null) return new ArrayList<>();
+        return consultationRoomResponses;
     }
 
     @GetMapping(value = "/api/consultationRoom/between")
     @PreAuthorize("hasRole('User')")
-    public Map<LocalDate, List<ConsultationRoomResponse>> getConsultationsBetween
+    public ResponseEntity getConsultationsBetween
             (@RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
              @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
              Principal principal) {
+        Map<LocalDate, List<ConsultationRoomResponse>> map = getConsultations(startDate, endDate, principal);
+        return new ResponseEntity(map, HttpStatus.OK);
+    }
+
+    private Map<LocalDate, List<ConsultationRoomResponse>> getConsultations(LocalDate startDate, LocalDate endDate, Principal principal) {
         Map<LocalDate, List<ConsultationRoomResponse>> map = new HashMap<>();
-        ConsultationRooms consultationRooms = consultationRoomRepository.findAllBetween(startDate.atStartOfDay(), endDate.atTime(23, 59), userService.getOrganisation(principal));
+        ConsultationRooms consultationRooms = consultationRoomRepository.findAllBetween(startDate, endDate, userService.getOrganisation(principal));
         consultationRooms.forEach(consultationRoom -> {
-            LocalDate date = consultationRoom.getScheduledStartAt().toLocalDate();
+            LocalDate date = consultationRoom.getScheduledOn();
             map.computeIfAbsent(date, k -> new ArrayList<>());
             map.get(date).add(ConsultationRoomMapper.map(consultationRoom));
-        });
-
-        List<ConsultationRoomSchedule> schedules = consultationRoomScheduleRepository.findAllByOrganisation(userService.getOrganisation(principal));
-        schedules.forEach(consultationRoomSchedule -> {
-            List<LocalDate> nextConsultationDates = consultationRoomSchedule.getNextConsultationDates(startDate, endDate);
-            nextConsultationDates.forEach(date -> {
-                map.computeIfAbsent(date, k -> new ArrayList<>());
-                if (!consultationRooms.isAlreadyScheduled(consultationRoomSchedule, date))
-                    map.get(date).add(ConsultationRoomMapper.map(consultationRoomSchedule, date));
-            });
         });
         return map;
     }
