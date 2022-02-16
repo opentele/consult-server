@@ -4,6 +4,7 @@ import org.opentele.consult.domain.Organisation;
 import org.opentele.consult.domain.consultationRoom.ConsultationRoom;
 import org.opentele.consult.domain.consultationRoom.ConsultationRoomSchedule;
 import org.opentele.consult.domain.consultationRoom.ConsultationRooms;
+import org.opentele.consult.domain.security.User;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
@@ -21,4 +22,10 @@ public interface ConsultationRoomRepository extends PagingAndSortingRepository<C
     }
 
     List<ConsultationRoom> findAllByScheduledOnAfterAndScheduledOnBeforeAndOrganisation(LocalDate from, LocalDate to, Organisation organisation);
+
+    default int getNumberOfAppointmentsFor(User user) {
+        return countAllByAppointmentTokensAppointmentTokenUsersUser(user);
+    }
+
+    int countAllByAppointmentTokensAppointmentTokenUsersUser(User user);
 }

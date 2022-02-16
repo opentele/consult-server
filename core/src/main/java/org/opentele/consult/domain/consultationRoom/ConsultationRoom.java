@@ -1,6 +1,8 @@
 package org.opentele.consult.domain.consultationRoom;
 
+import org.opentele.consult.domain.client.Client;
 import org.opentele.consult.domain.framework.OrganisationalEntity;
+import org.opentele.consult.domain.security.User;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -41,6 +43,9 @@ public class ConsultationRoom  extends OrganisationalEntity {
 
     @Column
     private int totalSlots;
+
+    @Column
+    private int currentQueueNumber;
 
     public LocalDate getScheduledOn() {
         return scheduledOn;
@@ -124,5 +129,42 @@ public class ConsultationRoom  extends OrganisationalEntity {
 
     public void addProvider(ConsultationRoomUser consultationRoomUser) {
         this.providers.add(consultationRoomUser);
+    }
+
+    public boolean isProvider(User user) {
+        return this.providers.stream().anyMatch(consultationRoomUser -> consultationRoomUser.getUser().equals(user));
+    }
+
+    public int getNumberOfClients() {
+        return this.getAppointmentTokens().size();
+    }
+
+    public int getCurrentQueueNumber() {
+        return currentQueueNumber;
+    }
+
+    public void setCurrentQueueNumber(int currentQueueNumber) {
+        this.currentQueueNumber = currentQueueNumber;
+    }
+
+    public static class ConsultationRoomCurrentUserSummary {
+        private int numberOfClients;
+        private Client nextClient;
+
+        public int getNumberOfClients() {
+            return numberOfClients;
+        }
+
+        public void setNumberOfClients(int numberOfClients) {
+            this.numberOfClients = numberOfClients;
+        }
+
+        public Client getNextClient() {
+            return nextClient;
+        }
+
+        public void setNextClient(Client nextClient) {
+            this.nextClient = nextClient;
+        }
     }
 }

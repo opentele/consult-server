@@ -1,6 +1,5 @@
 package org.opentele.consult.domain.consultationRoom;
 
-import com.sun.istack.NotNull;
 import org.opentele.consult.domain.framework.OrganisationalEntity;
 import org.opentele.consult.domain.security.User;
 

@@ -28,14 +28,16 @@ import java.util.stream.Collectors;
 public class ConsultationRoomController {
     private final ConsultationRoomRepository consultationRoomRepository;
     private final ConsultationRoomScheduleRepository consultationRoomScheduleRepository;
+    private final ConsultationRoomMapper consultationRoomMapper;
     private final UserService userService;
 
     @Autowired
     public ConsultationRoomController(ConsultationRoomRepository consultationRoomRepository,
                                       ConsultationRoomScheduleRepository consultationRoomScheduleRepository,
-                                      UserService userService) {
+                                      UserService userService, ConsultationRoomMapper consultationRoomMapper) {
         this.consultationRoomRepository = consultationRoomRepository;
         this.consultationRoomScheduleRepository = consultationRoomScheduleRepository;
+        this.consultationRoomMapper = consultationRoomMapper;
         this.userService = userService;
     }
 
@@ -64,7 +66,7 @@ public class ConsultationRoomController {
         consultationRooms.forEach(consultationRoom -> {
             LocalDate date = consultationRoom.getScheduledOn();
             map.computeIfAbsent(date, k -> new ArrayList<>());
-            map.get(date).add(ConsultationRoomMapper.map(consultationRoom));
+            map.get(date).add(consultationRoomMapper.map(consultationRoom, userService.getUser(principal)));
         });
         return map;
     }

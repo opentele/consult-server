@@ -11,6 +11,9 @@ public class ConsultationRoomResponse extends BaseConsultationRoomResponse {
     private LocalTime startTime;
     private LocalTime endTime;
     private int scheduleId;
+    private int numberOfClients;
+    private int numberOfUserClients;
+    private String nextClient;
 
     public LocalTime getEndTime() {
         return endTime;
@@ -58,5 +61,29 @@ public class ConsultationRoomResponse extends BaseConsultationRoomResponse {
 
     public void setStartTime(LocalTime startTime) {
         this.startTime = startTime;
+    }
+
+    public int getNumberOfClients() {
+        return numberOfClients;
+    }
+
+    public void setNumberOfClients(int numberOfClients) {
+        this.numberOfClients = numberOfClients;
+    }
+
+    public int getNumberOfUserClients() {
+        return numberOfUserClients;
+    }
+
+    public void setNumberOfUserClients(int numberOfUserClients) {
+        this.numberOfUserClients = numberOfUserClients;
+    }
+
+    public String getNextClient() {
+        return nextClient;
+    }
+
+    public void setNextClient(String nextClient) {
+        this.nextClient = nextClient;
     }
 }

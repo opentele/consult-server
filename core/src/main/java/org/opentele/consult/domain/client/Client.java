@@ -8,4 +8,12 @@ import javax.persistence.*;
 @Table(name = "client")
 public class Client extends OrganisationalEntity {
     private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
