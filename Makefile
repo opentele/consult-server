@@ -79,7 +79,7 @@ run-server: build-db build-server
 	$(call _run_server)
 
 run-server-without-background: build-server
-	java -jar --enable-preview server/build/libs/server-0.0.1-SNAPSHOT.jar --app.cron.main="0 0 6 6 9 ? 2035"
+	java -jar --enable-preview server/build/libs/server-0.0.1-SNAPSHOT.jar --consult.scheduled.room.cron="0 0 6 6 9 ? 2035"
 
 test-schema-generation: generate-schema rebuild-db migrate-db
 
@@ -105,3 +105,7 @@ endif
 	git tag -a v$(version) -m "version $(version)"
 	git push origin --tags
 #######
+
+
+###### Use Case
+local-setup: rebuild-db migrate-db create-super-admin run-server-without-background

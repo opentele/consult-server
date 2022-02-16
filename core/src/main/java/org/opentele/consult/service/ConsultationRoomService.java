@@ -20,18 +20,26 @@ public class ConsultationRoomService {
         this.consultationRoomRepository = consultationRoomRepository;
     }
 
-    public void schedule() {
+    public int schedule() {
+        int roomsCreated = 0;
         LocalDate today = LocalDate.now();
         List<ConsultationRoomSchedule> schedules = consultationRoomScheduleRepository.findAllBy();
-        schedules.forEach(consultationRoomSchedule -> create(today, consultationRoomSchedule));
+        for (ConsultationRoomSchedule consultationRoomSchedule : schedules) {
+            if (create(today, consultationRoomSchedule)) roomsCreated++;
+        }
+        return roomsCreated;
     }
 
     @Transactional
-    protected void create(LocalDate today, ConsultationRoomSchedule consultationRoomSchedule) {
+    protected boolean create(LocalDate today, ConsultationRoomSchedule consultationRoomSchedule) {
         List<LocalDate> nextConsultationDates = consultationRoomSchedule.getNextConsultationDates(today, today);
         if (nextConsultationDates.size() == 1 && !consultationRoomRepository.existsByConsultationRoomScheduleAndScheduledOn(consultationRoomSchedule, today)) {
-            ConsultationRoom consultationRoom = consultationRoomSchedule.schedule(today);
+            ConsultationRoom consultationRoom = consultationRoomSchedule.createRoomFor(today);
             consultationRoomRepository.save(consultationRoom);
+            return true;
+        } else if (nextConsultationDates.size() > 1) {
+            throw new RuntimeException("Issue in getting next consultation dates");
         }
+        return false;
     }
 }

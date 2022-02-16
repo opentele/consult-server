@@ -10,13 +10,13 @@ import javax.persistence.*;
 @Table(name = "appointment_token")
 public class AppointmentToken extends OrganisationalEntity {
     @ManyToOne(targetEntity = ConsultationRoomSchedule.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "consultation_room_id")
-    @NotNull
+    @JoinColumn(name = "consultation_room_id", columnDefinition = "integer not null")
     private ConsultationRoom consultationRoom;
 
     @Column(nullable = false)
     private int queueNumber;
 
     @ManyToOne(targetEntity = Client.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "client_id", columnDefinition = "integer not null")
     private Client client;
 }

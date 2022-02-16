@@ -33,6 +33,7 @@ public class ConsultationRoom  extends OrganisationalEntity {
     private Set<ConsultationRoomUser> providers = new HashSet<>();
 
     @ManyToOne(targetEntity = ConsultationRoomSchedule.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "consultation_room_schedule_id", columnDefinition = "integer not null")
     private ConsultationRoomSchedule consultationRoomSchedule;
 
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, mappedBy = "consultationRoom")

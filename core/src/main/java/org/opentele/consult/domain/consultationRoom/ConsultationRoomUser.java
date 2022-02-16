@@ -10,11 +10,11 @@ import javax.persistence.*;
 @Table(name = "consultant_room_user")
 public class ConsultationRoomUser extends OrganisationalEntity {
     @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", columnDefinition = "integer not null")
     private User user;
 
     @ManyToOne(targetEntity = ConsultationRoom.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "consultation_room_id")
-    @NotNull
+    @JoinColumn(name = "consultation_room_id", columnDefinition = "integer not null")
     private ConsultationRoom consultationRoom;
 
     public User getUser() {

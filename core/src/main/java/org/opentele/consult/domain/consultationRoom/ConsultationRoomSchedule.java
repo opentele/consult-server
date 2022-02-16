@@ -138,7 +138,7 @@ public class ConsultationRoomSchedule extends OrganisationalEntity {
         this.totalSlots = totalSlots;
     }
 
-    public ConsultationRoom schedule(LocalDate date) {
+    public ConsultationRoom createRoomFor(LocalDate date) {
         ConsultationRoom consultationRoom = new ConsultationRoom();
         consultationRoom.setConsultationRoomSchedule(this);
         consultationRoom.setScheduledOn(date);
@@ -152,6 +152,7 @@ public class ConsultationRoomSchedule extends OrganisationalEntity {
         });
         consultationRoom.setTitle(this.title);
         consultationRoom.setTotalSlots(this.totalSlots);
+        consultationRoom.setOrganisation(this.getOrganisation());
         return consultationRoom;
     }
 }

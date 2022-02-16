@@ -1,6 +1,7 @@
 package org.opentele.consult.controller;
 
 import org.opentele.consult.framework.FileUtil;
+import org.opentele.consult.service.ConsultationRoomService;
 import org.opentele.consult.service.MailService;
 import org.opentele.consult.service.TemplateContextFactory;
 import org.opentele.consult.service.UserService;
@@ -24,15 +25,17 @@ public class TestController {
     private final FileUtil fileUtil;
     private final TemplateContextFactory templateContextFactory;
     private final UserService userService;
+    private final ConsultationRoomService consultationRoomService;
 
     @Autowired
     public TestController(MailService mailService, BCryptPasswordEncoder bCryptPasswordEncoder,
-                          FileUtil fileUtil, TemplateContextFactory templateContextFactory, UserService userService) {
+                          FileUtil fileUtil, TemplateContextFactory templateContextFactory, UserService userService, ConsultationRoomService consultationRoomService) {
         this.mailService = mailService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.fileUtil = fileUtil;
         this.templateContextFactory = templateContextFactory;
         this.userService = userService;
+        this.consultationRoomService = consultationRoomService;
     }
 
     @PutMapping()
@@ -63,5 +66,11 @@ public class TestController {
     @PreAuthorize("hasAnyRole('Admin')")
     public void deleteOrganisation(@RequestParam("orgName") String orgName) {
         userService.deleteOrganisation(orgName);
+    }
+
+    @GetMapping("/api/test/scheduleRooms")
+    @PreAuthorize("hasAnyRole('Admin')")
+    public int scheduleRooms() {
+        return consultationRoomService.schedule();
     }
 }
