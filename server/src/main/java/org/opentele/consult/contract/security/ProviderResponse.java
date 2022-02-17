@@ -1,8 +1,8 @@
 package org.opentele.consult.contract.security;
 
-import org.opentele.consult.contract.framework.BaseResponse;
+import org.opentele.consult.contract.framework.BaseEntityContract;
 
-public class ProviderResponse extends BaseResponse {
+public class ProviderResponse extends BaseEntityContract {
     private String name;
 
     public ProviderResponse() {

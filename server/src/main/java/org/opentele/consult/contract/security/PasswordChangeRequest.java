@@ -1,4 +1,4 @@
-package org.opentele.consult.contract;
+package org.opentele.consult.contract.security;
 
 public class PasswordChangeRequest {
     private String token;

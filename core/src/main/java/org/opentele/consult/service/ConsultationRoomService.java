@@ -56,7 +56,7 @@ public class ConsultationRoomService {
         if (consultationRoom.isProvider(user)) {
             nextToken = appointmentTokenRepository.findFirstByConsultationRoomAndQueueNumberGreaterThanOrderByQueueNumber(consultationRoom, consultationRoom.getCurrentQueueNumber());
         } else {
-            nextToken = appointmentTokenRepository.findFirstByConsultationRoomAndQueueNumberGreaterThanAndAppointmentTokenUsersUserOrderByQueueNumber(consultationRoom, consultationRoom.getCurrentQueueNumber(), user);
+            nextToken = appointmentTokenRepository.findFirstByConsultationRoomAndQueueNumberGreaterThanAndAppointmentProviderOrderByQueueNumber(consultationRoom, consultationRoom.getCurrentQueueNumber(), user);
         }
         if (nextToken != null)
             summary.setNextClient(nextToken.getClient());

@@ -2,6 +2,7 @@ package org.opentele.consult.domain.consultationRoom;
 
 import org.opentele.consult.domain.client.Client;
 import org.opentele.consult.domain.framework.OrganisationalEntity;
+import org.opentele.consult.domain.security.User;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -21,8 +22,9 @@ public class AppointmentToken extends OrganisationalEntity {
     @JoinColumn(name = "client_id", columnDefinition = "integer not null")
     private Client client;
 
-    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, mappedBy = "appointmentToken")
-    private Set<AppointmentTokenUser> appointmentTokenUsers = new HashSet<>();
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "appointment_provider_id", columnDefinition = "integer not null")
+    private User appointmentProvider;
 
     public ConsultationRoom getConsultationRoom() {
         return consultationRoom;
@@ -48,11 +50,11 @@ public class AppointmentToken extends OrganisationalEntity {
         this.client = client;
     }
 
-    public Set<AppointmentTokenUser> getAppointmentTokenUsers() {
-        return appointmentTokenUsers;
+    public User getAppointmentProvider() {
+        return appointmentProvider;
     }
 
-    public void setAppointmentTokenUsers(Set<AppointmentTokenUser> appointmentTokenUsers) {
-        this.appointmentTokenUsers = appointmentTokenUsers;
+    public void setAppointmentProvider(User appointmentProvider) {
+        this.appointmentProvider = appointmentProvider;
     }
 }

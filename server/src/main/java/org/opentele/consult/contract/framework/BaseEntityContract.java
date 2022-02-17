@@ -1,12 +1,12 @@
 package org.opentele.consult.contract.framework;
 
-public class BaseResponse {
+public class BaseEntityContract {
     private int id;
 
-    public BaseResponse() {
+    public BaseEntityContract() {
     }
 
-    public BaseResponse(int id) {
+    public BaseEntityContract(int id) {
         this.id = id;
     }
 

@@ -1,9 +1,9 @@
 package org.opentele.consult.controller;
 
-import org.opentele.consult.contract.OrganisationPutPostRequest;
-import org.opentele.consult.contract.PasswordChangeRequest;
-import org.opentele.consult.contract.ResetPasswordRequest;
-import org.opentele.consult.contract.UserResponse;
+import org.opentele.consult.contract.security.OrganisationPutPostRequest;
+import org.opentele.consult.contract.security.PasswordChangeRequest;
+import org.opentele.consult.contract.security.ResetPasswordRequest;
+import org.opentele.consult.contract.security.UserResponse;
 import org.opentele.consult.domain.Organisation;
 import org.opentele.consult.domain.security.PasswordResetToken;
 import org.opentele.consult.domain.security.User;

@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AppointmentTokenRepository extends AbstractRepository<AppointmentToken> {
     AppointmentToken findFirstByConsultationRoomAndQueueNumberGreaterThanOrderByQueueNumber(ConsultationRoom consultationRoom, int queueNumber);
-    AppointmentToken findFirstByConsultationRoomAndQueueNumberGreaterThanAndAppointmentTokenUsersUserOrderByQueueNumber(ConsultationRoom consultationRoom, int queueNumber, User user);
+    AppointmentToken findFirstByConsultationRoomAndQueueNumberGreaterThanAndAppointmentProviderOrderByQueueNumber(ConsultationRoom consultationRoom, int queueNumber, User user);
 }
