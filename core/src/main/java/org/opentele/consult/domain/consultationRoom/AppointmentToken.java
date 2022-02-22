@@ -1,6 +1,7 @@
 package org.opentele.consult.domain.consultationRoom;
 
 import org.opentele.consult.domain.client.Client;
+import org.opentele.consult.domain.client.Consultation;
 import org.opentele.consult.domain.framework.OrganisationalEntity;
 import org.opentele.consult.domain.security.User;
 
@@ -9,7 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "appointment_token")
+@Table(name = "appointment_token", uniqueConstraints = {@UniqueConstraint(columnNames = {"consultation_room_id", "client_id"})})
 public class AppointmentToken extends OrganisationalEntity {
     @ManyToOne(targetEntity = ConsultationRoom.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "consultation_room_id", columnDefinition = "integer not null")
@@ -25,6 +26,10 @@ public class AppointmentToken extends OrganisationalEntity {
     @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "appointment_provider_id", columnDefinition = "integer not null")
     private User appointmentProvider;
+
+    @ManyToOne(targetEntity = Consultation.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "consultation_id", columnDefinition = "integer null")
+    private Consultation consultation;
 
     public ConsultationRoom getConsultationRoom() {
         return consultationRoom;
@@ -56,5 +61,13 @@ public class AppointmentToken extends OrganisationalEntity {
 
     public void setAppointmentProvider(User appointmentProvider) {
         this.appointmentProvider = appointmentProvider;
+    }
+
+    public Consultation getConsultation() {
+        return consultation;
+    }
+
+    public void setConsultation(Consultation consultation) {
+        this.consultation = consultation;
     }
 }

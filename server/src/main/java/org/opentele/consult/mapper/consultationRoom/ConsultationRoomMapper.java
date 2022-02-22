@@ -36,6 +36,8 @@ public class ConsultationRoomMapper {
         Client nextClient = summary.getNextClient();
         if (nextClient != null)
             response.setNextClient(nextClient.getName());
+        response.setNumberOfClientsPending(consultationRoom.getNumberOfPendingClients());
+        response.setNumberOfUserClientsPending(consultationRoom.getNumberOfPendingUserClients(user));
         return response;
     }
 }

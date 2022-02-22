@@ -13,6 +13,8 @@ public class ConsultationRoomResponse extends BaseConsultationRoomResponse {
     private int scheduleId;
     private int numberOfClients;
     private int numberOfUserClients;
+    private int numberOfClientsPending;
+    private int numberOfUserClientsPending;
     private String nextClient;
 
     public LocalTime getEndTime() {
@@ -85,5 +87,21 @@ public class ConsultationRoomResponse extends BaseConsultationRoomResponse {
 
     public void setNextClient(String nextClient) {
         this.nextClient = nextClient;
+    }
+
+    public int getNumberOfClientsPending() {
+        return numberOfClientsPending;
+    }
+
+    public void setNumberOfClientsPending(int numberOfClientsPending) {
+        this.numberOfClientsPending = numberOfClientsPending;
+    }
+
+    public int getNumberOfUserClientsPending() {
+        return numberOfUserClientsPending;
+    }
+
+    public void setNumberOfUserClientsPending(int numberOfUserClientsPending) {
+        this.numberOfUserClientsPending = numberOfUserClientsPending;
     }
 }

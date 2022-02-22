@@ -108,5 +108,5 @@ endif
 
 
 ###### Use Case
-local-setup: rebuild-db migrate-db create-super-admin
+local-setup: generate-schema rebuild-db migrate-db create-super-admin
 local-setup-and-start: local-setup run-server-without-background

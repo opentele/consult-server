@@ -3,6 +3,7 @@ package org.opentele.consult.controller;
 import org.opentele.consult.contract.appointment.AppointmentRequest;
 import org.opentele.consult.contract.appointment.AppointmentResponse;
 import org.opentele.consult.domain.consultationRoom.AppointmentToken;
+import org.opentele.consult.domain.consultationRoom.ConsultationRoom;
 import org.opentele.consult.repository.AppointmentTokenRepository;
 import org.opentele.consult.repository.ClientRepository;
 import org.opentele.consult.repository.ConsultationRoomRepository;
@@ -35,9 +36,19 @@ public class AppointmentController {
         appointmentToken.setAppointmentProvider(userService.getUser(principal));
         appointmentToken.setOrganisation(userService.getOrganisation(principal));
         appointmentToken.setClient(clientRepository.findEntity(request.getClientId()));
-        appointmentToken.setConsultationRoom(consultationRoomRepository.findEntity(request.getConsultationRoomId()));
-        appointmentToken.setQueueNumber(request.getQueueNumber());
-        appointmentToken = appointmentTokenRepository.save(appointmentToken);
+        ConsultationRoom consultationRoom = consultationRoomRepository.findEntity(request.getConsultationRoomId());
+        appointmentToken.setConsultationRoom(consultationRoom);
+        if (request.getQueueNumber() <= 0) {
+            String lockString = String.format("consultationRoom-%d", request.getConsultationRoomId());
+            synchronized (lockString.intern()) {
+                int queueNumber = appointmentTokenRepository.getMostRecentAppointmentQueueNumber(consultationRoom);
+                appointmentToken.setQueueNumber(queueNumber + 1);
+                appointmentToken = appointmentTokenRepository.save(appointmentToken);
+            }
+        } else {
+            appointmentToken.setQueueNumber(request.getQueueNumber());
+            appointmentToken = appointmentTokenRepository.save(appointmentToken);
+        }
         return AppointmentResponse.fromEntity(appointmentToken);
     }
 }

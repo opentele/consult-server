@@ -1,6 +1,8 @@
 package org.opentele.consult.contract.client;
 
-public class ClientSearchResponse {
+import org.opentele.consult.contract.framework.BaseEntityContract;
+
+public class ClientSearchResponse extends BaseEntityContract {
     private String name;
     private String registrationNumber;
 

@@ -51,7 +51,7 @@ public class ConsultationRoomService {
 
     public ConsultationRoom.ConsultationRoomCurrentUserSummary getCurrentSummaryFor(User user, ConsultationRoom consultationRoom) {
         ConsultationRoom.ConsultationRoomCurrentUserSummary summary = new ConsultationRoom.ConsultationRoomCurrentUserSummary();
-        summary.setNumberOfClients(consultationRoom.getNumberOfClients());
+        summary.setNumberOfClients(consultationRoom.getNumberOfClients(user));
         AppointmentToken nextToken;
         if (consultationRoom.isProvider(user)) {
             nextToken = appointmentTokenRepository.findFirstByConsultationRoomAndQueueNumberGreaterThanOrderByQueueNumber(consultationRoom, consultationRoom.getCurrentQueueNumber());

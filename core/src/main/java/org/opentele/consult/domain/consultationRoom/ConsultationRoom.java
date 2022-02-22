@@ -147,6 +147,18 @@ public class ConsultationRoom  extends OrganisationalEntity {
         this.currentQueueNumber = currentQueueNumber;
     }
 
+    public int getNumberOfPendingClients() {
+        return (int) this.appointmentTokens.stream().filter(appointmentToken -> appointmentToken.getConsultation() == null).count();
+    }
+
+    public int getNumberOfPendingUserClients(User user) {
+        return (int) this.appointmentTokens.stream().filter(appointmentToken -> appointmentToken.getConsultation() == null && appointmentToken.getAppointmentProvider().equals(user)).count();
+    }
+
+    public int getNumberOfClients(User user) {
+        return (int) this.appointmentTokens.stream().filter(appointmentToken -> appointmentToken.getAppointmentProvider().equals(user)).count();
+    }
+
     public static class ConsultationRoomCurrentUserSummary {
         private int numberOfClients;
         private Client nextClient;

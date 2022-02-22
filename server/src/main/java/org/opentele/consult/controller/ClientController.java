@@ -8,6 +8,7 @@ import org.opentele.consult.repository.framework.Repository;
 import org.opentele.consult.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -27,16 +28,25 @@ public class ClientController {
     }
 
     @GetMapping("/api/client/search")
-    public List<ClientSearchResponse> searchResults(@RequestParam("q") String q, Principal principal) {
-        return clientRepository.findTop10ByNameContainingAndOrganisationOrderByName(q, userService.getOrganisation(principal)).stream().map(client -> {
+    public List<ClientSearchResponse> searchResults(@RequestParam("q") String q,
+                                                    @RequestParam("consultationRoomId") int consultationRoomId,
+                                                    Principal principal) {
+        return clientRepository.getClientsMatching(q, userService.getOrganisation(principal), consultationRoomId).stream().map(client -> {
             ClientSearchResponse clientSearchResponse = new ClientSearchResponse();
+            clientSearchResponse.setId(client.getId());
             clientSearchResponse.setRegistrationNumber(client.getRegistrationNumber());
             clientSearchResponse.setName(client.getName());
             return clientSearchResponse;
         }).collect(Collectors.toList());
     }
 
+    @RequestMapping(value = "/api/clients", method = {RequestMethod.POST, RequestMethod.PUT})
+    public void createUpdate(@RequestBody List<ClientRequestResponse> listContract, Principal principal) {
+        listContract.forEach(clientRequestResponse -> createUpdate(clientRequestResponse, principal));
+    }
+
     @RequestMapping(value = "/api/client", method = {RequestMethod.POST, RequestMethod.PUT})
+    @Transactional
     public ClientRequestResponse createUpdate(@RequestBody ClientRequestResponse contract, Principal principal) {
         Client client = Repository.findByIdOrCreate(contract.getId(), clientRepository, new Client());
         client.setGender(contract.getGender());

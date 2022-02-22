@@ -4,7 +4,6 @@ import org.opentele.consult.domain.framework.OrganisationalEntity;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "client")

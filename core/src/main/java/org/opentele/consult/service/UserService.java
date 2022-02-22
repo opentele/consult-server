@@ -116,4 +116,8 @@ public class UserService {
         User user = getUser(principal);
         return user.getOrganisation();
     }
+
+    public int getOrganisationId(Principal principal) {
+        return getOrganisation(principal).getId();
+    }
 }
