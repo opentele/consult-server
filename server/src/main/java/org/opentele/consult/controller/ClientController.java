@@ -2,6 +2,7 @@ package org.opentele.consult.controller;
 
 import org.opentele.consult.contract.client.ClientRequestResponse;
 import org.opentele.consult.contract.client.ClientSearchResponse;
+import org.opentele.consult.contract.client.ConsultationRoomClientResponse;
 import org.opentele.consult.domain.client.Client;
 import org.opentele.consult.repository.ClientRepository;
 import org.opentele.consult.repository.framework.Repository;
@@ -12,6 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,6 +47,19 @@ public class ClientController {
     @RequestMapping(value = "/api/clients", method = {RequestMethod.POST, RequestMethod.PUT})
     public void createUpdate(@RequestBody List<ClientRequestResponse> listContract, Principal principal) {
         listContract.forEach(clientRequestResponse -> createUpdate(clientRequestResponse, principal));
+    }
+
+    @GetMapping(value = "/api/client")
+    public List<ConsultationRoomClientResponse> getClients(@RequestParam(name = "consultationRoomId") int consultationRoomId) {
+        return clientRepository.getClients(consultationRoomId).stream().map(projection -> {
+            ConsultationRoomClientResponse response = new ConsultationRoomClientResponse();
+            response.setGender(projection.getGender());
+            response.setQueueNumber(projection.getQueueNumber());
+            response.setAge(Period.between(LocalDate.now(), projection.getDateOfBirth()));
+            response.setName(projection.getName());
+            response.setRegistrationNumber(projection.getRegistrationNumber());
+            return response;
+        }).collect(Collectors.toList());
     }
 
     @RequestMapping(value = "/api/client", method = {RequestMethod.POST, RequestMethod.PUT})

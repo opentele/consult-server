@@ -17,7 +17,7 @@ public abstract class AbstractEntity {
     @Column(name = "uuid", updatable = false, unique = true, nullable = false, columnDefinition = "uuid default uuid_generate_v4()")
     private UUID uuid;
 
-    @Column(name = "inactive")
+    @Column(name = "inactive", columnDefinition = "boolean default false", nullable = false)
     private boolean inactive;
 
     @CreatedDate

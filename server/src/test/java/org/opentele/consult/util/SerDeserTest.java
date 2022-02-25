@@ -9,6 +9,7 @@ import org.opentele.consult.domain.consultationRoom.ConsultationRoomSchedule;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.Period;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,5 +33,11 @@ public class SerDeserTest {
     public void emptyMap() throws JsonProcessingException {
         Map<LocalDate, List<ConsultationRoomResponse>> map = new HashMap<>();
         String s = objectMapper.writeValueAsString(map);
+    }
+
+    @Test
+    public void getAge() throws JsonProcessingException {
+        LocalDate localDate = LocalDate.of(2001, 5, 5);
+        String s = objectMapper.writeValueAsString(Period.between(LocalDate.now(), localDate));
     }
 }

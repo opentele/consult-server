@@ -1,5 +1,6 @@
 package org.opentele.consult.controller;
 
+import org.opentele.consult.contract.consultationRoom.BaseConsultationRoomContract;
 import org.opentele.consult.contract.consultationRoom.ConsultationRoomResponse;
 import org.opentele.consult.contract.consultationRoom.ConsultationRoomScheduleRequest;
 import org.opentele.consult.contract.consultationRoom.ConsultationRoomScheduleResponse;
@@ -74,23 +75,29 @@ public class ConsultationRoomController {
     @GetMapping(value = "/api/consultationRoomSchedule")
     @PreAuthorize("hasRole('User')")
     public List<ConsultationRoomScheduleResponse> getScheduledConsultations(Principal principal) {
-        Organisation organisation = userService.getOrganisation(principal);
-        List<ConsultationRoomSchedule> list = consultationRoomScheduleRepository.findAllByOrganisation(organisation);
+        var organisation = userService.getOrganisation(principal);
+        var list = consultationRoomScheduleRepository.findAllByOrganisation(organisation);
         return list.stream().map(ConsultationRoomScheduleMapper::map).collect(Collectors.toList());
     }
 
     @PutMapping(value = "/api/consultationRoomSchedule")
     @PreAuthorize("hasRole('OrgAdmin')")
     public ResponseEntity<Integer> put(@RequestBody ConsultationRoomScheduleRequest request, Principal principal) {
-        ConsultationRoomSchedule consultationRoomSchedule = ConsultationRoomScheduleMapper.mapNew(request, userService.getUser(principal));
-        Set<ConsultationRoomScheduleUser> consultationRoomScheduleUsers = request.getProviders().stream().map(userId -> {
-            ConsultationRoomScheduleUser consultationRoomScheduleUser = new ConsultationRoomScheduleUser();
+        var consultationRoomSchedule = ConsultationRoomScheduleMapper.mapNew(request, userService.getUser(principal));
+        var consultationRoomScheduleUsers = request.getProviders().stream().map(userId -> {
+            var consultationRoomScheduleUser = new ConsultationRoomScheduleUser();
             consultationRoomScheduleUser.setConsultationRoomSchedule(consultationRoomSchedule);
             consultationRoomScheduleUser.setUser(userService.getUser(userId));
             return consultationRoomScheduleUser;
         }).collect(Collectors.toSet());
         consultationRoomSchedule.setProviders(consultationRoomScheduleUsers);
-        ConsultationRoomSchedule saved = consultationRoomScheduleRepository.save(consultationRoomSchedule);
+        var saved = consultationRoomScheduleRepository.save(consultationRoomSchedule);
         return new ResponseEntity<>(saved.getId(), HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/api/consultationRoom")
+    @PreAuthorize("hasRole('User')")
+    public ResponseEntity<Integer> put(@RequestBody BaseConsultationRoomContract request, Principal principal) {
+        return null;
     }
 }

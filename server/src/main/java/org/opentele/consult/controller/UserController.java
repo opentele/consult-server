@@ -66,9 +66,9 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/api/currentUser", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/user", method = RequestMethod.GET)
     @PreAuthorize("hasAnyRole('User','OrgAdmin')")
-    public UserResponse loggedInUser(Principal principal) {
+    public UserResponse getUser(Principal principal) {
         String name = principal.getName();
         User user = userService.findUserByEmail(name);
         UserResponse userResponse = new UserResponse();
@@ -77,6 +77,7 @@ public class UserController {
         userResponse.setEmail(user.getEmail());
         userResponse.setOrganisationName(user.getOrganisation().getName());
         userResponse.setName(user.getName());
+        userResponse.setUserType(user.getUserType().name());
         return userResponse;
     }
 

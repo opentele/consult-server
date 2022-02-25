@@ -3,12 +3,15 @@ package org.opentele.consult.contract.consultationRoom;
 import org.opentele.consult.contract.framework.BaseEntityContract;
 import org.opentele.consult.contract.security.ProviderResponse;
 
+import java.time.LocalTime;
 import java.util.List;
 
-public class BaseConsultationRoomResponse extends BaseEntityContract {
+public class BaseConsultationRoomContract extends BaseEntityContract {
     private String title;
-    private List<ProviderResponse> providers;
+    private LocalTime startTime;
+    private LocalTime endTime;
     private int totalSlots;
+    private List<ProviderResponse> providers;
 
     public String getTitle() {
         return title;
@@ -32,5 +35,21 @@ public class BaseConsultationRoomResponse extends BaseEntityContract {
 
     public void setTotalSlots(int totalSlots) {
         this.totalSlots = totalSlots;
+    }
+
+    public LocalTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalTime endTime) {
+        this.endTime = endTime;
     }
 }

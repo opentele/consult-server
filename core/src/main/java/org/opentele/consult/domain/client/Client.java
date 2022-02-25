@@ -3,6 +3,7 @@ package org.opentele.consult.domain.client;
 import org.opentele.consult.domain.framework.OrganisationalEntity;
 
 import javax.persistence.*;
+import java.time.Duration;
 import java.time.LocalDate;
 
 @Entity
@@ -51,5 +52,9 @@ public class Client extends OrganisationalEntity {
 
     public void setRegistrationNumber(String registrationNumber) {
         this.registrationNumber = registrationNumber;
+    }
+
+    public Duration getAge() {
+        return Duration.between(LocalDate.now(), this.getDateOfBirth());
     }
 }

@@ -1,12 +1,9 @@
 package org.opentele.consult.contract.consultationRoom;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 
-public class ConsultationRoomScheduleResponse extends BaseConsultationRoomResponse {
+public class ConsultationRoomScheduleResponse extends BaseConsultationRoomContract {
     private String recurrenceRule;
-    private LocalTime startTime;
-    private LocalTime endTime;
     private LocalDate startDate;
 
     public String getRecurrenceRule() {
@@ -15,22 +12,6 @@ public class ConsultationRoomScheduleResponse extends BaseConsultationRoomRespon
 
     public void setRecurrenceRule(String recurrenceRule) {
         this.recurrenceRule = recurrenceRule;
-    }
-
-    public LocalTime getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(LocalTime startTime) {
-        this.startTime = startTime;
-    }
-
-    public LocalTime getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(LocalTime endTime) {
-        this.endTime = endTime;
     }
 
     public void setStartDate(LocalDate startDate) {

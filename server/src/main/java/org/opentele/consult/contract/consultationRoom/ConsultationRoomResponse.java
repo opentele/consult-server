@@ -1,29 +1,18 @@
 package org.opentele.consult.contract.consultationRoom;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-public class ConsultationRoomResponse extends BaseConsultationRoomResponse {
+public class ConsultationRoomResponse extends BaseConsultationRoomContract {
     private LocalDate scheduledOn;
     private LocalTime scheduledStartTime;
     private LocalTime scheduledEndTime;
-    private LocalTime startTime;
-    private LocalTime endTime;
     private int scheduleId;
     private int numberOfClients;
     private int numberOfUserClients;
     private int numberOfClientsPending;
     private int numberOfUserClientsPending;
     private String nextClient;
-
-    public LocalTime getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(LocalTime endAt) {
-        this.endTime = endAt;
-    }
 
     public void setScheduleId(int scheduleId) {
         this.scheduleId = scheduleId;
@@ -55,14 +44,6 @@ public class ConsultationRoomResponse extends BaseConsultationRoomResponse {
 
     public void setScheduledEndTime(LocalTime scheduledEndTime) {
         this.scheduledEndTime = scheduledEndTime;
-    }
-
-    public LocalTime getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(LocalTime startTime) {
-        this.startTime = startTime;
     }
 
     public int getNumberOfClients() {
