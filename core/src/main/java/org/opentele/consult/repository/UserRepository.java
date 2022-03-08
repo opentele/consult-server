@@ -20,5 +20,9 @@ public interface UserRepository extends CrudRepository<User, Integer> {
         return findByMobile(mobile);
     }
 
-    List<User> findAllByOrganisationName(String orgName);
+    List<User> findAllByOrganisationUsersNull();
+
+    default List<User> findUsersWithNoOrganisation() {
+        return findAllByOrganisationUsersNull();
+    }
 }

@@ -34,7 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private DataSource dataSource;
 
     private static final String usersQuery = "select * from (select concat(email,mobile) foo, password, true as active from users) x where x.foo = ?";
-    private static final String privilegesQuery = "select * from (select concat(email,mobile) foo, 'ROLE_' || u.user_type from users u union select concat(email,mobile) foo, 'ROLE_User' from users u) x where x.foo = ?";
+    private static final String privilegesQuery = "select * from (select concat(email,mobile) foo, 'ROLE_User' from users u) x where x.foo = ?";
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth)
@@ -52,7 +52,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry expressionInterceptUrlRegistry = http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/api/message", "/api/login", "/api/test/*").permitAll()
-                .antMatchers(HttpMethod.PUT, "/api/app/organisation").permitAll();
+                .antMatchers(HttpMethod.PUT, "/api/organisation").permitAll();
 
         handleLogin(expressionInterceptUrlRegistry);
     }
@@ -71,6 +71,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/api/logout")).addLogoutHandler((request, response, authentication) -> {
             request.getSession().invalidate();
+            logger.info("User logout");
         })
                 .and().exceptionHandling().authenticationEntryPoint(unauthenticatedRequestHandler());
     }

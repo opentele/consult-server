@@ -1,10 +1,13 @@
 package org.opentele.consult.service;
 
 import org.opentele.consult.domain.Organisation;
+import org.opentele.consult.domain.security.OrganisationUser;
 import org.opentele.consult.domain.security.PasswordResetToken;
 import org.opentele.consult.domain.security.User;
+import org.opentele.consult.domain.security.UserType;
 import org.opentele.consult.message.MessageCodes;
 import org.opentele.consult.repository.OrganisationRepository;
+import org.opentele.consult.repository.OrganisationUserRepository;
 import org.opentele.consult.repository.PasswordResetTokenRepository;
 import org.opentele.consult.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +23,14 @@ public class UserService {
     private final UserRepository userRepository;
     private final OrganisationRepository organisationRepository;
     private final PasswordResetTokenRepository passwordResetTokenRepository;
+    private final OrganisationUserRepository organisationUserRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository, OrganisationRepository organisationRepository, PasswordResetTokenRepository passwordResetTokenRepository) {
+    public UserService(UserRepository userRepository, OrganisationRepository organisationRepository, PasswordResetTokenRepository passwordResetTokenRepository, OrganisationUserRepository organisationUserRepository) {
         this.userRepository = userRepository;
         this.organisationRepository = organisationRepository;
         this.passwordResetTokenRepository = passwordResetTokenRepository;
+        this.organisationUserRepository = organisationUserRepository;
     }
 
     public String validateNewOrganisation(String email, String mobile) {
@@ -41,14 +46,21 @@ public class UserService {
         return null;
     }
 
-    public User findUserByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public OrganisationUser getOrganisationUser(String email, Organisation currentOrganisation) {
+        User user = userRepository.findByEmail(email);
+        return organisationUserRepository.findByUserAndOrganisation(user, currentOrganisation);
     }
 
     public void createNewOrganisation(User user, Organisation organisation) {
         Organisation savedOrg = organisationRepository.save(organisation);
-        user.setOrganisation(savedOrg);
-        userRepository.save(user);
+
+        User savedUser = userRepository.save(user);
+
+        OrganisationUser organisationUser = new OrganisationUser();
+        organisationUser.setUser(savedUser);
+        organisationUser.setOrganisation(savedOrg);
+        organisationUser.setUserType(UserType.OrgAdmin);
+        organisationUserRepository.save(organisationUser);
     }
 
     public PasswordResetToken createPasswordResetTokenForUser(User user) {
@@ -97,9 +109,15 @@ public class UserService {
         return userRepository.getUserByMobile(mobile);
     }
 
+    public User getUser(String userId) {
+        return getUser(userId, userId);
+    }
+
     public void deleteOrganisation(String orgName) {
-        List<User> users = userRepository.findAllByOrganisationName(orgName);
-        userRepository.deleteAll(users);
+        List<OrganisationUser> organisationUsers = organisationUserRepository.findAllByOrganisationName(orgName);
+        organisationUserRepository.deleteAll(organisationUsers);
+        List<User> usersWithNoOrganisation = userRepository.findUsersWithNoOrganisation();
+        userRepository.deleteAll(usersWithNoOrganisation);
         organisationRepository.delete(organisationRepository.findByName(orgName));
     }
 
@@ -110,14 +128,5 @@ public class UserService {
     public User getUser(Principal principal) {
         String name = principal.getName();
         return getUser(name, name);
-    }
-
-    public Organisation getOrganisation(Principal principal) {
-        User user = getUser(principal);
-        return user.getOrganisation();
-    }
-
-    public int getOrganisationId(Principal principal) {
-        return getOrganisation(principal).getId();
     }
 }

@@ -1,14 +1,15 @@
 package org.opentele.consult.controller;
 
-import org.opentele.consult.contract.security.OrganisationPutPostRequest;
-import org.opentele.consult.contract.security.PasswordChangeRequest;
-import org.opentele.consult.contract.security.ResetPasswordRequest;
-import org.opentele.consult.contract.security.UserResponse;
+import org.apache.log4j.Logger;
+import org.opentele.consult.contract.ApplicationStatus;
+import org.opentele.consult.contract.security.*;
 import org.opentele.consult.domain.Organisation;
+import org.opentele.consult.domain.security.OrganisationUser;
 import org.opentele.consult.domain.security.PasswordResetToken;
 import org.opentele.consult.domain.security.User;
 import org.opentele.consult.domain.security.UserType;
 import org.opentele.consult.framework.Translator;
+import org.opentele.consult.framework.UserSession;
 import org.opentele.consult.message.MessageCodes;
 import org.opentele.consult.service.MailService;
 import org.opentele.consult.service.TemplateContextFactory;
@@ -35,16 +36,19 @@ public class UserController {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final MailService mailService;
     private TemplateContextFactory templateContextFactory;
+    private UserSession userSession;
+    private static final Logger logger = Logger.getLogger(UserController.class);
 
     @Autowired
-    public UserController(UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder, MailService mailService, TemplateContextFactory templateContextFactory) {
+    public UserController(UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder, MailService mailService, TemplateContextFactory templateContextFactory, UserSession userSession) {
         this.userService = userService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.mailService = mailService;
         this.templateContextFactory = templateContextFactory;
+        this.userSession = userSession;
     }
 
-    @RequestMapping(value = "/api/app/organisation", method = {RequestMethod.PUT})
+    @RequestMapping(value = "/api/organisation", method = {RequestMethod.PUT})
     @Transactional
     public ResponseEntity<String> save(@RequestBody OrganisationPutPostRequest request) {
         String error = userService.validateNewOrganisation(request.getEmail(), request.getMobile());
@@ -60,30 +64,35 @@ public class UserController {
         user.setEmail(request.getEmail());
         user.setMobile(request.getMobile());
         user.setName(request.getName());
-        user.setUserType(UserType.OrgAdmin);
 
         userService.createNewOrganisation(user, organisation);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/api/user", method = RequestMethod.GET)
     @PreAuthorize("hasAnyRole('User','OrgAdmin')")
+    @RequestMapping(value = "/api/user", method = RequestMethod.GET)
     public UserResponse getUser(Principal principal) {
-        String name = principal.getName();
-        User user = userService.findUserByEmail(name);
-        UserResponse userResponse = new UserResponse();
-        userResponse.setUserType(user.getUserType().name());
-        userResponse.setPhone(user.getMobile());
-        userResponse.setEmail(user.getEmail());
-        userResponse.setOrganisationName(user.getOrganisation().getName());
-        userResponse.setName(user.getName());
-        userResponse.setUserType(user.getUserType().name());
-        return userResponse;
+        try {
+            String name = principal.getName();
+            OrganisationUser organisationUser = userService.getOrganisationUser(name, userSession.getCurrentOrganisation());
+            User user = organisationUser.getUser();
+
+            UserResponse userResponse = new UserResponse();
+            userResponse.setUserType(organisationUser.getUserType().name());
+            userResponse.setMobile(user.getMobile());
+            userResponse.setEmail(user.getEmail());
+            userResponse.setOrganisationName(userSession.getCurrentOrganisation().getName());
+            userResponse.setName(user.getName());
+            return userResponse;
+        } finally {
+            logger.info("Returned user info");
+        }
     }
 
     @RequestMapping(value = "/api/user/loggedIn", method = RequestMethod.GET)
     @PreAuthorize("hasAnyRole('User','OrgAdmin')")
     public boolean loggedIn() {
+        logger.info("User is logged in");
         return true;
     }
 

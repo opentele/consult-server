@@ -3,16 +3,18 @@ package org.opentele.consult.mapper.consultationRoom;
 import org.opentele.consult.contract.consultationRoom.ConsultationRoomScheduleRequest;
 import org.opentele.consult.contract.consultationRoom.ConsultationRoomScheduleResponse;
 import org.opentele.consult.contract.security.ProviderResponse;
+import org.opentele.consult.domain.Organisation;
 import org.opentele.consult.domain.consultationRoom.ConsultationRoomSchedule;
+import org.opentele.consult.domain.security.OrganisationUser;
 import org.opentele.consult.domain.security.User;
 
 import java.util.stream.Collectors;
 
 public class ConsultationRoomScheduleMapper {
-    public static ConsultationRoomSchedule mapNew(ConsultationRoomScheduleRequest request, User user) {
+    public static ConsultationRoomSchedule mapNew(ConsultationRoomScheduleRequest request, Organisation organisation) {
         ConsultationRoomSchedule consultationRoomSchedule = new ConsultationRoomSchedule();
         consultationRoomSchedule.setEndTime(request.getEndTime());
-        consultationRoomSchedule.setOrganisation(user.getOrganisation());
+        consultationRoomSchedule.setOrganisation(organisation);
         consultationRoomSchedule.setRecurrenceRule(request.getRecurrenceRule());
         consultationRoomSchedule.setStartDate(request.getStartDate());
         consultationRoomSchedule.setStartTime(request.getStartTime());

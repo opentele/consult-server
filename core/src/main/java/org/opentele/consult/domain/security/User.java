@@ -1,13 +1,17 @@
 package org.opentele.consult.domain.security;
 
+import org.opentele.consult.domain.consultationRoom.ConsultationRoomScheduleUser;
+import org.opentele.consult.domain.framework.AbstractEntity;
 import org.opentele.consult.domain.framework.OrganisationalEntity;
 import org.springframework.data.annotation.Transient;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class User extends OrganisationalEntity {
+public class User extends AbstractEntity {
     @Column(name = "email")
     private String email;
 
@@ -21,9 +25,8 @@ public class User extends OrganisationalEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "user_type", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private UserType userType;
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, mappedBy = "user")
+    private Set<OrganisationUser> organisationUsers = new HashSet<>();
 
     public String getPassword() {
         return password;
@@ -55,13 +58,5 @@ public class User extends OrganisationalEntity {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public void setUserType(UserType userType) {
-        this.userType = userType;
-    }
-
-    public UserType getUserType() {
-        return userType;
     }
 }
