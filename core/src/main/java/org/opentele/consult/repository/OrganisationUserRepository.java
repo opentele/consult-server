@@ -11,6 +11,7 @@ import java.util.List;
 @Repository
 public interface OrganisationUserRepository extends AbstractRepository<OrganisationUser> {
     OrganisationUser findByUserAndOrganisation(User user, Organisation currentOrganisation);
+    OrganisationUser findByUserAndOrganisationId(User user, int organisationId);
     List<OrganisationUser> findAllByOrganisationName(String organisationName);
     List<OrganisationUser> findAllByUser(User user);
 }

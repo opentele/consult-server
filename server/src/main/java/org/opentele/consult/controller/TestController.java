@@ -9,13 +9,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.context.Context;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -36,6 +44,17 @@ public class TestController {
         this.templateContextFactory = templateContextFactory;
         this.userService = userService;
         this.consultationRoomService = consultationRoomService;
+    }
+
+    @RequestMapping(value = "/api/test/foo")
+    public String hello(HttpSession httpSession) {
+        return "Hello";
+    }
+
+    @RequestMapping(value = "/api/test/security/orgAdminRole")
+    @PreAuthorize("hasAnyRole('OrgAdmin')")
+    public String orgAdminRole(HttpSession httpSession) {
+        return "Yes";
     }
 
     @PutMapping()

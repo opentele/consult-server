@@ -86,6 +86,8 @@ test-schema-generation: generate-schema rebuild-db migrate-db
 test-server: drop-test-db build-test-db
 	./gradlew clean build
 
+test: test-server
+
 open-test-results-core:
 	open core/build/reports/tests/test/index.html
 

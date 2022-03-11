@@ -46,8 +46,8 @@ public class UserService {
         return null;
     }
 
-    public OrganisationUser getOrganisationUser(String email, Organisation currentOrganisation) {
-        User user = userRepository.findByEmail(email);
+    public OrganisationUser getOrganisationUser(String userId, Organisation currentOrganisation) {
+        User user = this.getUser(userId);
         return organisationUserRepository.findByUserAndOrganisation(user, currentOrganisation);
     }
 
@@ -128,5 +128,27 @@ public class UserService {
     public User getUser(Principal principal) {
         String name = principal.getName();
         return getUser(name, name);
+    }
+
+    public UserType getUserType(String userId, int organisationId) {
+        User user = this.getUser(userId);
+        OrganisationUser organisationUser = organisationUserRepository.findByUserAndOrganisationId(user, organisationId);
+        if (organisationUser == null)
+            throw new RuntimeException(String.format("User doesn't belong to this organisation: %d", organisationId));
+        return organisationUser.getUserType();
+    }
+
+    public OrganisationUser getOrganisationUser(String email, String mobile) {
+        User user = this.getUser(email, mobile);
+        List<OrganisationUser> organisationUsers = organisationUserRepository.findAllByUser(user);
+        if (organisationUsers.size() != 1)
+            return null;
+
+        return organisationUsers.get(0);
+    }
+
+    public List<OrganisationUser> getOrganisationUsers(String userId) {
+        User user = this.getUser(userId);
+        return organisationUserRepository.findAllByUser(user);
     }
 }

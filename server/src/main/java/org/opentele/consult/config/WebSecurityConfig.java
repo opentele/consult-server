@@ -1,6 +1,11 @@
 package org.opentele.consult.config;
 
 import org.apache.log4j.Logger;
+import org.opentele.consult.domain.security.OrganisationUser;
+import org.opentele.consult.domain.security.UserType;
+import org.opentele.consult.framework.UserSession;
+import org.opentele.consult.service.SecurityService;
+import org.opentele.consult.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,6 +38,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource dataSource;
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private UserSession userSession;
+
     private static final String usersQuery = "select * from (select concat(email,mobile) foo, password, true as active from users) x where x.foo = ?";
     private static final String privilegesQuery = "select * from (select concat(email,mobile) foo, 'ROLE_User' from users u) x where x.foo = ?";
 
@@ -60,6 +71,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private void handleLogin(ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry) throws Exception {
         registry.anyRequest().authenticated().and().csrf().disable()
                 .formLogin().loginPage("/api/login").successHandler((request, response, authentication) -> {
+            OrganisationUser organisationUser = userService.getOrganisationUser(request.getParameter("email"), request.getParameter("mobile"));
+            if (!UserType.User.equals(organisationUser.getUserType())) {
+                SecurityService.elevateToRole(organisationUser.getUserType());
+                userSession.setCurrentOrganisation(organisationUser.getOrganisation());
+            }
             response.setStatus(HttpServletResponse.SC_OK);
             logger.info("Login Successful");
         }).failureHandler((request, response, exception) -> {

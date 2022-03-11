@@ -1,7 +1,6 @@
 package org.opentele.consult.controller;
 
 import org.apache.log4j.Logger;
-import org.opentele.consult.contract.ApplicationStatus;
 import org.opentele.consult.contract.security.*;
 import org.opentele.consult.domain.Organisation;
 import org.opentele.consult.domain.security.OrganisationUser;
@@ -12,6 +11,7 @@ import org.opentele.consult.framework.Translator;
 import org.opentele.consult.framework.UserSession;
 import org.opentele.consult.message.MessageCodes;
 import org.opentele.consult.service.MailService;
+import org.opentele.consult.service.SecurityService;
 import org.opentele.consult.service.TemplateContextFactory;
 import org.opentele.consult.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,9 @@ import javax.transaction.Transactional;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.Principal;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 public class UserController {
@@ -69,6 +71,23 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/api/user/organisation", method = {RequestMethod.POST})
+    @PreAuthorize("hasRole('User')")
+    public ResponseEntity<String> setOrganisation(@RequestParam(name = "organisationId") int organisationId, Principal principal) {
+        String userId = principal.getName();
+        UserType userType = userService.getUserType(userId, organisationId);
+        if (userType.equals(UserType.OrgAdmin))
+            SecurityService.elevateToOrgAdminRole();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/api/user/organisation", method = {RequestMethod.GET})
+    @PreAuthorize("hasRole('User')")
+    public List<UserOrganisationContract> getOrganisations(Principal principal) {
+        String userId = principal.getName();
+        return userService.getOrganisationUsers(userId).stream().map(UserOrganisationContract::create).collect(Collectors.toList());
+    }
+
     @PreAuthorize("hasAnyRole('User','OrgAdmin')")
     @RequestMapping(value = "/api/user", method = RequestMethod.GET)
     public UserResponse getUser(Principal principal) {
@@ -78,7 +97,7 @@ public class UserController {
             User user = organisationUser.getUser();
 
             UserResponse userResponse = new UserResponse();
-            userResponse.setUserType(organisationUser.getUserType().name());
+            userResponse.setUserType(organisationUser.getUserType());
             userResponse.setMobile(user.getMobile());
             userResponse.setEmail(user.getEmail());
             userResponse.setOrganisationName(userSession.getCurrentOrganisation().getName());
