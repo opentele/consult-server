@@ -27,23 +27,20 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
-public class ConsultationRoomController {
+public class ConsultationRoomController extends BaseController {
     private final ConsultationRoomRepository consultationRoomRepository;
     private final ConsultationRoomScheduleRepository consultationRoomScheduleRepository;
     private final ConsultationRoomMapper consultationRoomMapper;
-    private final UserService userService;
-    private UserSession userSession;
 
     @Autowired
     public ConsultationRoomController(ConsultationRoomRepository consultationRoomRepository,
                                       ConsultationRoomScheduleRepository consultationRoomScheduleRepository,
                                       UserService userService, ConsultationRoomMapper consultationRoomMapper,
                                       UserSession userSession) {
+        super(userService, userSession);
         this.consultationRoomRepository = consultationRoomRepository;
         this.consultationRoomScheduleRepository = consultationRoomScheduleRepository;
         this.consultationRoomMapper = consultationRoomMapper;
-        this.userService = userService;
-        this.userSession = userSession;
     }
 
     @GetMapping(value = "/api/consultationRoom/today")
@@ -67,11 +64,11 @@ public class ConsultationRoomController {
 
     private Map<LocalDate, List<ConsultationRoomResponse>> getConsultations(LocalDate startDate, LocalDate endDate, Principal principal) {
         Map<LocalDate, List<ConsultationRoomResponse>> map = new HashMap<>();
-        ConsultationRooms consultationRooms = consultationRoomRepository.findAllBetween(startDate, endDate, userSession.getCurrentOrganisation());
+        ConsultationRooms consultationRooms = consultationRoomRepository.findAllBetween(startDate, endDate, getCurrentOrganisation());
         consultationRooms.forEach(consultationRoom -> {
             LocalDate date = consultationRoom.getScheduledOn();
             map.computeIfAbsent(date, k -> new ArrayList<>());
-            map.get(date).add(consultationRoomMapper.map(consultationRoom, userService.getUser(principal)));
+            map.get(date).add(consultationRoomMapper.map(consultationRoom, getCurrentUser(principal)));
         });
         return map;
     }
@@ -79,7 +76,7 @@ public class ConsultationRoomController {
     @GetMapping(value = "/api/consultationRoomSchedule")
     @PreAuthorize("hasRole('User')")
     public List<ConsultationRoomScheduleResponse> getScheduledConsultations() {
-        var organisation = userSession.getCurrentOrganisation();
+        var organisation = getCurrentOrganisation();
         var list = consultationRoomScheduleRepository.findAllByOrganisation(organisation);
         return list.stream().map(ConsultationRoomScheduleMapper::map).collect(Collectors.toList());
     }
@@ -87,11 +84,11 @@ public class ConsultationRoomController {
     @PutMapping(value = "/api/consultationRoomSchedule")
     @PreAuthorize("hasRole('OrgAdmin')")
     public ResponseEntity<Integer> put(@RequestBody ConsultationRoomScheduleRequest request, Principal principal) {
-        var consultationRoomSchedule = ConsultationRoomScheduleMapper.mapNew(request, userSession.getCurrentOrganisation());
+        var consultationRoomSchedule = ConsultationRoomScheduleMapper.mapNew(request, getCurrentOrganisation());
         var consultationRoomScheduleUsers = request.getProviders().stream().map(userId -> {
             var consultationRoomScheduleUser = new ConsultationRoomScheduleUser();
             consultationRoomScheduleUser.setConsultationRoomSchedule(consultationRoomSchedule);
-            consultationRoomScheduleUser.setUser(userService.getUser(userId));
+            consultationRoomScheduleUser.setUser(getUser(userId));
             return consultationRoomScheduleUser;
         }).collect(Collectors.toSet());
         consultationRoomSchedule.setProviders(consultationRoomScheduleUsers);

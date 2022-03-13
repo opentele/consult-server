@@ -14,4 +14,5 @@ public interface OrganisationUserRepository extends AbstractRepository<Organisat
     OrganisationUser findByUserAndOrganisationId(User user, int organisationId);
     List<OrganisationUser> findAllByOrganisationName(String organisationName);
     List<OrganisationUser> findAllByUser(User user);
+    List<OrganisationUser> findTop10ByUserEmailContainsOrUserMobileContains(String q1, String q2);
 }

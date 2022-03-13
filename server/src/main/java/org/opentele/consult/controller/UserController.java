@@ -33,21 +33,18 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
-public class UserController {
-    private final UserService userService;
+public class UserController extends BaseController {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final MailService mailService;
     private TemplateContextFactory templateContextFactory;
-    private UserSession userSession;
     private static final Logger logger = Logger.getLogger(UserController.class);
 
     @Autowired
     public UserController(UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder, MailService mailService, TemplateContextFactory templateContextFactory, UserSession userSession) {
-        this.userService = userService;
+        super(userService, userSession);
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.mailService = mailService;
         this.templateContextFactory = templateContextFactory;
-        this.userSession = userSession;
     }
 
     @RequestMapping(value = "/api/organisation", method = {RequestMethod.PUT})
@@ -89,18 +86,18 @@ public class UserController {
     }
 
     @PreAuthorize("hasAnyRole('User','OrgAdmin')")
-    @RequestMapping(value = "/api/user", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/user/current", method = RequestMethod.GET)
     public UserResponse getUser(Principal principal) {
         try {
             String name = principal.getName();
-            OrganisationUser organisationUser = userService.getOrganisationUser(name, userSession.getCurrentOrganisation());
+            OrganisationUser organisationUser = userService.getOrganisationUser(name, getCurrentOrganisation());
             User user = organisationUser.getUser();
 
             UserResponse userResponse = new UserResponse();
             userResponse.setUserType(organisationUser.getUserType());
             userResponse.setMobile(user.getMobile());
             userResponse.setEmail(user.getEmail());
-            userResponse.setOrganisationName(userSession.getCurrentOrganisation().getName());
+            userResponse.setOrganisationName(getCurrentOrganisation().getName());
             userResponse.setName(user.getName());
             return userResponse;
         } finally {
@@ -153,5 +150,10 @@ public class UserController {
                 userService.updatePassword(passwordChangeRequest.getToken(), passwordChangeRequest.getPassword());
                 return new ResponseEntity<>(HttpStatus.OK);
         }
+    }
+
+    @GetMapping("/api/user/search")
+    public List<UserContract> search(@RequestParam("q") String searchParam) {
+        return userService.findUsers(searchParam).stream().map(UserContract::create).collect(Collectors.toList());
     }
 }

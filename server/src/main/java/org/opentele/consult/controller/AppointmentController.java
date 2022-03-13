@@ -17,27 +17,24 @@ import java.security.Principal;
 
 @RestController
 @PreAuthorize("hasRole('User')")
-public class AppointmentController {
+public class AppointmentController extends BaseController {
     private final ConsultationRoomRepository consultationRoomRepository;
-    private final UserService userService;
     private final ClientRepository clientRepository;
     private final AppointmentTokenRepository appointmentTokenRepository;
-    private UserSession userSession;
 
     @Autowired
     public AppointmentController(ConsultationRoomRepository consultationRoomRepository, UserService userService, ClientRepository clientRepository, AppointmentTokenRepository appointmentTokenRepository, UserSession userSession) {
+        super(userService, userSession);
         this.consultationRoomRepository = consultationRoomRepository;
-        this.userService = userService;
         this.clientRepository = clientRepository;
         this.appointmentTokenRepository = appointmentTokenRepository;
-        this.userSession = userSession;
     }
 
     @RequestMapping(value = "/api/appointment", method = {RequestMethod.PUT, RequestMethod.POST})
     public AppointmentResponse saveAppointment(@RequestBody AppointmentRequest request, Principal principal) {
         AppointmentToken appointmentToken = new AppointmentToken();
-        appointmentToken.setAppointmentProvider(userService.getUser(principal));
-        appointmentToken.setOrganisation(userSession.getCurrentOrganisation());
+        appointmentToken.setAppointmentProvider(getCurrentUser(principal));
+        appointmentToken.setOrganisation(getCurrentOrganisation());
         appointmentToken.setClient(clientRepository.findEntity(request.getClientId()));
         ConsultationRoom consultationRoom = consultationRoomRepository.findEntity(request.getConsultationRoomId());
         appointmentToken.setConsultationRoom(consultationRoom);

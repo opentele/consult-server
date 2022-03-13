@@ -3,6 +3,7 @@ package org.opentele.consult.controller;
 import org.opentele.consult.contract.client.ClientRequestResponse;
 import org.opentele.consult.contract.client.ClientSearchResponse;
 import org.opentele.consult.contract.client.ConsultationRoomClientResponse;
+import org.opentele.consult.domain.Organisation;
 import org.opentele.consult.domain.client.Client;
 import org.opentele.consult.framework.UserSession;
 import org.opentele.consult.repository.ClientRepository;
@@ -22,22 +23,19 @@ import java.util.stream.Collectors;
 
 @RestController
 @PreAuthorize("hasRole('User')")
-public class ClientController {
+public class ClientController extends BaseController {
     private final ClientRepository clientRepository;
-    private final UserService userService;
-    private UserSession userSession;
 
     @Autowired
     public ClientController(ClientRepository clientRepository, UserService userService, UserSession userSession) {
+        super(userService, userSession);
         this.clientRepository = clientRepository;
-        this.userService = userService;
-        this.userSession = userSession;
     }
 
     @GetMapping("/api/client/search")
     public List<ClientSearchResponse> searchResults(@RequestParam("q") String q,
                                                     @RequestParam("consultationRoomId") int consultationRoomId) {
-        return clientRepository.getClientsMatching(q, userSession.getCurrentOrganisation(), consultationRoomId).stream().map(client -> {
+        return clientRepository.getClientsMatching(q, getCurrentOrganisation(), consultationRoomId).stream().map(client -> {
             ClientSearchResponse clientSearchResponse = new ClientSearchResponse();
             clientSearchResponse.setId(client.getId());
             clientSearchResponse.setRegistrationNumber(client.getRegistrationNumber());
@@ -71,7 +69,7 @@ public class ClientController {
         client.setGender(contract.getGender());
         client.setDateOfBirth(contract.getDateOfBirth());
         client.setName(contract.getName());
-        client.setOrganisation(userSession.getCurrentOrganisation());
+        client.setOrganisation(getCurrentOrganisation());
         client.setRegistrationNumber(contract.getRegistrationNumber());
 
         contract.setId(clientRepository.save(client).getId());

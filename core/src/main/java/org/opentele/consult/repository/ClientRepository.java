@@ -14,7 +14,7 @@ public interface ClientRepository extends AbstractRepository<Client> {
     @Query(
             value = "SELECT c.* FROM client c " +
                     "join organisation o on c.organisation_id = o.id " +
-                    "where c.name like :s and o.id = :organisationId and c.id not in (select client_id from appointment_token where consultation_room_id = :consultationRoomId ) order by c.name",
+                    "where c.name like :s and o.id = :organisationId and c.id not in (select client_id from appointment_token where consultation_room_id = :consultationRoomId ) order by c.name limit 10",
             nativeQuery = true)
     List<Client> searchClients(String s, int organisationId, int consultationRoomId);
 

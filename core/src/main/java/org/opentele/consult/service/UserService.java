@@ -46,20 +46,27 @@ public class UserService {
         return null;
     }
 
-    public OrganisationUser getOrganisationUser(String userId, Organisation currentOrganisation) {
+    public OrganisationUser getOrganisationUser(String userName, Organisation currentOrganisation) {
+        User user = this.getUser(userName);
+        return organisationUserRepository.findByUserAndOrganisation(user, currentOrganisation);
+    }
+
+    public OrganisationUser getOrganisationUser(int userId, Organisation currentOrganisation) {
         User user = this.getUser(userId);
         return organisationUserRepository.findByUserAndOrganisation(user, currentOrganisation);
     }
 
     public void createNewOrganisation(User user, Organisation organisation) {
         Organisation savedOrg = organisationRepository.save(organisation);
-
         User savedUser = userRepository.save(user);
+        addUser(savedOrg, savedUser, UserType.OrgAdmin);
+    }
 
+    public void addUser(Organisation savedOrg, User savedUser, UserType role) {
         OrganisationUser organisationUser = new OrganisationUser();
         organisationUser.setUser(savedUser);
         organisationUser.setOrganisation(savedOrg);
-        organisationUser.setUserType(UserType.OrgAdmin);
+        organisationUser.setUserType(role);
         organisationUserRepository.save(organisationUser);
     }
 
@@ -150,5 +157,13 @@ public class UserService {
     public List<OrganisationUser> getOrganisationUsers(String userId) {
         User user = this.getUser(userId);
         return organisationUserRepository.findAllByUser(user);
+    }
+
+    public Organisation getOrganisation(int organisationId) {
+        return organisationRepository.findEntity(organisationId);
+    }
+
+    public List<OrganisationUser> findUsers(String searchParam) {
+        return organisationUserRepository.findTop10ByUserEmailContainsOrUserMobileContains(searchParam, searchParam);
     }
 }

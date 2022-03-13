@@ -1,20 +1,21 @@
 package org.opentele.consult.framework;
 
-import org.opentele.consult.domain.Organisation;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
+
 @Component
 @Scope(value="session", proxyMode= ScopedProxyMode.TARGET_CLASS)
-public class UserSession {
-    private Organisation currentOrganisation;
+public class UserSession implements Serializable {
+    private int currentOrganisationId;
 
-    public Organisation getCurrentOrganisation() {
-        return currentOrganisation;
+    public int getCurrentOrganisationId() {
+        return currentOrganisationId;
     }
 
-    public void setCurrentOrganisation(Organisation currentOrganisation) {
-        this.currentOrganisation = currentOrganisation;
+    public void setCurrentOrganisationId(int currentOrganisationId) {
+        this.currentOrganisationId = currentOrganisationId;
     }
 }
