@@ -116,8 +116,8 @@ public class UserService {
         return userRepository.getUserByMobile(mobile);
     }
 
-    public User getUser(String userId) {
-        return getUser(userId, userId);
+    public User getUser(String userName) {
+        return getUser(userName, userName);
     }
 
     public void deleteOrganisation(String orgName) {

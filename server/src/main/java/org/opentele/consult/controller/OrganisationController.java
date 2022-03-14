@@ -1,7 +1,9 @@
 package org.opentele.consult.controller;
 
+import org.opentele.consult.contract.security.OrganisationUserContract;
 import org.opentele.consult.contract.security.UserContract;
 import org.opentele.consult.domain.security.OrganisationUser;
+import org.opentele.consult.domain.security.User;
 import org.opentele.consult.domain.security.UserType;
 import org.opentele.consult.framework.UserSession;
 import org.opentele.consult.service.UserService;
@@ -26,16 +28,21 @@ public class OrganisationController extends BaseController {
     @PreAuthorize("hasRole('OrgAdmin')")
     public List<UserContract> getUsers(Principal principal) {
         String userId = principal.getName();
-        return userService.getOrganisationUsers(userId).stream().map(UserContract::create).collect(Collectors.toList());
+        return userService.getOrganisationUsers(userId).stream().map(OrganisationUserContract::create).collect(Collectors.toList());
     }
 
     @PostMapping("/api/organisation/addUser")
     @PreAuthorize("hasRole('OrgAdmin')")
-    public ResponseEntity addUser(@RequestParam(name = "userId") int userId) {
-        OrganisationUser organisationUser = userService.getOrganisationUser(userId, getCurrentOrganisation());
-        if (organisationUser == null) {
-            userService.addUser(getCurrentOrganisation(), getUser(userId), UserType.User);
-        }
+    public ResponseEntity addUser(@RequestParam(name = "userName") String userName) {
+        User user = userService.getUser(userName);
+        if (user == null)
+            return new ResponseEntity("added-user-not-found", HttpStatus.BAD_REQUEST);
+
+        OrganisationUser organisationUser = userService.getOrganisationUser(userName, getCurrentOrganisation());
+        if (organisationUser != null)
+            return new ResponseEntity("user-already-in-organisation", HttpStatus.BAD_REQUEST);
+
+        userService.addUser(getCurrentOrganisation(), user, UserType.User);
         return new ResponseEntity(HttpStatus.OK);
     }
 }

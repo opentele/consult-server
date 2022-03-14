@@ -87,7 +87,7 @@ public class UserController extends BaseController {
 
     @PreAuthorize("hasAnyRole('User','OrgAdmin')")
     @RequestMapping(value = "/api/user/current", method = RequestMethod.GET)
-    public UserResponse getUser(Principal principal) {
+    public UserResponse getLoggedInUser(Principal principal) {
         try {
             String name = principal.getName();
             OrganisationUser organisationUser = userService.getOrganisationUser(name, getCurrentOrganisation());
@@ -103,6 +103,14 @@ public class UserController extends BaseController {
         } finally {
             logger.info("Returned user info");
         }
+    }
+
+    @GetMapping
+    @RequestMapping(value = "/api/user", method = RequestMethod.GET)
+    @PreAuthorize("hasAnyRole('User','OrgAdmin')")
+    public UserContract getUser(@RequestParam("userName") String userName) {
+        User user = userService.getUser(userName);
+        return UserContract.from(user);
     }
 
     @RequestMapping(value = "/api/user/loggedIn", method = RequestMethod.GET)
@@ -153,7 +161,7 @@ public class UserController extends BaseController {
     }
 
     @GetMapping("/api/user/search")
-    public List<UserContract> search(@RequestParam("q") String searchParam) {
-        return userService.findUsers(searchParam).stream().map(UserContract::create).collect(Collectors.toList());
+    public List<OrganisationUserContract> search(@RequestParam("q") String searchParam) {
+        return userService.findUsers(searchParam).stream().map(OrganisationUserContract::create).collect(Collectors.toList());
     }
 }

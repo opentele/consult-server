@@ -1,6 +1,6 @@
 package org.opentele.consult.contract.security;
 
-public class OrganisationPutPostRequest extends UserContract {
+public class OrganisationPutPostRequest extends OrganisationUserContract {
     private String password;
     private int organisationId;
     private int userId;

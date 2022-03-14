@@ -1,15 +1,19 @@
 package org.opentele.consult.contract.security;
 
-import org.opentele.consult.domain.security.OrganisationUser;
 import org.opentele.consult.domain.security.User;
-import org.opentele.consult.domain.security.UserType;
 
 public class UserContract {
     private String email;
     private String mobile;
     private String name;
-    private UserType userType;
-    private String organisationName;
+
+    public static UserContract from(User user) {
+        UserContract userContract = new UserContract();
+        userContract.setName(user.getName());
+        userContract.setMobile(user.getMobile());
+        userContract.setEmail(user.getEmail());
+        return userContract;
+    }
 
     public String getEmail() {
         return email;
@@ -33,31 +37,5 @@ public class UserContract {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public UserType getUserType() {
-        return userType;
-    }
-
-    public void setUserType(UserType userType) {
-        this.userType = userType;
-    }
-
-    public String getOrganisationName() {
-        return organisationName;
-    }
-
-    public void setOrganisationName(String organisationName) {
-        this.organisationName = organisationName;
-    }
-
-    public static UserContract create(OrganisationUser organisationUser) {
-        UserContract userContract = new UserContract();
-        User user = organisationUser.getUser();
-        userContract.setEmail(user.getEmail());
-        userContract.setMobile(user.getMobile());
-        userContract.setUserType(organisationUser.getUserType());
-        userContract.setName(user.getName());
-        return userContract;
     }
 }
