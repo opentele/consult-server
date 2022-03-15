@@ -1,5 +1,7 @@
 package org.opentele.consult.controller;
 
+import org.opentele.consult.contract.client.ClientSearchResponse;
+import org.opentele.consult.contract.client.ConsultationRoomClientResponse;
 import org.opentele.consult.contract.consultationRoom.BaseConsultationRoomContract;
 import org.opentele.consult.contract.consultationRoom.ConsultationRoomResponse;
 import org.opentele.consult.contract.consultationRoom.ConsultationRoomScheduleRequest;
@@ -11,6 +13,7 @@ import org.opentele.consult.domain.consultationRoom.ConsultationRooms;
 import org.opentele.consult.framework.UserSession;
 import org.opentele.consult.mapper.consultationRoom.ConsultationRoomMapper;
 import org.opentele.consult.mapper.consultationRoom.ConsultationRoomScheduleMapper;
+import org.opentele.consult.repository.ClientRepository;
 import org.opentele.consult.repository.ConsultationRoomRepository;
 import org.opentele.consult.repository.ConsultationRoomScheduleRepository;
 import org.opentele.consult.service.UserService;
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -31,16 +35,18 @@ public class ConsultationRoomController extends BaseController {
     private final ConsultationRoomRepository consultationRoomRepository;
     private final ConsultationRoomScheduleRepository consultationRoomScheduleRepository;
     private final ConsultationRoomMapper consultationRoomMapper;
+    private final ClientRepository clientRepository;
 
     @Autowired
     public ConsultationRoomController(ConsultationRoomRepository consultationRoomRepository,
                                       ConsultationRoomScheduleRepository consultationRoomScheduleRepository,
                                       UserService userService, ConsultationRoomMapper consultationRoomMapper,
-                                      UserSession userSession) {
+                                      UserSession userSession, ClientRepository clientRepository) {
         super(userService, userSession);
         this.consultationRoomRepository = consultationRoomRepository;
         this.consultationRoomScheduleRepository = consultationRoomScheduleRepository;
         this.consultationRoomMapper = consultationRoomMapper;
+        this.clientRepository = clientRepository;
     }
 
     @GetMapping(value = "/api/consultationRoom/today")
@@ -100,5 +106,24 @@ public class ConsultationRoomController extends BaseController {
     @PreAuthorize("hasRole('User')")
     public ResponseEntity<Integer> put(@RequestBody BaseConsultationRoomContract request, Principal principal) {
         return null;
+    }
+
+    @GetMapping(value = "/api/consultationRoom/client")
+    public List<ConsultationRoomClientResponse> getClients(@RequestParam(name = "consultationRoomId") int consultationRoomId) {
+        return clientRepository.getClients(consultationRoomId).stream().map(projection -> {
+            ConsultationRoomClientResponse response = new ConsultationRoomClientResponse();
+            response.setGender(projection.getGender());
+            response.setQueueNumber(projection.getQueueNumber());
+            response.setAge(Period.between(LocalDate.now(), projection.getDateOfBirth()));
+            response.setName(projection.getName());
+            response.setRegistrationNumber(projection.getRegistrationNumber());
+            return response;
+        }).collect(Collectors.toList());
+    }
+
+    @GetMapping("/api/consultationRoom/client/search")
+    public List<ClientSearchResponse> searchResults(@RequestParam("q") String q,
+                                                    @RequestParam("consultationRoomId") int consultationRoomId) {
+        return clientRepository.getClientsMatching(q, getCurrentOrganisation(), consultationRoomId).stream().map(ClientSearchResponse::from).collect(Collectors.toList());
     }
 }

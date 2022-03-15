@@ -1,24 +1,28 @@
 package org.opentele.consult.contract.client;
 
-import org.opentele.consult.contract.framework.BaseEntityContract;
+import org.opentele.consult.domain.client.Client;
+import org.opentele.consult.domain.client.Gender;
 
-public class ClientSearchResponse extends BaseEntityContract {
-    private String name;
-    private String registrationNumber;
+import java.time.Period;
 
-    public String getName() {
-        return name;
+public class ClientSearchResponse extends BaseClientContract {
+    private Period age;
+
+    public static ClientSearchResponse from(Client client) {
+        ClientSearchResponse clientSearchResponse = new ClientSearchResponse();
+        clientSearchResponse.setId(client.getId());
+        clientSearchResponse.setRegistrationNumber(client.getRegistrationNumber());
+        clientSearchResponse.setName(client.getName());
+        clientSearchResponse.setAge(client.getAge());
+        clientSearchResponse.setGender(client.getGender());
+        return clientSearchResponse;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public Period getAge() {
+        return age;
     }
 
-    public String getRegistrationNumber() {
-        return registrationNumber;
-    }
-
-    public void setRegistrationNumber(String registrationNumber) {
-        this.registrationNumber = registrationNumber;
+    public void setAge(Period age) {
+        this.age = age;
     }
 }

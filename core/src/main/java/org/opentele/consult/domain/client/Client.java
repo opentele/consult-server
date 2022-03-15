@@ -3,8 +3,8 @@ package org.opentele.consult.domain.client;
 import org.opentele.consult.domain.framework.OrganisationalEntity;
 
 import javax.persistence.*;
-import java.time.Duration;
 import java.time.LocalDate;
+import java.time.Period;
 
 @Entity
 @Table(name = "client")
@@ -54,7 +54,7 @@ public class Client extends OrganisationalEntity {
         this.registrationNumber = registrationNumber;
     }
 
-    public Duration getAge() {
-        return Duration.between(LocalDate.now(), this.getDateOfBirth());
+    public Period getAge() {
+        return Period.between(LocalDate.now(), this.getDateOfBirth());
     }
 }
