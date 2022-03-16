@@ -96,6 +96,9 @@ open-test-results-server:
 
 create-super-admin:
 	cat superadmin.sql | psql -Uconsult consult
+
+data-setup:
+	newman run setup-data.json -e postman-env.json
 #######
 
 
@@ -109,6 +112,6 @@ endif
 #######
 
 
-###### Use Case
+###### Use case specific
 local-setup: generate-schema rebuild-db migrate-db create-super-admin
 local-setup-and-start: local-setup run-server-without-background

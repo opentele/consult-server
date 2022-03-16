@@ -1,0 +1,187 @@
+{
+	"info": {
+		"_postman_id": "93304eb0-4cb4-40b0-ad48-278cc20b0895",
+		"name": "Consult Data Setup",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Data Setup",
+			"item": [
+				{
+					"name": "Register organisation by email",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"organisationName\": \"{{EMAIL_USER_ORGANISATION}}\",\n    \"name\": \"Vivek Singh\",\n    \"email\": \"{{EMAIL_USER}}\",\n    \"password\": \"{{EMAIL_USER_PASSWORD}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/organisation",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"organisation"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login by email",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "{{EMAIL_USER}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{EMAIL_USER_PASSWORD}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/login",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consultation Room Schedule",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"TB Clinic\",\n    \"totalSlots\": 10,\n    \"providers\": [],\n    \"recurrenceRule\": \"FREQ=WEEKLY;INTERVAL=1;BYDAY=MO,TU,WE,TH,FR,SA,SU\",\n    \"startTime\": [12,0],\n    \"endTime\": [16,0],\n    \"startDate\": [2022,2,4]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_API_URL}}/consultationRoomSchedule",
+							"host": [
+								"{{BASE_API_URL}}"
+							],
+							"path": [
+								"consultationRoomSchedule"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Clients",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n  {\n    \"name\": \"Vivek Gagrani\",\n    \"gender\": \"Male\",\n    \"dateOfBirth\": \"2000-01-03\",\n    \"registrationNumber\": 20021\n  },\n  {\n    \"name\": \"Sid Narayanan\",\n    \"gender\": \"Male\",\n    \"dateOfBirth\": \"2000-10-03\",\n    \"registrationNumber\": 20022\n  },\n  {\n    \"name\": \"Mukul De\",\n    \"gender\": \"Male\",\n    \"dateOfBirth\": \"2002-01-03\",\n    \"registrationNumber\": 20023\n  },\n  {\n    \"name\": \"Himani Saran\",\n    \"gender\": \"Female\",\n    \"dateOfBirth\": \"2010-11-03\",\n    \"registrationNumber\": 20024\n  },\n  {\n    \"name\": \"Savita Persaud\",\n    \"gender\": \"Female\",\n    \"dateOfBirth\": \"1987-01-01\",\n    \"registrationNumber\": 20025\n  },\n  {\n    \"name\": \"Kirti Dixit\",\n    \"gender\": \"Female\",\n    \"dateOfBirth\": \"1967-01-03\",\n    \"registrationNumber\": 20026\n  },\n  {\n    \"name\": \"Tabeed Raja\",\n    \"gender\": \"Male\",\n    \"dateOfBirth\": \"1987-01-03\",\n    \"registrationNumber\": 20027\n  },\n  {\n    \"name\": \"Moti Sangha\",\n    \"gender\": \"Other\",\n    \"dateOfBirth\": \"1967-01-03\",\n    \"registrationNumber\": 20028\n  },\n  {\n    \"name\": \"Riya Bajwa\",\n    \"gender\": \"Female\",\n    \"dateOfBirth\": \"1935-01-03\",\n    \"registrationNumber\": 20029\n  },\n  {\n    \"name\": \"Aditya Pillay\",\n    \"gender\": \"Male\",\n    \"dateOfBirth\": \"1948-01-03\",\n    \"registrationNumber\": 20030\n  }\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_API_URL}}/clients",
+							"host": [
+								"{{BASE_API_URL}}"
+							],
+							"path": [
+								"clients"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Super Admin Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "superadmin@opentele.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{SUPER_ADMIN_PASSWORD}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/login",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Schedule Rooms",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_API_URL}}/test/scheduleRooms",
+							"host": [
+								"{{BASE_API_URL}}"
+							],
+							"path": [
+								"test",
+								"scheduleRooms"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

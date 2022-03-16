@@ -14,13 +14,13 @@ import java.util.List;
 public interface ClientRepository extends AbstractRepository<Client> {
     @Query(value = "SELECT c.* FROM client c " +
             "join organisation o on c.organisation_id = o.id " +
-            "where c.name like :s and o.id = :organisationId and c.id not in (select client_id from appointment_token where consultation_room_id = :consultationRoomId ) order by c.name limit 10",
+            "where c.name ilike :s and o.id = :organisationId and c.id not in (select client_id from appointment_token where consultation_room_id = :consultationRoomId ) order by c.name limit 10",
             nativeQuery = true)
     List<Client> searchClients(String s, int organisationId, int consultationRoomId);
 
     @Query(value = "SELECT c.* FROM client c " +
             "join organisation o on c.organisation_id = o.id " +
-            "where (c.name like :name and c.registration_number like :registrationNumber) and o.id = :organisationId order by c.name limit 10",
+            "where (c.name ilike :name and COALESCE(c.registration_number, '') ilike :registrationNumber) and o.id = :organisationId order by c.name limit 10",
             nativeQuery = true)
     List<Client> searchClients(String name, String registrationNumber, int organisationId);
 
@@ -36,7 +36,8 @@ public interface ClientRepository extends AbstractRepository<Client> {
     List<ConsultationRoomClientProjection> getClients(int consultationRoomId);
 
     default List<Client> getClientsMatching(String name, String registrationNumber, Organisation organisation) {
-        return searchClients("%" + name + "%", "%" + registrationNumber + "%", organisation.getId());
+        String s2 = registrationNumber == null ? "" : registrationNumber;
+        return searchClients("%" + name + "%", "%" + s2 + "%", organisation.getId());
     }
 
     int countAllByOrganisation(Organisation organisation);

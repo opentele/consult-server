@@ -7,6 +7,7 @@ import java.time.Period;
 
 public class ClientSearchResponse extends BaseClientContract {
     private Period age;
+    private int numberOfSessions;
 
     public static ClientSearchResponse from(Client client) {
         ClientSearchResponse clientSearchResponse = new ClientSearchResponse();
@@ -15,7 +16,16 @@ public class ClientSearchResponse extends BaseClientContract {
         clientSearchResponse.setName(client.getName());
         clientSearchResponse.setAge(client.getAge());
         clientSearchResponse.setGender(client.getGender());
+        clientSearchResponse.setNumberOfSessions(client.getConsultationSessionRecords().size());
         return clientSearchResponse;
+    }
+
+    public int getNumberOfSessions() {
+        return numberOfSessions;
+    }
+
+    public void setNumberOfSessions(int numberOfSessions) {
+        this.numberOfSessions = numberOfSessions;
     }
 
     public Period getAge() {

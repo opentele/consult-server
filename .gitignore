@@ -7,3 +7,4 @@ consult-server.iml
 logs
 dump.sql
 superadmin.sql
+postman-env.json

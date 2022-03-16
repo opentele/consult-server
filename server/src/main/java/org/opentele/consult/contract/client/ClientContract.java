@@ -12,5 +12,4 @@ public class ClientContract extends BaseClientContract {
     public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
-
 }

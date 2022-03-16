@@ -107,6 +107,4 @@ public abstract class AbstractEntity {
     public void setLastModifiedDate(Date lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
     }
-
 }
-
