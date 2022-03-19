@@ -6,7 +6,6 @@ import org.opentele.consult.domain.client.Gender;
 import java.time.Period;
 
 public class ClientSearchResponse extends BaseClientContract {
-    private Period age;
     private int numberOfSessions;
 
     public static ClientSearchResponse from(Client client) {
@@ -26,13 +25,5 @@ public class ClientSearchResponse extends BaseClientContract {
 
     public void setNumberOfSessions(int numberOfSessions) {
         this.numberOfSessions = numberOfSessions;
-    }
-
-    public Period getAge() {
-        return age;
-    }
-
-    public void setAge(Period age) {
-        this.age = age;
     }
 }

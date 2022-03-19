@@ -13,7 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @PreAuthorize("hasRole('User')")
@@ -39,6 +42,12 @@ public class ConsultationSessionRecordController extends BaseController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
+    @RequestMapping(value = "/api/consultationSessionRecords", method = {RequestMethod.PUT})
+    public void save(@RequestBody List<ConsultationSessionRecordContract> contracts) {
+        contracts.forEach(this::save);
+    }
+
+    @Transactional
     @RequestMapping(value = "/api/consultationSessionRecord", method = {RequestMethod.POST, RequestMethod.PUT})
     public ResponseEntity<Integer> save(@RequestBody ConsultationSessionRecordContract contract) {
         ConsultationSessionRecord entity = Repository.findByIdOrCreate(contract.getId(), consultationSessionRecordRepository, new ConsultationSessionRecord());
@@ -46,6 +55,7 @@ public class ConsultationSessionRecordController extends BaseController {
         entity.setObservations(contract.getObservations());
         entity.setRecommendations(contract.getRecommendations());
         entity.setKeyInference(contract.getKeyInference());
+        entity.setOrganisation(getCurrentOrganisation());
         Client client = clientRepository.findEntity(contract.getClientId());
         client.addConsultationSessionRecord(entity);
         clientRepository.save(client);

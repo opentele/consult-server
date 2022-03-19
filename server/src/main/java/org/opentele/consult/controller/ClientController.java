@@ -41,7 +41,6 @@ public class ClientController extends BaseController {
         client.setName(contract.getName());
         client.setOrganisation(getCurrentOrganisation());
         client.setRegistrationNumber(contract.getRegistrationNumber());
-
         contract.setId(clientRepository.save(client).getId());
         return contract;
     }
@@ -51,5 +50,11 @@ public class ClientController extends BaseController {
         int count = clientRepository.countAllByOrganisation(getCurrentOrganisation());
         List<ClientSearchResponse> clientSearchResponses = clientRepository.getClientsMatching(name, registrationNumber, getCurrentOrganisation()).stream().map(ClientSearchResponse::from).collect(Collectors.toList());
         return new ClientSearchResults(count, clientSearchResponses);
+    }
+
+    @GetMapping("/api/client")
+    public ClientContract get(@RequestParam("id") int id) {
+        Client client = clientRepository.findEntity(id);
+        return ClientContract.from(client);
     }
 }

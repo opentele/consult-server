@@ -3,10 +3,13 @@ package org.opentele.consult.contract.client;
 import org.opentele.consult.contract.framework.BaseEntityContract;
 import org.opentele.consult.domain.client.Gender;
 
+import java.time.Period;
+
 public class BaseClientContract extends BaseEntityContract {
     private String name;
     private String registrationNumber;
     private Gender gender;
+    private Period age;
 
     public String getName() {
         return name;
@@ -30,5 +33,13 @@ public class BaseClientContract extends BaseEntityContract {
 
     public void setGender(Gender gender) {
         this.gender = gender;
+    }
+
+    public Period getAge() {
+        return age;
+    }
+
+    public void setAge(Period age) {
+        this.age = age;
     }
 }
