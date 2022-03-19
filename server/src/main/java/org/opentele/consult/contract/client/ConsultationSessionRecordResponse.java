@@ -11,6 +11,7 @@ public class ConsultationSessionRecordResponse extends ConsultationSessionRecord
 
     public static ConsultationSessionRecordResponse from(ConsultationSessionRecord entity) {
         ConsultationSessionRecordResponse contract = new ConsultationSessionRecordResponse();
+        contract.setId(entity.getId());
         contract.setComplaints(entity.getComplaints());
         contract.setObservations(entity.getObservations());
         contract.setRecommendations(entity.getRecommendations());

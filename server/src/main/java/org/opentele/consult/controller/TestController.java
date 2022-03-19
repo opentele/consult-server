@@ -89,7 +89,7 @@ public class TestController {
 
     @GetMapping("/api/test/scheduleRooms")
     @PreAuthorize("hasAnyRole('Admin')")
-    public int scheduleRooms() {
-        return consultationRoomService.schedule();
+    public int scheduleRooms(@RequestParam("numberOfDays") int numberOfDays) {
+        return consultationRoomService.schedule(numberOfDays);
     }
 }

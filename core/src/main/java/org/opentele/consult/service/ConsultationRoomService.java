@@ -26,12 +26,15 @@ public class ConsultationRoomService {
         this.appointmentTokenRepository = appointmentTokenRepository;
     }
 
-    public int schedule() {
+    public int schedule(int numberOfDays) {
         int roomsCreated = 0;
-        LocalDate today = LocalDate.now();
         List<ConsultationRoomSchedule> schedules = consultationRoomScheduleRepository.findAllBy();
         for (ConsultationRoomSchedule consultationRoomSchedule : schedules) {
-            if (create(today, consultationRoomSchedule)) roomsCreated++;
+            LocalDate localDate = LocalDate.now();
+            for (int i = 0; i < numberOfDays; i++) {
+                if (create(localDate, consultationRoomSchedule)) roomsCreated++;
+                localDate = localDate.plusDays(1);
+            }
         }
         return roomsCreated;
     }

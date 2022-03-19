@@ -16,6 +16,6 @@ public class JobScheduler {
 
     @Scheduled(cron = "${consult.scheduled.room.cron}")
     public void mainJob() {
-        consultationRoomService.schedule();
+        consultationRoomService.schedule(1);
     }
 }
