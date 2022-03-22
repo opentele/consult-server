@@ -45,10 +45,17 @@ public class ClientController extends BaseController {
         return contract;
     }
 
-    @GetMapping("/api/client/search")
-    public ClientSearchResults search(@RequestParam("name") String name, @RequestParam("registrationNumber") String registrationNumber) {
+    @GetMapping("/api/client/findBy")
+    public ClientSearchResults getClients(@RequestParam("name") String name, @RequestParam("registrationNumber") String registrationNumber) {
         int count = clientRepository.countAllByOrganisation(getCurrentOrganisation());
         List<ClientSearchResponse> clientSearchResponses = clientRepository.getClientsMatching(name, registrationNumber, getCurrentOrganisation()).stream().map(ClientSearchResponse::from).collect(Collectors.toList());
+        return new ClientSearchResults(count, clientSearchResponses);
+    }
+
+    @GetMapping("/api/client/search")
+    public ClientSearchResults searchClients(@RequestParam("q") String q) {
+        int count = clientRepository.countAllByOrganisation(getCurrentOrganisation());
+        List<ClientSearchResponse> clientSearchResponses = clientRepository.searchClients(q, getCurrentOrganisation()).stream().map(ClientSearchResponse::from).collect(Collectors.toList());
         return new ClientSearchResults(count, clientSearchResponses);
     }
 

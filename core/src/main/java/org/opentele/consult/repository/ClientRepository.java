@@ -28,6 +28,16 @@ public interface ClientRepository extends AbstractRepository<Client> {
         return searchClients("%" + s + "%", organisation.getId(), consultationRoomId);
     }
 
+    @Query(value = "SELECT c.* FROM client c " +
+            "join organisation o on c.organisation_id = o.id " +
+            "where (c.name ilike :q or COALESCE(c.registration_number, '') ilike :q) and o.id = :organisationId order by c.name limit 10",
+            nativeQuery = true)
+    List<Client> searchClients(String q, int organisationId);
+
+    default List<Client> searchClients(String s, Organisation organisation) {
+        return searchClients("%" + s + "%", organisation.getId());
+    }
+
     @Query(value = "SELECT c.name, c.registration_number as registrationNumber, c.gender, c.date_of_birth as dateOfBirth, at.queue_number as queueNumber FROM client c " +
             "join appointment_token at on c.id = at.client_id " +
             "where at.consultation_room_id = :consultationRoomId" +
