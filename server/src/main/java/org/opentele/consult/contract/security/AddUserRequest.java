@@ -1,15 +1,15 @@
 package org.opentele.consult.contract.security;
 
 public class AddUserRequest {
-    private String userName;
+    private int userId;
     private String providerType;
 
-    public String getUserName() {
-        return userName;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getProviderType() {

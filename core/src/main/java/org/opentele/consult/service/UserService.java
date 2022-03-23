@@ -7,6 +7,7 @@ import org.opentele.consult.repository.OrganisationRepository;
 import org.opentele.consult.repository.OrganisationUserRepository;
 import org.opentele.consult.repository.PasswordResetTokenRepository;
 import org.opentele.consult.repository.UserRepository;
+import org.opentele.consult.repository.framework.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -59,10 +60,13 @@ public class UserService {
         addUser(savedOrg, savedUser, UserType.OrgAdmin, ProviderType.Consultant);
     }
 
-    public void addUser(Organisation savedOrg, User savedUser, UserType role, ProviderType providerType) {
-        OrganisationUser organisationUser = new OrganisationUser();
-        organisationUser.setUser(savedUser);
-        organisationUser.setOrganisation(savedOrg);
+    public void addUser(Organisation organisation, User user, UserType role, ProviderType providerType) {
+        OrganisationUser organisationUser = organisationUserRepository.findByUserAndOrganisation(user, organisation);
+        if (organisationUser == null) {
+            organisationUser = new OrganisationUser();
+            organisationUser.setUser(user);
+            organisationUser.setOrganisation(organisation);
+        }
         organisationUser.setUserType(role);
         organisationUser.setProviderType(providerType);
         organisationUserRepository.save(organisationUser);

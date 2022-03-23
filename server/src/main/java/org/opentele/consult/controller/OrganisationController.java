@@ -29,29 +29,25 @@ public class OrganisationController extends BaseController {
     @RequestMapping(value = "/api/organisation/user", method = {RequestMethod.GET})
     @PreAuthorize("hasRole('OrgAdmin')")
     public List<OrganisationUserContract> getUsers(Principal principal) {
-        String userId = principal.getName();
-        return userService.getOrganisationUsers(userId).stream().map(OrganisationUserContract::create).collect(Collectors.toList());
+        String userName = principal.getName();
+        return userService.getOrganisationUsers(userName).stream().map(OrganisationUserContract::create).collect(Collectors.toList());
     }
 
-    @PostMapping("/api/organisation/addUsers")
+    @RequestMapping(value = "/api/organisation/users", method = {RequestMethod.POST, RequestMethod.PUT})
     @PreAuthorize("hasRole('OrgAdmin')")
-    public ResponseEntity addUsers(@RequestBody List<AddUserRequest> addUserRequests) {
-        addUserRequests.forEach(addUserRequest -> this.addUser(addUserRequest.getUserName(), addUserRequest.getProviderType()));
-        return new ResponseEntity(HttpStatus.OK);
+    public ResponseEntity<Void> addUsers(@RequestBody List<AddUserRequest> addUserRequests) {
+        addUserRequests.forEach(addUserRequest -> this.addUser(addUserRequest.getUserId(), addUserRequest.getProviderType()));
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/api/organisation/addUser")
+    @RequestMapping(value = "/api/organisation/user", method = {RequestMethod.POST, RequestMethod.PUT})
     @PreAuthorize("hasRole('OrgAdmin')")
-    public ResponseEntity addUser(@RequestParam(name = "userName") String userName, @RequestParam(name = "providerType") String providerType) {
-        User user = userService.getUser(userName);
+    public ResponseEntity<String> addUser(@RequestParam(name = "userId") int userId, @RequestParam(name = "providerType") String providerType) {
+        User user = userService.getUser(userId);
         if (user == null)
-            return new ResponseEntity("added-user-not-found", HttpStatus.BAD_REQUEST);
-
-        OrganisationUser organisationUser = userService.getOrganisationUser(userName, getCurrentOrganisation());
-        if (organisationUser != null)
-            return new ResponseEntity("user-already-in-organisation", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("added-user-not-found", HttpStatus.BAD_REQUEST);
 
         userService.addUser(getCurrentOrganisation(), user, UserType.User, ProviderType.valueOf(providerType));
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -23,12 +23,11 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/api/organisation",
+							"raw": "{{BASE_API_URL}}/organisation",
 							"host": [
-								"{{BASE_URL}}"
+								"{{BASE_API_URL}}"
 							],
 							"path": [
-								"api",
 								"organisation"
 							]
 						}
@@ -120,6 +119,59 @@
 							],
 							"path": [
 								"clients"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register users",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    {\n        \"name\": \"Yamini Gupta\",\n        \"email\": \"yaminigupta@gmail.com\",\n        \"password\": \"password\"\n    },\n    {\n        \"name\": \"Brajesh Agarwal\",\n        \"email\": \"brajeshagarwal@gmail.com\",\n        \"password\": \"password\"\n    }\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_API_URL}}/users",
+							"host": [
+								"{{BASE_API_URL}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Users to Organisation",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    {\n        \"userId\": 3,\n        \"providerType\": \"Consultant\"\n    },\n    {\n        \"userId\": 4,\n        \"providerType\": \"Usher\"\n    }\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_API_URL}}/organisation/users",
+							"host": [
+								"{{BASE_API_URL}}"
+							],
+							"path": [
+								"organisation",
+								"users"
 							]
 						}
 					},
