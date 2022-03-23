@@ -2,7 +2,7 @@ package org.opentele.consult.controller;
 
 import org.opentele.consult.contract.client.ClientSearchResponse;
 import org.opentele.consult.contract.client.ConsultationRoomClientResponse;
-import org.opentele.consult.contract.consultationRoom.BaseConsultationRoomContract;
+import org.opentele.consult.contract.consultationRoom.ConsultationRoomScheduleContract;
 import org.opentele.consult.contract.consultationRoom.ConsultationRoomResponse;
 import org.opentele.consult.contract.consultationRoom.ConsultationRoomScheduleRequest;
 import org.opentele.consult.contract.consultationRoom.ConsultationRoomScheduleResponse;
@@ -16,7 +16,6 @@ import org.opentele.consult.repository.ConsultationRoomRepository;
 import org.opentele.consult.repository.ConsultationRoomScheduleRepository;
 import org.opentele.consult.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -65,9 +64,9 @@ public class ConsultationRoomController extends BaseController {
     @GetMapping(value = "/api/consultationRoom/future")
     @PreAuthorize("hasRole('User')")
     public List<ConsultationRoomResponse> getFutureRooms(Principal principal) {
-        LocalDate today = LocalDate.now();
-        LocalDate oneMonthLater = today.plusMonths(1);
-        return getConsultationRooms(today, oneMonthLater, principal);
+        LocalDate tomorrow = LocalDate.now().plusDays(1);
+        LocalDate oneMonthLater = tomorrow.plusMonths(1);
+        return getConsultationRooms(tomorrow, oneMonthLater, principal);
     }
 
     private List<ConsultationRoomResponse> getConsultationRooms(LocalDate startDate, LocalDate endDate, Principal principal) {
@@ -99,9 +98,9 @@ public class ConsultationRoomController extends BaseController {
         return new ResponseEntity<>(saved.getId(), HttpStatus.OK);
     }
 
-    @PutMapping(value = "/api/consultationRoom")
     @PreAuthorize("hasRole('User')")
-    public ResponseEntity<Integer> put(@RequestBody BaseConsultationRoomContract request, Principal principal) {
+    @RequestMapping(value = "/api/consultationRoom", method = {RequestMethod.PUT, RequestMethod.POST})
+    public ResponseEntity<Integer> save(@RequestBody ConsultationRoomScheduleContract request, Principal principal) {
         return null;
     }
 

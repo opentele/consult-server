@@ -2,7 +2,7 @@ package org.opentele.consult.contract.consultationRoom;
 
 import java.time.LocalDate;
 
-public class ConsultationRoomScheduleResponse extends BaseConsultationRoomContract {
+public class ConsultationRoomScheduleResponse extends ConsultationRoomScheduleContract {
     private String recurrenceRule;
     private LocalDate startDate;
 

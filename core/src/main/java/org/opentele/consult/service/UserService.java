@@ -30,15 +30,15 @@ public class UserService {
         this.organisationUserRepository = organisationUserRepository;
     }
 
-    public String validateNewOrganisation(String email, String mobile) {
+    public String validateNewUser(String email, String mobile) {
         User userByEmail = userRepository.getUserByEmail(email);
         if (userByEmail != null) {
-            return MessageCodes.CREATE_ORG_EMAIL_USER_EXISTS;
+            return MessageCodes.CREATE_EMAIL_USER_EXISTS;
         }
 
         User userByMobile = userRepository.getUserByMobile(mobile);
         if (userByMobile != null) {
-            return MessageCodes.CREATE_ORG_MOBILE_USER_EXISTS;
+            return MessageCodes.CREATE_MOBILE_USER_EXISTS;
         }
         return null;
     }
@@ -163,5 +163,9 @@ public class UserService {
 
     public List<OrganisationUser> findUsers(String searchParam) {
         return organisationUserRepository.findTop10ByUserEmailContainsOrUserMobileContains(searchParam, searchParam);
+    }
+
+    public void save(User user) {
+        userRepository.save(user);
     }
 }

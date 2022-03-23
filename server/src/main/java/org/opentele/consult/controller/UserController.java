@@ -29,7 +29,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.Principal;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -50,7 +49,7 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/api/organisation", method = {RequestMethod.PUT})
     @Transactional
     public ResponseEntity<String> save(@RequestBody OrganisationPutPostRequest request) {
-        String error = userService.validateNewOrganisation(request.getEmail(), request.getMobile());
+        String error = userService.validateNewUser(request.getEmail(), request.getMobile());
         if (error != null)
             return new ResponseEntity<>(error, HttpStatus.CONFLICT);
 
@@ -58,13 +57,34 @@ public class UserController extends BaseController {
         organisation.setName(request.getOrganisationName());
 
         User user = new User();
-        user.setUuid(UUID.randomUUID());
         user.setPassword(bCryptPasswordEncoder.encode(request.getPassword()));
         user.setEmail(request.getEmail());
         user.setMobile(request.getMobile());
         user.setName(request.getName());
 
         userService.createNewOrganisation(user, organisation);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/api/user", method = {RequestMethod.PUT})
+    @Transactional
+    public ResponseEntity<String> save(@RequestBody UserRequest request) {
+        String error = userService.validateNewUser(request.getEmail(), request.getMobile());
+        if (error != null)
+            return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+
+        User user = new User();
+        user.setPassword(bCryptPasswordEncoder.encode(request.getPassword()));
+        user.setEmail(request.getEmail());
+        user.setMobile(request.getMobile());
+        user.setName(request.getName());
+        userService.save(user);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/api/users", method = {RequestMethod.PUT})
+    public ResponseEntity<String> save(@RequestBody List<UserRequest> requests) {
+        requests.forEach(this::save);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

@@ -6,7 +6,7 @@ import org.opentele.consult.contract.security.ProviderResponse;
 import java.time.LocalTime;
 import java.util.List;
 
-public class BaseConsultationRoomContract extends BaseEntityContract {
+public class ConsultationRoomScheduleContract extends BaseEntityContract {
     private String title;
     private LocalTime startTime;
     private LocalTime endTime;

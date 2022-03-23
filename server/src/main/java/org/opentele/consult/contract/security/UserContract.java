@@ -1,8 +1,9 @@
 package org.opentele.consult.contract.security;
 
+import org.opentele.consult.contract.framework.BaseEntityContract;
 import org.opentele.consult.domain.security.User;
 
-public class UserContract {
+public class UserContract extends BaseEntityContract {
     private String email;
     private String mobile;
     private String name;

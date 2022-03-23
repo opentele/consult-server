@@ -3,7 +3,7 @@ package org.opentele.consult.contract.consultationRoom;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class ConsultationRoomResponse extends BaseConsultationRoomContract {
+public class ConsultationRoomResponse extends ConsultationRoomScheduleContract {
     private LocalDate scheduledOn;
     private LocalTime scheduledStartTime;
     private LocalTime scheduledEndTime;

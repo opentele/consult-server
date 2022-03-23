@@ -1,5 +1,6 @@
 package org.opentele.consult.controller;
 
+import org.opentele.consult.contract.security.AddUserRequest;
 import org.opentele.consult.contract.security.OrganisationUserContract;
 import org.opentele.consult.contract.security.UserContract;
 import org.opentele.consult.domain.security.OrganisationUser;
@@ -27,9 +28,16 @@ public class OrganisationController extends BaseController {
 
     @RequestMapping(value = "/api/organisation/user", method = {RequestMethod.GET})
     @PreAuthorize("hasRole('OrgAdmin')")
-    public List<UserContract> getUsers(Principal principal) {
+    public List<OrganisationUserContract> getUsers(Principal principal) {
         String userId = principal.getName();
         return userService.getOrganisationUsers(userId).stream().map(OrganisationUserContract::create).collect(Collectors.toList());
+    }
+
+    @PostMapping("/api/organisation/addUsers")
+    @PreAuthorize("hasRole('OrgAdmin')")
+    public ResponseEntity addUsers(@RequestBody List<AddUserRequest> addUserRequests) {
+        addUserRequests.forEach(addUserRequest -> this.addUser(addUserRequest.getUserName(), addUserRequest.getProviderType()));
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @PostMapping("/api/organisation/addUser")
