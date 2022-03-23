@@ -6,8 +6,6 @@ import org.opentele.consult.contract.consultationRoom.BaseConsultationRoomContra
 import org.opentele.consult.contract.consultationRoom.ConsultationRoomResponse;
 import org.opentele.consult.contract.consultationRoom.ConsultationRoomScheduleRequest;
 import org.opentele.consult.contract.consultationRoom.ConsultationRoomScheduleResponse;
-import org.opentele.consult.domain.Organisation;
-import org.opentele.consult.domain.consultationRoom.ConsultationRoomSchedule;
 import org.opentele.consult.domain.consultationRoom.ConsultationRoomScheduleUser;
 import org.opentele.consult.domain.consultationRoom.ConsultationRooms;
 import org.opentele.consult.framework.UserSession;
@@ -51,32 +49,31 @@ public class ConsultationRoomController extends BaseController {
 
     @GetMapping(value = "/api/consultationRoom/today")
     @PreAuthorize("hasRole('User')")
-    public List<ConsultationRoomResponse> getActiveRooms(Principal principal) {
+    public List<ConsultationRoomResponse> getTodayRooms(Principal principal) {
         LocalDate today = LocalDate.now();
-        List<ConsultationRoomResponse> consultationRoomResponses = getConsultations(today, today, principal).get(today);
-        if (consultationRoomResponses == null) return new ArrayList<>();
-        return consultationRoomResponses;
+        return getConsultationRooms(today, today, principal);
     }
 
-    @GetMapping(value = "/api/consultationRoom/between")
+    @GetMapping(value = "/api/consultationRoom/past")
     @PreAuthorize("hasRole('User')")
-    public ResponseEntity getConsultationsBetween
-            (@RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-             @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
-             Principal principal) {
-        Map<LocalDate, List<ConsultationRoomResponse>> map = getConsultations(startDate, endDate, principal);
-        return new ResponseEntity(map, HttpStatus.OK);
+    public List<ConsultationRoomResponse> getPastRooms(Principal principal) {
+        LocalDate yesterday = LocalDate.now().minusDays(1);
+        LocalDate twoWeeksBack = yesterday.minusWeeks(2);
+        return getConsultationRooms(twoWeeksBack, yesterday, principal);
     }
 
-    private Map<LocalDate, List<ConsultationRoomResponse>> getConsultations(LocalDate startDate, LocalDate endDate, Principal principal) {
+    @GetMapping(value = "/api/consultationRoom/future")
+    @PreAuthorize("hasRole('User')")
+    public List<ConsultationRoomResponse> getFutureRooms(Principal principal) {
+        LocalDate today = LocalDate.now();
+        LocalDate oneMonthLater = today.plusMonths(1);
+        return getConsultationRooms(today, oneMonthLater, principal);
+    }
+
+    private List<ConsultationRoomResponse> getConsultationRooms(LocalDate startDate, LocalDate endDate, Principal principal) {
         Map<LocalDate, List<ConsultationRoomResponse>> map = new HashMap<>();
         ConsultationRooms consultationRooms = consultationRoomRepository.findAllBetween(startDate, endDate, getCurrentOrganisation());
-        consultationRooms.forEach(consultationRoom -> {
-            LocalDate date = consultationRoom.getScheduledOn();
-            map.computeIfAbsent(date, k -> new ArrayList<>());
-            map.get(date).add(consultationRoomMapper.map(consultationRoom, getCurrentUser(principal)));
-        });
-        return map;
+        return consultationRooms.stream().map(consultationRoom -> consultationRoomMapper.map(consultationRoom, getCurrentUser(principal))).collect(Collectors.toList());
     }
 
     @GetMapping(value = "/api/consultationRoomSchedule")

@@ -169,13 +169,19 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_API_URL}}/test/scheduleRooms",
+							"raw": "{{BASE_API_URL}}/test/scheduleRooms?numberOfDays=5",
 							"host": [
 								"{{BASE_API_URL}}"
 							],
 							"path": [
 								"test",
 								"scheduleRooms"
+							],
+							"query": [
+								{
+									"key": "numberOfDays",
+									"value": "5"
+								}
 							]
 						}
 					},

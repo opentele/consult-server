@@ -1,10 +1,7 @@
 package org.opentele.consult.service;
 
 import org.opentele.consult.domain.Organisation;
-import org.opentele.consult.domain.security.OrganisationUser;
-import org.opentele.consult.domain.security.PasswordResetToken;
-import org.opentele.consult.domain.security.User;
-import org.opentele.consult.domain.security.UserType;
+import org.opentele.consult.domain.security.*;
 import org.opentele.consult.message.MessageCodes;
 import org.opentele.consult.repository.OrganisationRepository;
 import org.opentele.consult.repository.OrganisationUserRepository;
@@ -59,14 +56,15 @@ public class UserService {
     public void createNewOrganisation(User user, Organisation organisation) {
         Organisation savedOrg = organisationRepository.save(organisation);
         User savedUser = userRepository.save(user);
-        addUser(savedOrg, savedUser, UserType.OrgAdmin);
+        addUser(savedOrg, savedUser, UserType.OrgAdmin, ProviderType.Consultant);
     }
 
-    public void addUser(Organisation savedOrg, User savedUser, UserType role) {
+    public void addUser(Organisation savedOrg, User savedUser, UserType role, ProviderType providerType) {
         OrganisationUser organisationUser = new OrganisationUser();
         organisationUser.setUser(savedUser);
         organisationUser.setOrganisation(savedOrg);
         organisationUser.setUserType(role);
+        organisationUser.setProviderType(providerType);
         organisationUserRepository.save(organisationUser);
     }
 

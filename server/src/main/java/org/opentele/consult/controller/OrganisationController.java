@@ -3,6 +3,7 @@ package org.opentele.consult.controller;
 import org.opentele.consult.contract.security.OrganisationUserContract;
 import org.opentele.consult.contract.security.UserContract;
 import org.opentele.consult.domain.security.OrganisationUser;
+import org.opentele.consult.domain.security.ProviderType;
 import org.opentele.consult.domain.security.User;
 import org.opentele.consult.domain.security.UserType;
 import org.opentele.consult.framework.UserSession;
@@ -33,7 +34,7 @@ public class OrganisationController extends BaseController {
 
     @PostMapping("/api/organisation/addUser")
     @PreAuthorize("hasRole('OrgAdmin')")
-    public ResponseEntity addUser(@RequestParam(name = "userName") String userName) {
+    public ResponseEntity addUser(@RequestParam(name = "userName") String userName, @RequestParam(name = "providerType") String providerType) {
         User user = userService.getUser(userName);
         if (user == null)
             return new ResponseEntity("added-user-not-found", HttpStatus.BAD_REQUEST);
@@ -42,7 +43,7 @@ public class OrganisationController extends BaseController {
         if (organisationUser != null)
             return new ResponseEntity("user-already-in-organisation", HttpStatus.BAD_REQUEST);
 
-        userService.addUser(getCurrentOrganisation(), user, UserType.User);
+        userService.addUser(getCurrentOrganisation(), user, UserType.User, ProviderType.valueOf(providerType));
         return new ResponseEntity(HttpStatus.OK);
     }
 }

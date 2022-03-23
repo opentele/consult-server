@@ -99,18 +99,11 @@ public class UserController extends BaseController {
             userResponse.setEmail(user.getEmail());
             userResponse.setOrganisationName(getCurrentOrganisation().getName());
             userResponse.setName(user.getName());
+            userResponse.setProviderType(organisationUser.getProviderType());
             return userResponse;
         } finally {
             logger.info("Returned user info");
         }
-    }
-
-    @GetMapping
-    @RequestMapping(value = "/api/user", method = RequestMethod.GET)
-    @PreAuthorize("hasAnyRole('User','OrgAdmin')")
-    public UserContract getUser(@RequestParam("userName") String userName) {
-        User user = userService.getUser(userName);
-        return UserContract.from(user);
     }
 
     @RequestMapping(value = "/api/user/loggedIn", method = RequestMethod.GET)
