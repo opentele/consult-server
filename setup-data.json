@@ -73,13 +73,66 @@
 					"response": []
 				},
 				{
+					"name": "Register users",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    {\n        \"name\": \"Yamini Gupta\",\n        \"email\": \"yaminigupta@gmail.com\",\n        \"password\": \"password\"\n    },\n    {\n        \"name\": \"Brajesh Agarwal\",\n        \"email\": \"brajeshagarwal@gmail.com\",\n        \"password\": \"password\"\n    },\n    {\n        \"name\": \"Kuntal Das\",\n        \"email\": \"kuntaldas@gmail.com\",\n        \"password\": \"password\"\n    }\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_API_URL}}/users",
+							"host": [
+								"{{BASE_API_URL}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Users to Organisation",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    {\n        \"comment\": \"UserId 1 and 2 are for admin and org admin\",\n        \"userId\": 3,\n        \"providerType\": \"Consultant\"\n    },\n    {\n        \"userId\": 4,\n        \"providerType\": \"Usher\"\n    },\n    {\n        \"userId\": 5,\n        \"providerType\": \"Consultant\"\n    }\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_API_URL}}/organisation/users",
+							"host": [
+								"{{BASE_API_URL}}"
+							],
+							"path": [
+								"organisation",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Consultation Room Schedule",
 					"request": {
 						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"title\": \"TB Clinic\",\n    \"totalSlots\": 10,\n    \"providers\": [],\n    \"recurrenceRule\": \"FREQ=WEEKLY;INTERVAL=1;BYDAY=MO,TU,WE,TH,FR,SA,SU\",\n    \"startTime\": [12,0],\n    \"endTime\": [16,0],\n    \"startDate\": [2022,2,4]\n}",
+							"raw": "{\n    \"title\": \"TB Clinic\",\n    \"totalSlots\": 10,\n    \"providers\": [3,4],\n    \"recurrenceRule\": \"FREQ=WEEKLY;INTERVAL=1;BYDAY=MO,TU,WE,TH,FR,SA,SU\",\n    \"startTime\": [12,0],\n    \"endTime\": [16,0],\n    \"startDate\": [2022,2,4]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -119,59 +172,6 @@
 							],
 							"path": [
 								"clients"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Register users",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "[\n    {\n        \"name\": \"Yamini Gupta\",\n        \"email\": \"yaminigupta@gmail.com\",\n        \"password\": \"password\"\n    },\n    {\n        \"name\": \"Brajesh Agarwal\",\n        \"email\": \"brajeshagarwal@gmail.com\",\n        \"password\": \"password\"\n    }\n]",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_API_URL}}/users",
-							"host": [
-								"{{BASE_API_URL}}"
-							],
-							"path": [
-								"users"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Add Users to Organisation",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "[\n    {\n        \"userId\": 3,\n        \"providerType\": \"Consultant\"\n    },\n    {\n        \"userId\": 4,\n        \"providerType\": \"Usher\"\n    }\n]",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_API_URL}}/organisation/users",
-							"host": [
-								"{{BASE_API_URL}}"
-							],
-							"path": [
-								"organisation",
-								"users"
 							]
 						}
 					},

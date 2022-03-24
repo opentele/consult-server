@@ -27,4 +27,8 @@ public class ConsultationRoomUser extends OrganisationalEntity {
     public ConsultationRoom getConsultationRoom() {
         return consultationRoom;
     }
+
+    public void setConsultationRoom(ConsultationRoom consultationRoom) {
+        this.consultationRoom = consultationRoom;
+    }
 }

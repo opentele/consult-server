@@ -156,9 +156,10 @@ public class UserService {
         return organisationUsers.get(0);
     }
 
-    public List<OrganisationUser> getOrganisationUsers(String userId) {
-        User user = this.getUser(userId);
-        return organisationUserRepository.findAllByUser(user);
+    public List<OrganisationUser> getOrganisationUsers(Organisation organisation, ProviderType providerType) {
+        if (providerType != null)
+            return organisationUserRepository.findAllByOrganisationAndProviderType(organisation, providerType);
+        return organisationUserRepository.findAllByOrganisation(organisation);
     }
 
     public Organisation getOrganisation(int organisationId) {

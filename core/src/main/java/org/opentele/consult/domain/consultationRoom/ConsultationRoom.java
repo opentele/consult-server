@@ -129,6 +129,7 @@ public class ConsultationRoom  extends OrganisationalEntity {
 
     public void addProvider(ConsultationRoomUser consultationRoomUser) {
         this.providers.add(consultationRoomUser);
+        consultationRoomUser.setConsultationRoom(this);
     }
 
     public boolean isProvider(User user) {

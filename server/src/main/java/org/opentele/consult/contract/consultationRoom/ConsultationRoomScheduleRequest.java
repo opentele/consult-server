@@ -2,12 +2,13 @@ package org.opentele.consult.contract.consultationRoom;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ConsultationRoomScheduleRequest {
     private String title;
     private int totalSlots;
-    private List<Integer> providers;
+    private List<Integer> providers = new ArrayList<>();
     private String recurrenceRule;
     private LocalTime startTime;
     private LocalTime endTime;

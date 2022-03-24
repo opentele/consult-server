@@ -98,13 +98,6 @@ public class UserController extends BaseController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/api/user/organisation", method = {RequestMethod.GET})
-    @PreAuthorize("hasRole('User')")
-    public List<UserOrganisationContract> getOrganisations(Principal principal) {
-        String userId = principal.getName();
-        return userService.getOrganisationUsers(userId).stream().map(UserOrganisationContract::create).collect(Collectors.toList());
-    }
-
     @PreAuthorize("hasAnyRole('User','OrgAdmin')")
     @RequestMapping(value = "/api/user/current", method = RequestMethod.GET)
     public UserResponse getLoggedInUser(Principal principal) {
