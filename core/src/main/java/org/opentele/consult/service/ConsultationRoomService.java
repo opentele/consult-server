@@ -1,18 +1,20 @@
 package org.opentele.consult.service;
 
-import org.opentele.consult.domain.client.Client;
 import org.opentele.consult.domain.consultationRoom.AppointmentToken;
 import org.opentele.consult.domain.consultationRoom.ConsultationRoom;
 import org.opentele.consult.domain.consultationRoom.ConsultationRoomSchedule;
 import org.opentele.consult.domain.security.User;
+import org.opentele.consult.domain.teleconference.TeleConference;
 import org.opentele.consult.repository.AppointmentTokenRepository;
 import org.opentele.consult.repository.ConsultationRoomRepository;
 import org.opentele.consult.repository.ConsultationRoomScheduleRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ConsultationRoomService {
@@ -64,5 +66,17 @@ public class ConsultationRoomService {
         if (nextToken != null)
             summary.setNextClient(nextToken.getClient());
         return summary;
+    }
+
+    public TeleConference setup(int consultationRoomId) {
+        ConsultationRoom consultationRoom = consultationRoomRepository.findEntity(consultationRoomId);
+        TeleConference activeTeleConference = consultationRoom.getActiveTeleConference();
+        if (activeTeleConference != null) return activeTeleConference;
+
+        TeleConference teleConference = new TeleConference();
+        teleConference.setJitsiId(UUID.randomUUID().toString());
+        consultationRoom.addTeleConference(teleConference);
+        consultationRoomRepository.save(consultationRoom);
+        return teleConference;
     }
 }

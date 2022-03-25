@@ -13,6 +13,7 @@ create table password_reset_token (id  serial not null, created_date timestamp d
 create table privilege (id  serial not null, created_date timestamp default (now()):: timestamp without time zone not null, inactive boolean default false not null, last_modified_date timestamp default (now()):: timestamp without time zone not null, uuid uuid default uuid_generate_v4() not null, name varchar(255) not null, primary key (id));
 create table role (id  serial not null, created_date timestamp default (now()):: timestamp without time zone not null, inactive boolean default false not null, last_modified_date timestamp default (now()):: timestamp without time zone not null, uuid uuid default uuid_generate_v4() not null, name varchar(255) not null, primary key (id));
 create table role_privilege (role_id int4 not null, privilege_id int4 not null, primary key (role_id, privilege_id));
+create table tele_conference (id  serial not null, created_date timestamp default (now()):: timestamp without time zone not null, inactive boolean default false not null, last_modified_date timestamp default (now()):: timestamp without time zone not null, uuid uuid default uuid_generate_v4() not null, jitsi_id varchar(255), organisation_id integer not null, consultation_room_id integer not null, primary key (id));
 create table users (id  serial not null, created_date timestamp default (now()):: timestamp without time zone not null, inactive boolean default false not null, last_modified_date timestamp default (now()):: timestamp without time zone not null, uuid uuid default uuid_generate_v4() not null, email varchar(255), mobile varchar(255), name varchar(255) not null, password varchar(255) not null, primary key (id));
 alter table if exists appointment_token add constraint UKlorwqhcqwdvxrqg95wxal7a4q unique (consultation_room_id, client_id);
 alter table if exists appointment_token add constraint UK_e2f8j58y990i7v4s5hjsknaq5 unique (uuid);
@@ -29,6 +30,7 @@ alter table if exists organisation_user add constraint UK_e20k00juxw43g38hd3b7x1
 alter table if exists password_reset_token add constraint UK_b83nimwg75cdko9pp1lkdp892 unique (uuid);
 alter table if exists privilege add constraint UK_hkkbq0189qlql9ss5srnoltsa unique (uuid);
 alter table if exists role add constraint UK_k5dwya5n8n7y3m2opvmm7qjcc unique (uuid);
+alter table if exists tele_conference add constraint UK_jotwuv73im2nqmqtqcnpf9j4r unique (uuid);
 alter table if exists users add constraint UK_6km2m9i3vjuy36rnvkgj1l61s unique (uuid);
 alter table if exists appointment_token add constraint FKvlofalr5d0acac9nx9jykb02 foreign key (organisation_id) references organisation;
 alter table if exists appointment_token add constraint FKq5x34hg43vs167xe2anb1hxf9 foreign key (appointment_provider_id) references users;
@@ -57,3 +59,5 @@ alter table if exists organisation_user add constraint FK7cwghb79m4el4t15bvk77k9
 alter table if exists password_reset_token add constraint FK83nsrttkwkb6ym0anu051mtxn foreign key (user_id) references users;
 alter table if exists role_privilege add constraint FKdkwbrwb5r8h74m1v7dqmhp99c foreign key (privilege_id) references privilege;
 alter table if exists role_privilege add constraint FKsykrtrdngu5iexmbti7lu9xa foreign key (role_id) references role;
+alter table if exists tele_conference add constraint FK6qhqf0917f4lt2hqlr5xrvoax foreign key (organisation_id) references organisation;
+alter table if exists tele_conference add constraint FKu6welns3mi57a2vme3cnsddf foreign key (consultation_room_id) references consultation_room;

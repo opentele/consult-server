@@ -3,6 +3,7 @@ package org.opentele.consult.domain.consultationRoom;
 import org.opentele.consult.domain.client.Client;
 import org.opentele.consult.domain.framework.OrganisationalEntity;
 import org.opentele.consult.domain.security.User;
+import org.opentele.consult.domain.teleconference.TeleConference;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -40,6 +41,9 @@ public class ConsultationRoom  extends OrganisationalEntity {
 
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, mappedBy = "consultationRoom")
     private Set<AppointmentToken> appointmentTokens = new HashSet<>();
+
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, mappedBy = "consultationRoom")
+    private Set<TeleConference> teleConferences = new HashSet<>();
 
     @Column
     private int totalSlots;
@@ -158,6 +162,15 @@ public class ConsultationRoom  extends OrganisationalEntity {
 
     public int getNumberOfClients(User user) {
         return (int) this.appointmentTokens.stream().filter(appointmentToken -> appointmentToken.getAppointmentProvider().equals(user)).count();
+    }
+
+    public TeleConference getActiveTeleConference() {
+        return this.teleConferences.stream().filter(teleConference -> !teleConference.getInactive()).findFirst().orElse(null);
+    }
+
+    public void addTeleConference(TeleConference teleConference) {
+        this.teleConferences.add(teleConference);
+        teleConference.setConsultationRoom(this);
     }
 
     public static class ConsultationRoomCurrentUserSummary {

@@ -1,11 +1,14 @@
 package org.opentele.consult.mapper.consultationRoom;
 
+import org.opentele.consult.contract.appointment.AppointmentResponse;
+import org.opentele.consult.contract.consultationRoom.ConsultationRoomConferenceResponse;
 import org.opentele.consult.contract.consultationRoom.ConsultationRoomContract;
 import org.opentele.consult.contract.consultationRoom.ConsultationRoomDetailResponse;
 import org.opentele.consult.contract.security.ProviderResponse;
 import org.opentele.consult.domain.client.Client;
 import org.opentele.consult.domain.consultationRoom.ConsultationRoom;
 import org.opentele.consult.domain.security.User;
+import org.opentele.consult.domain.teleconference.TeleConference;
 import org.opentele.consult.service.ConsultationRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,6 +27,11 @@ public class ConsultationRoomMapper {
     public ConsultationRoomDetailResponse map(ConsultationRoom consultationRoom, User user) {
         ConsultationRoomDetailResponse response = new ConsultationRoomDetailResponse();
         mapCore(response, consultationRoom);
+        mapDetails(consultationRoom, user, response);
+        return response;
+    }
+
+    private void mapDetails(ConsultationRoom consultationRoom, User user, ConsultationRoomDetailResponse response) {
         response.setNumberOfClients(consultationRoom.getNumberOfClients());
 
         ConsultationRoom.ConsultationRoomCurrentUserSummary summary = consultationRoomService.getCurrentSummaryFor(user, consultationRoom);
@@ -33,10 +41,11 @@ public class ConsultationRoomMapper {
             response.setNextClient(nextClient.getName());
         response.setNumberOfClientsPending(consultationRoom.getNumberOfPendingClients());
         response.setNumberOfUserClientsPending(consultationRoom.getNumberOfPendingUserClients(user));
-        return response;
+        TeleConference activeTeleConference = consultationRoom.getActiveTeleConference();
+        response.setActiveTeleConferenceId(activeTeleConference == null ? null : activeTeleConference.getJitsiId());
     }
 
-    private static void mapCore(ConsultationRoomContract contract, ConsultationRoom consultationRoom) {
+    private void mapCore(ConsultationRoomContract contract, ConsultationRoom consultationRoom) {
         contract.setEndTime(consultationRoom.getEndTime());
         contract.setId(consultationRoom.getId());
         contract.setProviders(consultationRoom.getProviders().stream().map(x -> new ProviderResponse(x.getUser().getName(), x.getUser().getId())).collect(Collectors.toList()));
@@ -51,5 +60,13 @@ public class ConsultationRoomMapper {
         ConsultationRoomContract contract = new ConsultationRoomContract();
         mapCore(contract, consultationRoom);
         return contract;
+    }
+
+    public ConsultationRoomConferenceResponse mapForConference(ConsultationRoom consultationRoom, User user) {
+        ConsultationRoomConferenceResponse response = new ConsultationRoomConferenceResponse();
+        mapCore(response, consultationRoom);
+        mapDetails(consultationRoom, user, response);
+        response.setAppointments(consultationRoom.getAppointmentTokens().stream().map(AppointmentResponse::fromEntity).collect(Collectors.toList()));
+        return response;
     }
 }
