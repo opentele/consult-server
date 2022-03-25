@@ -37,6 +37,7 @@ public class OrganisationUserContract extends UserContract {
     public static OrganisationUserContract create(OrganisationUser organisationUser) {
         OrganisationUserContract userContract = new OrganisationUserContract();
         User user = organisationUser.getUser();
+        userContract.setId(user.getId());
         userContract.setEmail(user.getEmail());
         userContract.setMobile(user.getMobile());
         userContract.setUserType(organisationUser.getUserType());

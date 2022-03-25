@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Test;
-import org.opentele.consult.contract.consultationRoom.ConsultationRoomResponse;
+import org.opentele.consult.contract.consultationRoom.ConsultationRoomDetailResponse;
 import org.opentele.consult.domain.consultationRoom.ConsultationRoomSchedule;
 
 import java.time.LocalDate;
@@ -31,7 +31,7 @@ public class SerDeserTest {
 
     @Test
     public void emptyMap() throws JsonProcessingException {
-        Map<LocalDate, List<ConsultationRoomResponse>> map = new HashMap<>();
+        Map<LocalDate, List<ConsultationRoomDetailResponse>> map = new HashMap<>();
         String s = objectMapper.writeValueAsString(map);
     }
 

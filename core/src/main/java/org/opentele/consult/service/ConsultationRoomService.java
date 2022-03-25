@@ -40,10 +40,10 @@ public class ConsultationRoomService {
     }
 
     @Transactional
-    protected boolean create(LocalDate today, ConsultationRoomSchedule consultationRoomSchedule) {
-        List<LocalDate> nextConsultationDates = consultationRoomSchedule.getNextConsultationDates(today, today);
-        if (nextConsultationDates.size() == 1 && !consultationRoomRepository.existsByConsultationRoomScheduleAndScheduledOn(consultationRoomSchedule, today)) {
-            ConsultationRoom consultationRoom = consultationRoomSchedule.createRoomFor(today);
+    protected boolean create(LocalDate date, ConsultationRoomSchedule consultationRoomSchedule) {
+        List<LocalDate> nextConsultationDates = consultationRoomSchedule.getNextConsultationDates(date, date);
+        if (nextConsultationDates.size() == 1 && !consultationRoomRepository.existsByConsultationRoomScheduleAndScheduledOn(consultationRoomSchedule, date)) {
+            ConsultationRoom consultationRoom = consultationRoomSchedule.createRoomFor(date);
             consultationRoomRepository.save(consultationRoom);
             return true;
         } else if (nextConsultationDates.size() > 1) {
