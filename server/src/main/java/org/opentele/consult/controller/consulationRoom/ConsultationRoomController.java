@@ -101,8 +101,9 @@ public class ConsultationRoomController extends BaseController {
     }
 
     @RequestMapping(value = "/api/consultationRoom/teleConference", method = {RequestMethod.POST, RequestMethod.PUT})
-    public void saveTeleConference(@RequestBody int consultationRoomId) {
+    public int saveTeleConference(@RequestBody int consultationRoomId) {
         consultationRoomService.setup(consultationRoomId);
+        return consultationRoomId;
     }
 
     @GetMapping("/api/consultationRoom/teleConference/{consultationRoomId}")

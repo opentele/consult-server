@@ -1,5 +1,6 @@
 package org.opentele.consult.mapper.consultationRoom;
 
+import org.opentele.consult.contract.appointment.AppointmentDetailResponse;
 import org.opentele.consult.contract.appointment.AppointmentResponse;
 import org.opentele.consult.contract.consultationRoom.ConsultationRoomConferenceResponse;
 import org.opentele.consult.contract.consultationRoom.ConsultationRoomContract;
@@ -66,7 +67,7 @@ public class ConsultationRoomMapper {
         ConsultationRoomConferenceResponse response = new ConsultationRoomConferenceResponse();
         mapCore(response, consultationRoom);
         mapDetails(consultationRoom, user, response);
-        response.setAppointments(consultationRoom.getAppointmentTokens().stream().map(AppointmentResponse::fromEntity).collect(Collectors.toList()));
+        response.setAppointments(consultationRoom.getAppointmentTokens().stream().map(AppointmentDetailResponse::fromEntity).collect(Collectors.toList()));
         return response;
     }
 }

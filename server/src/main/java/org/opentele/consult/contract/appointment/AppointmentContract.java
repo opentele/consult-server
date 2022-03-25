@@ -2,7 +2,7 @@ package org.opentele.consult.contract.appointment;
 
 import org.opentele.consult.contract.framework.BaseEntityContract;
 
-public class AppointmentRequest extends BaseEntityContract {
+public class AppointmentContract extends BaseEntityContract {
     private int queueNumber;
     private int consultationRoomId;
     private int clientId;

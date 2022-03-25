@@ -1,18 +1,18 @@
 package org.opentele.consult.contract.consultationRoom;
 
-import org.opentele.consult.contract.appointment.AppointmentResponse;
+import org.opentele.consult.contract.appointment.AppointmentDetailResponse;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ConsultationRoomConferenceResponse extends ConsultationRoomDetailResponse {
-    private List<AppointmentResponse> appointments = new ArrayList<>();
+    private List<AppointmentDetailResponse> appointments = new ArrayList<>();
 
-    public List<AppointmentResponse> getAppointments() {
+    public List<AppointmentDetailResponse> getAppointments() {
         return appointments;
     }
 
-    public void setAppointments(List<AppointmentResponse> appointments) {
+    public void setAppointments(List<AppointmentDetailResponse> appointments) {
         this.appointments = appointments;
     }
 }
