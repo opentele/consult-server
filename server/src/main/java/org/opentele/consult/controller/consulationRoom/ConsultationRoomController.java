@@ -114,4 +114,14 @@ public class ConsultationRoomController extends BaseController {
         ConsultationRoom consultationRoom = consultationRoomRepository.findEntity(id);
         return consultationRoomMapper.mapForConference(consultationRoom, getCurrentUser(principal));
     }
+
+    @PostMapping("/api/consultationRoom/appointmentToken/next")
+    public void moveToNextToken(@RequestParam("consultationRoomId") int consultationRoomId, Principal principal) {
+        consultationRoomService.moveToNextToken(consultationRoomId);
+    }
+
+    @PostMapping("/api/consultationRoom/appointmentToken/previous")
+    public void moveToPreviousToken(@RequestParam("consultationRoomId") int consultationRoomId, Principal principal) {
+        consultationRoomService.moveToPreviousToken(consultationRoomId);
+    }
 }

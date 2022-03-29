@@ -9,7 +9,15 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AppointmentTokenRepository extends AbstractRepository<AppointmentToken> {
     AppointmentToken findFirstByConsultationRoomAndQueueNumberGreaterThanOrderByQueueNumber(ConsultationRoom consultationRoom, int queueNumber);
-    AppointmentToken findFirstByConsultationRoomAndQueueNumberGreaterThanAndAppointmentProviderOrderByQueueNumber(ConsultationRoom consultationRoom, int queueNumber, User user);
+    default AppointmentToken getNextToken(ConsultationRoom consultationRoom, int queueNumber) {
+        return findFirstByConsultationRoomAndQueueNumberGreaterThanOrderByQueueNumber(consultationRoom, queueNumber);
+    }
+
+    AppointmentToken findLastByConsultationRoomAndQueueNumberLessThanOrderByQueueNumber(ConsultationRoom consultationRoom, int queueNumber);
+    default AppointmentToken getPreviousToken(ConsultationRoom consultationRoom, int queueNumber) {
+        return findLastByConsultationRoomAndQueueNumberLessThanOrderByQueueNumber(consultationRoom, queueNumber);
+    }
+
     AppointmentToken findTopByConsultationRoomOrderByQueueNumberDesc(ConsultationRoom consultationRoom);
     default int getMostRecentAppointmentQueueNumber(ConsultationRoom consultationRoom) {
         AppointmentToken appointmentToken = this.findTopByConsultationRoomOrderByQueueNumberDesc(consultationRoom);

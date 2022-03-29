@@ -57,14 +57,6 @@ public class ConsultationRoomService {
     public ConsultationRoom.ConsultationRoomCurrentUserSummary getCurrentSummaryFor(User user, ConsultationRoom consultationRoom) {
         ConsultationRoom.ConsultationRoomCurrentUserSummary summary = new ConsultationRoom.ConsultationRoomCurrentUserSummary();
         summary.setNumberOfClients(consultationRoom.getNumberOfClients(user));
-        AppointmentToken nextToken;
-        if (consultationRoom.isProvider(user)) {
-            nextToken = appointmentTokenRepository.findFirstByConsultationRoomAndQueueNumberGreaterThanOrderByQueueNumber(consultationRoom, consultationRoom.getCurrentQueueNumber());
-        } else {
-            nextToken = appointmentTokenRepository.findFirstByConsultationRoomAndQueueNumberGreaterThanAndAppointmentProviderOrderByQueueNumber(consultationRoom, consultationRoom.getCurrentQueueNumber(), user);
-        }
-        if (nextToken != null)
-            summary.setNextClient(nextToken.getClient());
         return summary;
     }
 
@@ -81,5 +73,23 @@ public class ConsultationRoomService {
         consultationRoom.addTeleConference(teleConference);
         consultationRoomRepository.save(consultationRoom);
         return teleConference;
+    }
+
+    public void moveToNextToken(int consultationRoomId) {
+        ConsultationRoom consultationRoom = consultationRoomRepository.findEntity(consultationRoomId);
+        AppointmentToken currentAppointmentToken = consultationRoom.getCurrentAppointmentToken();
+        currentAppointmentToken.setCurrent(false);
+        AppointmentToken nextToken = appointmentTokenRepository.getNextToken(consultationRoom, currentAppointmentToken.getQueueNumber());
+        nextToken.setCurrent(true);
+        consultationRoomRepository.save(consultationRoom);
+    }
+
+    public void moveToPreviousToken(int consultationRoomId) {
+        ConsultationRoom consultationRoom = consultationRoomRepository.findEntity(consultationRoomId);
+        AppointmentToken currentAppointmentToken = consultationRoom.getCurrentAppointmentToken();
+        currentAppointmentToken.setCurrent(false);
+        AppointmentToken previousToken = appointmentTokenRepository.getPreviousToken(consultationRoom, currentAppointmentToken.getQueueNumber());
+        previousToken.setCurrent(true);
+        consultationRoomRepository.save(consultationRoom);
     }
 }

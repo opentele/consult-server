@@ -52,9 +52,6 @@ public class ConsultationRoom  extends OrganisationalEntity {
     @Column
     private int totalSlots;
 
-    @Column
-    private int currentQueueNumber;
-
     public LocalDate getScheduledOn() {
         return scheduledOn;
     }
@@ -152,14 +149,6 @@ public class ConsultationRoom  extends OrganisationalEntity {
         return this.getAppointmentTokens().size();
     }
 
-    public int getCurrentQueueNumber() {
-        return currentQueueNumber;
-    }
-
-    public void setCurrentQueueNumber(int currentQueueNumber) {
-        this.currentQueueNumber = currentQueueNumber;
-    }
-
     public int getNumberOfPendingClients() {
         return (int) this.appointmentTokens.stream().filter(appointmentToken -> appointmentToken.getConsultation() == null).count();
     }
@@ -189,9 +178,17 @@ public class ConsultationRoom  extends OrganisationalEntity {
         return this.appointmentTokens.stream().sorted(Comparator.comparingInt(AppointmentToken::getQueueNumber));
     }
 
+    public AppointmentToken getCurrentAppointmentToken() {
+        return this.appointmentTokens.stream().filter(AppointmentToken::isCurrent).findFirst().orElse(null);
+    }
+
+    public int getCurrentQueueNumber() {
+        AppointmentToken currentAppointment = getCurrentAppointmentToken();
+        return currentAppointment.getQueueNumber();
+    }
+
     public static class ConsultationRoomCurrentUserSummary {
         private int numberOfClients;
-        private Client nextClient;
 
         public int getNumberOfClients() {
             return numberOfClients;
@@ -199,14 +196,6 @@ public class ConsultationRoom  extends OrganisationalEntity {
 
         public void setNumberOfClients(int numberOfClients) {
             this.numberOfClients = numberOfClients;
-        }
-
-        public Client getNextClient() {
-            return nextClient;
-        }
-
-        public void setNextClient(Client nextClient) {
-            this.nextClient = nextClient;
         }
     }
 }
