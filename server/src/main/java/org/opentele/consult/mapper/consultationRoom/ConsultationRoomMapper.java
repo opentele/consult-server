@@ -34,6 +34,9 @@ public class ConsultationRoomMapper {
 
     private void mapDetails(ConsultationRoom consultationRoom, User user, ConsultationRoomDetailResponse response) {
         response.setNumberOfClients(consultationRoom.getNumberOfClients());
+        Client currentClient = consultationRoom.getCurrentClient();
+        if (currentClient != null)
+            response.setCurrentClientId(currentClient.getId());
 
         ConsultationRoom.ConsultationRoomCurrentUserSummary summary = consultationRoomService.getCurrentSummaryFor(user, consultationRoom);
         response.setNumberOfUserClients(summary.getNumberOfClients());

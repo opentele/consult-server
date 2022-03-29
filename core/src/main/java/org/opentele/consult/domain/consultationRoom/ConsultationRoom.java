@@ -45,6 +45,10 @@ public class ConsultationRoom  extends OrganisationalEntity {
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, mappedBy = "consultationRoom")
     private Set<TeleConference> teleConferences = new HashSet<>();
 
+    @ManyToOne(targetEntity = ConsultationRoomSchedule.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "current_client_id", columnDefinition = "integer null")
+    private Client currentClient;
+
     @Column
     private int totalSlots;
 
@@ -171,6 +175,14 @@ public class ConsultationRoom  extends OrganisationalEntity {
     public void addTeleConference(TeleConference teleConference) {
         this.teleConferences.add(teleConference);
         teleConference.setConsultationRoom(this);
+    }
+
+    public Client getCurrentClient() {
+        return currentClient;
+    }
+
+    public void setCurrentClient(Client currentClient) {
+        this.currentClient = currentClient;
     }
 
     public static class ConsultationRoomCurrentUserSummary {

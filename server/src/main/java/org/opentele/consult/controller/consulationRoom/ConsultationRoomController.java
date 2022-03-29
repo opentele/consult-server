@@ -1,6 +1,7 @@
 package org.opentele.consult.controller.consulationRoom;
 
 import org.opentele.consult.contract.client.ClientSearchResponse;
+import org.opentele.consult.contract.client.ClientSearchResults;
 import org.opentele.consult.contract.client.ConsultationRoomClientResponse;
 import org.opentele.consult.contract.consultationRoom.ConsultationRoomConferenceResponse;
 import org.opentele.consult.contract.consultationRoom.ConsultationRoomContract;
@@ -95,9 +96,11 @@ public class ConsultationRoomController extends BaseController {
     }
 
     @GetMapping("/api/consultationRoom/client/search")
-    public List<ClientSearchResponse> searchResults(@RequestParam("q") String q,
-                                                    @RequestParam("consultationRoomId") int consultationRoomId) {
-        return clientRepository.getClientsMatching(q, getCurrentOrganisation(), consultationRoomId).stream().map(ClientSearchResponse::from).collect(Collectors.toList());
+    public ClientSearchResults searchResults(@RequestParam("q") String q,
+                                             @RequestParam("consultationRoomId") int consultationRoomId) {
+        int count = clientRepository.countClientsMatching(q, getCurrentOrganisation(), consultationRoomId);
+        List<ClientSearchResponse> clientSearchResponses = clientRepository.getClientsMatching(q, getCurrentOrganisation(), consultationRoomId).stream().map(ClientSearchResponse::from).collect(Collectors.toList());
+        return new ClientSearchResults(count, clientSearchResponses);
     }
 
     @RequestMapping(value = "/api/consultationRoom/teleConference", method = {RequestMethod.POST, RequestMethod.PUT})
