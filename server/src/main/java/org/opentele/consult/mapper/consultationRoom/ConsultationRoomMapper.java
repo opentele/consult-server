@@ -1,12 +1,10 @@
 package org.opentele.consult.mapper.consultationRoom;
 
 import org.opentele.consult.contract.appointment.AppointmentDetailResponse;
-import org.opentele.consult.contract.appointment.AppointmentResponse;
 import org.opentele.consult.contract.consultationRoom.ConsultationRoomConferenceResponse;
 import org.opentele.consult.contract.consultationRoom.ConsultationRoomContract;
 import org.opentele.consult.contract.consultationRoom.ConsultationRoomDetailResponse;
 import org.opentele.consult.contract.security.ProviderResponse;
-import org.opentele.consult.domain.client.Client;
 import org.opentele.consult.domain.consultationRoom.ConsultationRoom;
 import org.opentele.consult.domain.security.User;
 import org.opentele.consult.domain.teleconference.TeleConference;
@@ -34,15 +32,8 @@ public class ConsultationRoomMapper {
 
     private void mapDetails(ConsultationRoom consultationRoom, User user, ConsultationRoomDetailResponse response) {
         response.setNumberOfClients(consultationRoom.getNumberOfClients());
-        Client currentClient = consultationRoom.getCurrentClient();
-        if (currentClient != null)
-            response.setCurrentClientId(currentClient.getId());
-
         ConsultationRoom.ConsultationRoomCurrentUserSummary summary = consultationRoomService.getCurrentSummaryFor(user, consultationRoom);
         response.setNumberOfUserClients(summary.getNumberOfClients());
-        Client nextClient = summary.getNextClient();
-        if (nextClient != null)
-            response.setNextClient(nextClient.getName());
         response.setNumberOfClientsPending(consultationRoom.getNumberOfPendingClients());
         response.setNumberOfUserClientsPending(consultationRoom.getNumberOfPendingUserClients(user));
         TeleConference activeTeleConference = consultationRoom.getActiveTeleConference();
@@ -70,7 +61,7 @@ public class ConsultationRoomMapper {
         ConsultationRoomConferenceResponse response = new ConsultationRoomConferenceResponse();
         mapCore(response, consultationRoom);
         mapDetails(consultationRoom, user, response);
-        response.setAppointments(consultationRoom.getAppointmentTokens().stream().map(AppointmentDetailResponse::fromEntity).collect(Collectors.toList()));
+        response.setAppointments(consultationRoom.getAppointmentTokensInOrder().stream().map(AppointmentDetailResponse::fromEntity).collect(Collectors.toList()));
         return response;
     }
 }

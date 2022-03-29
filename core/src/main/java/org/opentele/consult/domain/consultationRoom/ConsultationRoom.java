@@ -8,8 +8,12 @@ import org.opentele.consult.domain.teleconference.TeleConference;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Entity
 @Table(name = "consultation_room")
@@ -44,10 +48,6 @@ public class ConsultationRoom  extends OrganisationalEntity {
 
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, mappedBy = "consultationRoom")
     private Set<TeleConference> teleConferences = new HashSet<>();
-
-    @ManyToOne(targetEntity = ConsultationRoomSchedule.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "current_client_id", columnDefinition = "integer null")
-    private Client currentClient;
 
     @Column
     private int totalSlots;
@@ -123,6 +123,10 @@ public class ConsultationRoom  extends OrganisationalEntity {
         return appointmentTokens;
     }
 
+    public List<AppointmentToken> getAppointmentTokensInOrder() {
+        return this.getSortedAppointments().collect(Collectors.toList());
+    }
+
     public void setAppointmentTokens(Set<AppointmentToken> appointmentTokens) {
         this.appointmentTokens = appointmentTokens;
     }
@@ -177,12 +181,12 @@ public class ConsultationRoom  extends OrganisationalEntity {
         teleConference.setConsultationRoom(this);
     }
 
-    public Client getCurrentClient() {
-        return currentClient;
+    public AppointmentToken getFirstAppointment() {
+        return getSortedAppointments().findFirst().orElse(null);
     }
 
-    public void setCurrentClient(Client currentClient) {
-        this.currentClient = currentClient;
+    private Stream<AppointmentToken> getSortedAppointments() {
+        return this.appointmentTokens.stream().sorted(Comparator.comparingInt(AppointmentToken::getQueueNumber));
     }
 
     public static class ConsultationRoomCurrentUserSummary {

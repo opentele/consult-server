@@ -76,6 +76,8 @@ public class ConsultationRoomService {
         TeleConference teleConference = new TeleConference();
         teleConference.setJitsiId(UUID.randomUUID().toString());
         teleConference.setOrganisation(consultationRoom.getOrganisation());
+        AppointmentToken firstAppointment = consultationRoom.getFirstAppointment();
+        firstAppointment.setCurrent(true);
         consultationRoom.addTeleConference(teleConference);
         consultationRoomRepository.save(consultationRoom);
         return teleConference;

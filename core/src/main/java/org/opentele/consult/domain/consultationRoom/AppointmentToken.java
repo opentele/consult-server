@@ -31,6 +31,9 @@ public class AppointmentToken extends OrganisationalEntity {
     @JoinColumn(name = "consultation_id", columnDefinition = "integer null")
     private Consultation consultation;
 
+    @Column
+    private boolean isCurrent;
+
     public ConsultationRoom getConsultationRoom() {
         return consultationRoom;
     }
@@ -69,5 +72,13 @@ public class AppointmentToken extends OrganisationalEntity {
 
     public void setConsultation(Consultation consultation) {
         this.consultation = consultation;
+    }
+
+    public boolean isCurrent() {
+        return isCurrent;
+    }
+
+    public void setCurrent(boolean current) {
+        isCurrent = current;
     }
 }

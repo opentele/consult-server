@@ -5,9 +5,7 @@ public class ConsultationRoomDetailResponse extends ConsultationRoomContract {
     private int numberOfUserClients;
     private int numberOfClientsPending;
     private int numberOfUserClientsPending;
-    private String nextClient;
     private String activeTeleConferenceId;
-    private int currentClientId;
 
     public int getNumberOfClients() {
         return numberOfClients;
@@ -23,14 +21,6 @@ public class ConsultationRoomDetailResponse extends ConsultationRoomContract {
 
     public void setNumberOfUserClients(int numberOfUserClients) {
         this.numberOfUserClients = numberOfUserClients;
-    }
-
-    public String getNextClient() {
-        return nextClient;
-    }
-
-    public void setNextClient(String nextClient) {
-        this.nextClient = nextClient;
     }
 
     public int getNumberOfClientsPending() {
@@ -55,13 +45,5 @@ public class ConsultationRoomDetailResponse extends ConsultationRoomContract {
 
     public void setActiveTeleConferenceId(String activeTeleConferenceId) {
         this.activeTeleConferenceId = activeTeleConferenceId;
-    }
-
-    public int getCurrentClientId() {
-        return currentClientId;
-    }
-
-    public void setCurrentClientId(int currentClientId) {
-        this.currentClientId = currentClientId;
     }
 }

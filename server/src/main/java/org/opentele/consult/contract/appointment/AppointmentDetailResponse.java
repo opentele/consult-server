@@ -4,7 +4,7 @@ import org.opentele.consult.domain.client.Client;
 import org.opentele.consult.domain.client.Gender;
 import org.opentele.consult.domain.consultationRoom.AppointmentToken;
 
-public class AppointmentDetailResponse extends AppointmentResponse {
+public class AppointmentDetailResponse extends AppointmentContract {
     private String clientName;
     private Gender gender;
     private String usherName;
@@ -35,7 +35,7 @@ public class AppointmentDetailResponse extends AppointmentResponse {
 
     public static AppointmentDetailResponse fromEntity(AppointmentToken appointmentToken) {
         AppointmentDetailResponse appointmentDetailResponse = new AppointmentDetailResponse();
-        AppointmentResponse.set(appointmentToken, appointmentDetailResponse);
+        AppointmentContract.set(appointmentToken, appointmentDetailResponse);
         Client client = appointmentToken.getClient();
         appointmentDetailResponse.setClientName(client.getName());
         appointmentDetailResponse.setGender(client.getGender());

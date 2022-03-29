@@ -1,7 +1,6 @@
 package org.opentele.consult.controller;
 
 import org.opentele.consult.contract.appointment.AppointmentContract;
-import org.opentele.consult.contract.appointment.AppointmentResponse;
 import org.opentele.consult.domain.consultationRoom.AppointmentToken;
 import org.opentele.consult.domain.consultationRoom.ConsultationRoom;
 import org.opentele.consult.framework.UserSession;
@@ -31,7 +30,7 @@ public class AppointmentController extends BaseController {
     }
 
     @RequestMapping(value = "/api/appointment", method = {RequestMethod.PUT, RequestMethod.POST})
-    public AppointmentResponse saveAppointment(@RequestBody AppointmentContract request, Principal principal) {
+    public AppointmentContract saveAppointment(@RequestBody AppointmentContract request, Principal principal) {
         AppointmentToken appointmentToken = new AppointmentToken();
         appointmentToken.setAppointmentProvider(getCurrentUser(principal));
         appointmentToken.setOrganisation(getCurrentOrganisation());
@@ -49,6 +48,6 @@ public class AppointmentController extends BaseController {
             appointmentToken.setQueueNumber(request.getQueueNumber());
             appointmentToken = appointmentTokenRepository.save(appointmentToken);
         }
-        return AppointmentResponse.fromEntity(appointmentToken);
+        return AppointmentContract.fromEntity(appointmentToken);
     }
 }
