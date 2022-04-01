@@ -77,11 +77,11 @@ public class ConsultationRoomSchedule extends OrganisationalEntity {
     }
 
     private LocalDate getDate(DateTime dateTime) {
-        return LocalDate.of(dateTime.getYear(), dateTime.getMonth(), dateTime.getDayOfMonth());
+        return LocalDate.of(dateTime.getYear(), dateTime.getMonth() + 1, dateTime.getDayOfMonth());
     }
 
     private DateTime getRRDateTime(LocalDate fromDate) {
-        return new DateTime(fromDate.getYear(), fromDate.getMonthValue(), fromDate.getDayOfMonth());
+        return new DateTime(fromDate.getYear(), fromDate.getMonthValue() - 1, fromDate.getDayOfMonth());
     }
 
     public LocalTime getStartTime() {

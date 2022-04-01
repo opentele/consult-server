@@ -32,7 +32,7 @@ public class ConsultationRoomService {
         int roomsCreated = 0;
         List<ConsultationRoomSchedule> schedules = consultationRoomScheduleRepository.findAllBy();
         for (ConsultationRoomSchedule consultationRoomSchedule : schedules) {
-            LocalDate localDate = LocalDate.now();
+            LocalDate localDate = LocalDate.now().minusDays(1);
             for (int i = 0; i < numberOfDays; i++) {
                 if (create(localDate, consultationRoomSchedule)) roomsCreated++;
                 localDate = localDate.plusDays(1);

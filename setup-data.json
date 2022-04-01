@@ -127,12 +127,25 @@
 				},
 				{
 					"name": "Consultation Room Schedule",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const x = require('moment')().subtract(1, 'days');",
+									"const date = `[${x.year()},${x.month()+1},${x.date()}]`;",
+									"pm.environment.set('currentdate', date);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"title\": \"TB Clinic\",\n    \"totalSlots\": 10,\n    \"providers\": [3,4],\n    \"recurrenceRule\": \"FREQ=WEEKLY;INTERVAL=1;BYDAY=MO,TU,WE,TH,FR,SA,SU\",\n    \"startTime\": [12,0],\n    \"endTime\": [16,0],\n    \"startDate\": [2022,2,4]\n}",
+							"raw": "{\n    \"title\": \"TB Clinic\",\n    \"totalSlots\": 10,\n    \"providers\": [3,4],\n    \"recurrenceRule\": \"FREQ=WEEKLY;INTERVAL=1;BYDAY=MO,TU,WE,TH,FR,SA,SU\",\n    \"startTime\": [12,0],\n    \"endTime\": [16,0],\n    \"startDate\": {{currentdate}}\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -217,6 +230,17 @@
 				},
 				{
 					"name": "Schedule Rooms",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
