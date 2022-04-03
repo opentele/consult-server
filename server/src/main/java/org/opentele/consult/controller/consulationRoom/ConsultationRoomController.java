@@ -117,11 +117,23 @@ public class ConsultationRoomController extends BaseController {
 
     @PostMapping("/api/consultationRoom/appointmentToken/next")
     public void moveToNextToken(@RequestParam("consultationRoomId") int consultationRoomId, Principal principal) {
-        consultationRoomService.moveToNextToken(consultationRoomId);
+        consultationRoomService.moveToNextToken(consultationRoomId, getCurrentUser(principal), getCurrentOrganisation());
     }
 
     @PostMapping("/api/consultationRoom/appointmentToken/previous")
     public void moveToPreviousToken(@RequestParam("consultationRoomId") int consultationRoomId, Principal principal) {
-        consultationRoomService.moveToPreviousToken(consultationRoomId);
+        consultationRoomService.moveToPreviousToken(consultationRoomId, getCurrentUser(principal), getCurrentOrganisation());
+    }
+
+    @PostMapping("/api/consultationRoom/appointmentToken/moveDown")
+    public void appointmentTokenMoveDown(@RequestParam("consultationRoomId") int consultationRoomId,
+                                         @RequestParam("tokenId") int tokenId, Principal principal) {
+        consultationRoomService.appointmentTokenMoveDown(consultationRoomId, tokenId, getCurrentUser(principal), getCurrentOrganisation());
+    }
+
+    @PostMapping("/api/consultationRoom/appointmentToken/moveUp")
+    public void appointmentTokenMoveUp(@RequestParam("consultationRoomId") int consultationRoomId,
+                                         @RequestParam("tokenId") int tokenId, Principal principal) {
+        consultationRoomService.appointmentTokenMoveUp(consultationRoomId, tokenId, getCurrentUser(principal), getCurrentOrganisation());
     }
 }

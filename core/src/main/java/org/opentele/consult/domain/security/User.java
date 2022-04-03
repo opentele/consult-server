@@ -1,8 +1,7 @@
 package org.opentele.consult.domain.security;
 
-import org.opentele.consult.domain.consultationRoom.ConsultationRoomScheduleUser;
+import org.opentele.consult.domain.Organisation;
 import org.opentele.consult.domain.framework.AbstractEntity;
-import org.opentele.consult.domain.framework.OrganisationalEntity;
 import org.springframework.data.annotation.Transient;
 
 import javax.persistence.*;
@@ -58,5 +57,10 @@ public class User extends AbstractEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public ProviderType getProviderType(Organisation organisation) {
+        OrganisationUser organisationUser = this.organisationUsers.stream().filter(ou -> ou.getOrganisation().equals(organisation)).findFirst().orElse(null);
+        return organisationUser.getProviderType();
     }
 }

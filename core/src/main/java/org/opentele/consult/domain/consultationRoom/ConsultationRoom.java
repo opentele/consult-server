@@ -187,6 +187,10 @@ public class ConsultationRoom  extends OrganisationalEntity {
         return currentAppointment.getQueueNumber();
     }
 
+    public AppointmentToken getAppointmentToken(int tokenId) {
+        return this.appointmentTokens.stream().filter(appointmentToken -> appointmentToken.getId().equals(tokenId)).findFirst().orElse(null);
+    }
+
     public static class ConsultationRoomCurrentUserSummary {
         private int numberOfClients;
 
