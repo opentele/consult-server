@@ -115,25 +115,31 @@ public class ConsultationRoomController extends BaseController {
         return consultationRoomMapper.mapForConference(consultationRoom, getCurrentUser(principal));
     }
 
-    @PostMapping("/api/consultationRoom/appointmentToken/next")
-    public void moveToNextToken(@RequestParam("consultationRoomId") int consultationRoomId, Principal principal) {
+    @PostMapping("/api/consultationRoom/appointment/next")
+    public void moveToNextAppointment(@RequestParam("consultationRoomId") int consultationRoomId, Principal principal) {
         consultationRoomService.moveToNextToken(consultationRoomId, getCurrentUser(principal), getCurrentOrganisation());
     }
 
-    @PostMapping("/api/consultationRoom/appointmentToken/previous")
-    public void moveToPreviousToken(@RequestParam("consultationRoomId") int consultationRoomId, Principal principal) {
+    @PostMapping("/api/consultationRoom/appointment/previous")
+    public void moveToPreviousAppointment(@RequestParam("consultationRoomId") int consultationRoomId, Principal principal) {
         consultationRoomService.moveToPreviousToken(consultationRoomId, getCurrentUser(principal), getCurrentOrganisation());
     }
 
-    @PostMapping("/api/consultationRoom/appointmentToken/moveDown")
-    public void appointmentTokenMoveDown(@RequestParam("consultationRoomId") int consultationRoomId,
-                                         @RequestParam("tokenId") int tokenId, Principal principal) {
-        consultationRoomService.appointmentTokenMoveDown(consultationRoomId, tokenId, getCurrentUser(principal), getCurrentOrganisation());
+    @PostMapping("/api/consultationRoom/appointment/moveDown")
+    public void appointmentMoveDown(@RequestParam("consultationRoomId") int consultationRoomId,
+                                         @RequestParam("appointmentId") int tokenId, Principal principal) {
+        consultationRoomService.appointmentMoveDown(consultationRoomId, tokenId, getCurrentUser(principal), getCurrentOrganisation());
     }
 
-    @PostMapping("/api/consultationRoom/appointmentToken/moveUp")
-    public void appointmentTokenMoveUp(@RequestParam("consultationRoomId") int consultationRoomId,
-                                         @RequestParam("tokenId") int tokenId, Principal principal) {
-        consultationRoomService.appointmentTokenMoveUp(consultationRoomId, tokenId, getCurrentUser(principal), getCurrentOrganisation());
+    @PostMapping("/api/consultationRoom/appointment/moveUp")
+    public void appointmentMoveUp(@RequestParam("consultationRoomId") int consultationRoomId,
+                                         @RequestParam("appointmentId") int tokenId, Principal principal) {
+        consultationRoomService.appointmentMoveUp(consultationRoomId, tokenId, getCurrentUser(principal), getCurrentOrganisation());
+    }
+
+    @PostMapping("/api/consultationRoom/appointment/setCurrent")
+    public void setCurrentAppointment(@RequestParam("consultationRoomId") int consultationRoomId,
+                                         @RequestParam("appointmentId") int tokenId, Principal principal) {
+        consultationRoomService.appointmentMoveUp(consultationRoomId, tokenId, getCurrentUser(principal), getCurrentOrganisation());
     }
 }

@@ -61,7 +61,7 @@ public class ConsultationRoomMapper {
         ConsultationRoomConferenceResponse response = new ConsultationRoomConferenceResponse();
         mapCore(response, consultationRoom);
         mapDetails(consultationRoom, user, response);
-        response.setAppointments(consultationRoom.getAppointmentTokensInOrder().stream().map(AppointmentDetailResponse::fromEntity).collect(Collectors.toList()));
+        response.setAppointments(consultationRoom.getAppointmentInOrder().stream().map(AppointmentDetailResponse::fromEntity).collect(Collectors.toList()));
         return response;
     }
 }

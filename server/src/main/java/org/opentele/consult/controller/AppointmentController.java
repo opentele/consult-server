@@ -1,10 +1,10 @@
 package org.opentele.consult.controller;
 
 import org.opentele.consult.contract.appointment.AppointmentContract;
-import org.opentele.consult.domain.consultationRoom.AppointmentToken;
+import org.opentele.consult.domain.consultationRoom.Appointment;
 import org.opentele.consult.domain.consultationRoom.ConsultationRoom;
 import org.opentele.consult.framework.UserSession;
-import org.opentele.consult.repository.AppointmentTokenRepository;
+import org.opentele.consult.repository.AppointmentRepository;
 import org.opentele.consult.repository.ClientRepository;
 import org.opentele.consult.repository.ConsultationRoomRepository;
 import org.opentele.consult.service.UserService;
@@ -19,35 +19,35 @@ import java.security.Principal;
 public class AppointmentController extends BaseController {
     private final ConsultationRoomRepository consultationRoomRepository;
     private final ClientRepository clientRepository;
-    private final AppointmentTokenRepository appointmentTokenRepository;
+    private final AppointmentRepository appointmentRepository;
 
     @Autowired
-    public AppointmentController(ConsultationRoomRepository consultationRoomRepository, UserService userService, ClientRepository clientRepository, AppointmentTokenRepository appointmentTokenRepository, UserSession userSession) {
+    public AppointmentController(ConsultationRoomRepository consultationRoomRepository, UserService userService, ClientRepository clientRepository, AppointmentRepository appointmentRepository, UserSession userSession) {
         super(userService, userSession);
         this.consultationRoomRepository = consultationRoomRepository;
         this.clientRepository = clientRepository;
-        this.appointmentTokenRepository = appointmentTokenRepository;
+        this.appointmentRepository = appointmentRepository;
     }
 
     @RequestMapping(value = "/api/appointment", method = {RequestMethod.PUT, RequestMethod.POST})
     public AppointmentContract saveAppointment(@RequestBody AppointmentContract request, Principal principal) {
-        AppointmentToken appointmentToken = new AppointmentToken();
-        appointmentToken.setAppointmentProvider(getCurrentUser(principal));
-        appointmentToken.setOrganisation(getCurrentOrganisation());
-        appointmentToken.setClient(clientRepository.findEntity(request.getClientId()));
+        Appointment appointment = new Appointment();
+        appointment.setAppointmentProvider(getCurrentUser(principal));
+        appointment.setOrganisation(getCurrentOrganisation());
+        appointment.setClient(clientRepository.findEntity(request.getClientId()));
         ConsultationRoom consultationRoom = consultationRoomRepository.findEntity(request.getConsultationRoomId());
-        appointmentToken.setConsultationRoom(consultationRoom);
+        appointment.setConsultationRoom(consultationRoom);
         if (request.getQueueNumber() <= 0) {
             String lockString = String.format("consultationRoom-%d", request.getConsultationRoomId());
             synchronized (lockString.intern()) {
-                int queueNumber = appointmentTokenRepository.getMostRecentAppointmentQueueNumber(consultationRoom);
-                appointmentToken.setQueueNumber(queueNumber + 1);
-                appointmentToken = appointmentTokenRepository.save(appointmentToken);
+                int queueNumber = appointmentRepository.getMostRecentAppointmentQueueNumber(consultationRoom);
+                appointment.setQueueNumber(queueNumber + 1);
+                appointment = appointmentRepository.save(appointment);
             }
         } else {
-            appointmentToken.setQueueNumber(request.getQueueNumber());
-            appointmentToken = appointmentTokenRepository.save(appointmentToken);
+            appointment.setQueueNumber(request.getQueueNumber());
+            appointment = appointmentRepository.save(appointment);
         }
-        return AppointmentContract.fromEntity(appointmentToken);
+        return AppointmentContract.fromEntity(appointment);
     }
 }

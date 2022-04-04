@@ -10,8 +10,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "appointment_token", uniqueConstraints = {@UniqueConstraint(columnNames = {"consultation_room_id", "client_id"})})
-public class AppointmentToken extends OrganisationalEntity {
+@Table(name = "appointment", uniqueConstraints = {@UniqueConstraint(columnNames = {"consultation_room_id", "client_id"})})
+public class Appointment extends OrganisationalEntity {
     @ManyToOne(targetEntity = ConsultationRoom.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "consultation_room_id", columnDefinition = "integer not null")
     private ConsultationRoom consultationRoom;

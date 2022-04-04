@@ -2,7 +2,7 @@ package org.opentele.consult.contract.appointment;
 
 import org.opentele.consult.domain.client.Client;
 import org.opentele.consult.domain.client.Gender;
-import org.opentele.consult.domain.consultationRoom.AppointmentToken;
+import org.opentele.consult.domain.consultationRoom.Appointment;
 
 public class AppointmentDetailResponse extends AppointmentContract {
     private String clientName;
@@ -33,13 +33,13 @@ public class AppointmentDetailResponse extends AppointmentContract {
         this.usherName = usherName;
     }
 
-    public static AppointmentDetailResponse fromEntity(AppointmentToken appointmentToken) {
+    public static AppointmentDetailResponse fromEntity(Appointment appointment) {
         AppointmentDetailResponse appointmentDetailResponse = new AppointmentDetailResponse();
-        AppointmentContract.set(appointmentToken, appointmentDetailResponse);
-        Client client = appointmentToken.getClient();
+        AppointmentContract.set(appointment, appointmentDetailResponse);
+        Client client = appointment.getClient();
         appointmentDetailResponse.setClientName(client.getName());
         appointmentDetailResponse.setGender(client.getGender());
-        appointmentDetailResponse.setUsherName(appointmentToken.getAppointmentProvider().getName());
+        appointmentDetailResponse.setUsherName(appointment.getAppointmentProvider().getName());
         return appointmentDetailResponse;
     }
 }

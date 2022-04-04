@@ -1,6 +1,5 @@
 package org.opentele.consult.domain.consultationRoom;
 
-import org.opentele.consult.domain.client.Client;
 import org.opentele.consult.domain.framework.OrganisationalEntity;
 import org.opentele.consult.domain.security.User;
 import org.opentele.consult.domain.teleconference.TeleConference;
@@ -44,7 +43,7 @@ public class ConsultationRoom  extends OrganisationalEntity {
     private ConsultationRoomSchedule consultationRoomSchedule;
 
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, mappedBy = "consultationRoom")
-    private Set<AppointmentToken> appointmentTokens = new HashSet<>();
+    private Set<Appointment> appointments = new HashSet<>();
 
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, mappedBy = "consultationRoom")
     private Set<TeleConference> teleConferences = new HashSet<>();
@@ -116,16 +115,16 @@ public class ConsultationRoom  extends OrganisationalEntity {
         this.consultationRoomSchedule = consultationRoomSchedule;
     }
 
-    public Set<AppointmentToken> getAppointmentTokens() {
-        return appointmentTokens;
+    public Set<Appointment> getAppointments() {
+        return appointments;
     }
 
-    public List<AppointmentToken> getAppointmentTokensInOrder() {
+    public List<Appointment> getAppointmentInOrder() {
         return this.getSortedAppointments().collect(Collectors.toList());
     }
 
-    public void setAppointmentTokens(Set<AppointmentToken> appointmentTokens) {
-        this.appointmentTokens = appointmentTokens;
+    public void setAppointments(Set<Appointment> appointments) {
+        this.appointments = appointments;
     }
 
     public int getTotalSlots() {
@@ -146,19 +145,19 @@ public class ConsultationRoom  extends OrganisationalEntity {
     }
 
     public int getNumberOfClients() {
-        return this.getAppointmentTokens().size();
+        return this.getAppointments().size();
     }
 
     public int getNumberOfPendingClients() {
-        return (int) this.appointmentTokens.stream().filter(appointmentToken -> appointmentToken.getConsultation() == null).count();
+        return (int) this.appointments.stream().filter(appointment -> appointment.getConsultation() == null).count();
     }
 
     public int getNumberOfPendingUserClients(User user) {
-        return (int) this.appointmentTokens.stream().filter(appointmentToken -> appointmentToken.getConsultation() == null && appointmentToken.getAppointmentProvider().equals(user)).count();
+        return (int) this.appointments.stream().filter(appointment -> appointment.getConsultation() == null && appointment.getAppointmentProvider().equals(user)).count();
     }
 
     public int getNumberOfClients(User user) {
-        return (int) this.appointmentTokens.stream().filter(appointmentToken -> appointmentToken.getAppointmentProvider().equals(user)).count();
+        return (int) this.appointments.stream().filter(appointment -> appointment.getAppointmentProvider().equals(user)).count();
     }
 
     public TeleConference getActiveTeleConference() {
@@ -170,25 +169,25 @@ public class ConsultationRoom  extends OrganisationalEntity {
         teleConference.setConsultationRoom(this);
     }
 
-    public AppointmentToken getFirstAppointment() {
+    public Appointment getFirstAppointment() {
         return getSortedAppointments().findFirst().orElse(null);
     }
 
-    private Stream<AppointmentToken> getSortedAppointments() {
-        return this.appointmentTokens.stream().sorted(Comparator.comparingInt(AppointmentToken::getQueueNumber));
+    private Stream<Appointment> getSortedAppointments() {
+        return this.appointments.stream().sorted(Comparator.comparingInt(Appointment::getQueueNumber));
     }
 
-    public AppointmentToken getCurrentAppointmentToken() {
-        return this.appointmentTokens.stream().filter(AppointmentToken::isCurrent).findFirst().orElse(null);
+    public Appointment getCurrentAppointment() {
+        return this.appointments.stream().filter(Appointment::isCurrent).findFirst().orElse(null);
     }
 
     public int getCurrentQueueNumber() {
-        AppointmentToken currentAppointment = getCurrentAppointmentToken();
+        Appointment currentAppointment = getCurrentAppointment();
         return currentAppointment.getQueueNumber();
     }
 
-    public AppointmentToken getAppointmentToken(int tokenId) {
-        return this.appointmentTokens.stream().filter(appointmentToken -> appointmentToken.getId().equals(tokenId)).findFirst().orElse(null);
+    public Appointment getAppointment(int id) {
+        return this.appointments.stream().filter(appointment -> appointment.getId().equals(id)).findFirst().orElse(null);
     }
 
     public static class ConsultationRoomCurrentUserSummary {

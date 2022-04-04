@@ -14,7 +14,7 @@ import java.util.List;
 public interface ClientRepository extends AbstractRepository<Client> {
     @Query(value = "SELECT c.* FROM client c " +
             "join organisation o on c.organisation_id = o.id " +
-            "where c.name ilike :s and o.id = :organisationId and c.id not in (select client_id from appointment_token where consultation_room_id = :consultationRoomId ) order by c.name limit 10",
+            "where c.name ilike :s and o.id = :organisationId and c.id not in (select client_id from appointment where consultation_room_id = :consultationRoomId ) order by c.name limit 10",
             nativeQuery = true)
     List<Client> searchClients(String s, int organisationId, int consultationRoomId);
     default List<Client> getClientsMatching(String s, Organisation organisation, int consultationRoomId) {
@@ -22,7 +22,7 @@ public interface ClientRepository extends AbstractRepository<Client> {
     }
     @Query(value = "SELECT count(c.id) FROM client c " +
             "join organisation o on c.organisation_id = o.id " +
-            "where c.name ilike :s and o.id = :organisationId and c.id not in (select client_id from appointment_token where consultation_room_id = :consultationRoomId )",
+            "where c.name ilike :s and o.id = :organisationId and c.id not in (select client_id from appointment where consultation_room_id = :consultationRoomId )",
             nativeQuery = true)
     int countClients(String s, int organisationId, int consultationRoomId);
     default int countClientsMatching(String s, Organisation organisation, int consultationRoomId) {
@@ -38,9 +38,9 @@ public interface ClientRepository extends AbstractRepository<Client> {
         return searchClients("%" + s + "%", organisation.getId());
     }
 
-    @Query(value = "SELECT c.name, c.registration_number as registrationNumber, c.gender, c.date_of_birth as dateOfBirth, at.queue_number as queueNumber FROM client c " +
-            "join appointment_token at on c.id = at.client_id " +
-            "where at.consultation_room_id = :consultationRoomId" +
+    @Query(value = "SELECT c.name, c.registration_number as registrationNumber, c.gender, c.date_of_birth as dateOfBirth, a.queue_number as queueNumber FROM client c " +
+            "join appointment a on c.id = a.client_id " +
+            "where a.consultation_room_id = :consultationRoomId" +
             " order by c.name",
             nativeQuery = true)
     List<ConsultationRoomClientProjection> getClients(int consultationRoomId);

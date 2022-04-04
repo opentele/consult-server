@@ -1,7 +1,7 @@
 package org.opentele.consult.contract.appointment;
 
 import org.opentele.consult.contract.framework.BaseEntityContract;
-import org.opentele.consult.domain.consultationRoom.AppointmentToken;
+import org.opentele.consult.domain.consultationRoom.Appointment;
 
 public class AppointmentContract extends BaseEntityContract {
     private int queueNumber;
@@ -41,17 +41,17 @@ public class AppointmentContract extends BaseEntityContract {
         isCurrent = current;
     }
 
-    public static AppointmentContract fromEntity(AppointmentToken appointmentToken) {
+    public static AppointmentContract fromEntity(Appointment appointment) {
         AppointmentContract appointmentResponse = new AppointmentContract();
-        set(appointmentToken, appointmentResponse);
+        set(appointment, appointmentResponse);
         return appointmentResponse;
     }
 
-    public static void set(AppointmentToken appointmentToken, AppointmentContract appointmentContract) {
-        appointmentContract.setQueueNumber(appointmentToken.getQueueNumber());
-        appointmentContract.setClientId(appointmentToken.getClient().getId());
-        appointmentContract.setConsultationRoomId(appointmentToken.getConsultationRoom().getId());
-        appointmentContract.setId(appointmentToken.getId());
-        appointmentContract.setCurrent(appointmentToken.isCurrent());
+    public static void set(Appointment appointment, AppointmentContract appointmentContract) {
+        appointmentContract.setQueueNumber(appointment.getQueueNumber());
+        appointmentContract.setClientId(appointment.getClient().getId());
+        appointmentContract.setConsultationRoomId(appointment.getConsultationRoom().getId());
+        appointmentContract.setId(appointment.getId());
+        appointmentContract.setCurrent(appointment.isCurrent());
     }
 }

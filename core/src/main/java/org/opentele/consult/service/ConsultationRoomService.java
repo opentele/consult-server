@@ -1,33 +1,29 @@
 package org.opentele.consult.service;
 
 import org.opentele.consult.domain.Organisation;
-import org.opentele.consult.domain.consultationRoom.AppointmentToken;
+import org.opentele.consult.domain.consultationRoom.Appointment;
 import org.opentele.consult.domain.consultationRoom.ConsultationRoom;
 import org.opentele.consult.domain.consultationRoom.ConsultationRoomSchedule;
-import org.opentele.consult.domain.security.ProviderType;
 import org.opentele.consult.domain.security.User;
 import org.opentele.consult.domain.teleconference.TeleConference;
-import org.opentele.consult.repository.AppointmentTokenRepository;
 import org.opentele.consult.repository.ConsultationRoomRepository;
 import org.opentele.consult.repository.ConsultationRoomScheduleRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class ConsultationRoomService {
     private final ConsultationRoomScheduleRepository consultationRoomScheduleRepository;
     private final ConsultationRoomRepository consultationRoomRepository;
-    private final AppointmentTokenService appointmentTokenService;
+    private final AppointmentService appointmentService;
 
-    public ConsultationRoomService(ConsultationRoomScheduleRepository consultationRoomScheduleRepository, ConsultationRoomRepository consultationRoomRepository, AppointmentTokenService appointmentTokenService) {
+    public ConsultationRoomService(ConsultationRoomScheduleRepository consultationRoomScheduleRepository, ConsultationRoomRepository consultationRoomRepository, AppointmentService appointmentService) {
         this.consultationRoomScheduleRepository = consultationRoomScheduleRepository;
         this.consultationRoomRepository = consultationRoomRepository;
-        this.appointmentTokenService = appointmentTokenService;
+        this.appointmentService = appointmentService;
     }
 
     public int schedule(int numberOfDays) {
@@ -70,7 +66,7 @@ public class ConsultationRoomService {
         TeleConference teleConference = new TeleConference();
         teleConference.setJitsiId(String.format("%s (%d)", consultationRoom.getTitle(), consultationRoom.getId()));
         teleConference.setOrganisation(consultationRoom.getOrganisation());
-        AppointmentToken firstAppointment = consultationRoom.getFirstAppointment();
+        Appointment firstAppointment = consultationRoom.getFirstAppointment();
         firstAppointment.setCurrent(true);
         consultationRoom.addTeleConference(teleConference);
         consultationRoomRepository.save(consultationRoom);
@@ -79,46 +75,46 @@ public class ConsultationRoomService {
 
     public void moveToNextToken(int consultationRoomId, User user, Organisation organisation) {
         ConsultationRoom consultationRoom = consultationRoomRepository.findEntity(consultationRoomId);
-        AppointmentToken currentAppointmentToken = consultationRoom.getCurrentAppointmentToken();
+        Appointment currentAppointment = consultationRoom.getCurrentAppointment();
 
-        AppointmentToken nextToken = appointmentTokenService.getNextToken(user, organisation, consultationRoom);
+        Appointment nextToken = appointmentService.getNextToken(user, organisation, consultationRoom);
 
-        currentAppointmentToken.setCurrent(false);
+        currentAppointment.setCurrent(false);
         nextToken.setCurrent(true);
         consultationRoomRepository.save(consultationRoom);
     }
 
     public void moveToPreviousToken(int consultationRoomId, User user, Organisation organisation) {
         ConsultationRoom consultationRoom = consultationRoomRepository.findEntity(consultationRoomId);
-        AppointmentToken currentAppointmentToken = consultationRoom.getCurrentAppointmentToken();
+        Appointment currentAppointment = consultationRoom.getCurrentAppointment();
 
-        AppointmentToken previousToken = appointmentTokenService.getPreviousToken(user, organisation, consultationRoom);
+        Appointment previousToken = appointmentService.getPreviousToken(user, organisation, consultationRoom);
 
-        currentAppointmentToken.setCurrent(false);
+        currentAppointment.setCurrent(false);
         previousToken.setCurrent(true);
         consultationRoomRepository.save(consultationRoom);
     }
 
-    public void appointmentTokenMoveDown(int consultationRoomId, int tokenId, User user, Organisation organisation) {
+    public void appointmentMoveDown(int consultationRoomId, int tokenId, User user, Organisation organisation) {
         ConsultationRoom consultationRoom = consultationRoomRepository.findEntity(consultationRoomId);
-        AppointmentToken appointmentToken = consultationRoom.getAppointmentToken(tokenId);
-        int queueNumber = appointmentToken.getQueueNumber();
-        AppointmentToken nextToken = appointmentTokenService.getNextToken(user, organisation, consultationRoom, appointmentToken);
+        Appointment appointment = consultationRoom.getAppointment(tokenId);
+        int queueNumber = appointment.getQueueNumber();
+        Appointment nextToken = appointmentService.getNextToken(user, organisation, consultationRoom, appointment);
         int nextQueueNumber = nextToken.getQueueNumber();
 
-        appointmentToken.setQueueNumber(nextQueueNumber);
+        appointment.setQueueNumber(nextQueueNumber);
         nextToken.setQueueNumber(queueNumber);
         consultationRoomRepository.save(consultationRoom);
     }
 
-    public void appointmentTokenMoveUp(int consultationRoomId, int tokenId, User user, Organisation organisation) {
+    public void appointmentMoveUp(int consultationRoomId, int tokenId, User user, Organisation organisation) {
         ConsultationRoom consultationRoom = consultationRoomRepository.findEntity(consultationRoomId);
-        AppointmentToken appointmentToken = consultationRoom.getAppointmentToken(tokenId);
-        int queueNumber = appointmentToken.getQueueNumber();
-        AppointmentToken previousToken = appointmentTokenService.getPreviousToken(user, organisation, consultationRoom, appointmentToken);
+        Appointment appointment = consultationRoom.getAppointment(tokenId);
+        int queueNumber = appointment.getQueueNumber();
+        Appointment previousToken = appointmentService.getPreviousToken(user, organisation, consultationRoom, appointment);
         int previousQueueNumber = previousToken.getQueueNumber();
 
-        appointmentToken.setQueueNumber(previousQueueNumber);
+        appointment.setQueueNumber(previousQueueNumber);
         previousToken.setQueueNumber(queueNumber);
         consultationRoomRepository.save(consultationRoom);
     }
