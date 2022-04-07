@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 public class UserController extends BaseController {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final MailService mailService;
-    private TemplateContextFactory templateContextFactory;
+    private final TemplateContextFactory templateContextFactory;
     private static final Logger logger = Logger.getLogger(UserController.class);
 
     @Autowired
@@ -46,26 +46,6 @@ public class UserController extends BaseController {
         this.templateContextFactory = templateContextFactory;
     }
 
-    @RequestMapping(value = "/api/organisation", method = {RequestMethod.PUT})
-    @Transactional
-    public ResponseEntity<String> save(@RequestBody OrganisationPutPostRequest request) {
-        String error = userService.validateNewUser(request.getEmail(), request.getMobile());
-        if (error != null)
-            return new ResponseEntity<>(error, HttpStatus.CONFLICT);
-
-        Organisation organisation = new Organisation();
-        organisation.setName(request.getOrganisationName());
-
-        User user = new User();
-        user.setPassword(bCryptPasswordEncoder.encode(request.getPassword()));
-        user.setEmail(request.getEmail());
-        user.setMobile(request.getMobile());
-        user.setName(request.getName());
-
-        userService.createNewOrganisation(user, organisation);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
     @RequestMapping(value = "/api/user", method = {RequestMethod.PUT})
     @Transactional
     public ResponseEntity<String> save(@RequestBody UserRequest request) {
@@ -73,11 +53,7 @@ public class UserController extends BaseController {
         if (error != null)
             return new ResponseEntity<>(error, HttpStatus.CONFLICT);
 
-        User user = new User();
-        user.setPassword(bCryptPasswordEncoder.encode(request.getPassword()));
-        user.setEmail(request.getEmail());
-        user.setMobile(request.getMobile());
-        user.setName(request.getName());
+        User user = request.toUser(bCryptPasswordEncoder.encode(request.getPassword()));
         userService.save(user);
         return new ResponseEntity<>(HttpStatus.OK);
     }

@@ -39,4 +39,10 @@ public class UserContract extends BaseEntityContract {
     public void setName(String name) {
         this.name = name;
     }
+
+    protected void mapToUser(User user) {
+        user.setMobile(mobile);
+        user.setEmail(email);
+        user.setName(name);
+    }
 }

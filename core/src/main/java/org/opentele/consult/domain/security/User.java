@@ -63,4 +63,13 @@ public class User extends AbstractEntity {
         OrganisationUser organisationUser = this.organisationUsers.stream().filter(ou -> ou.getOrganisation().equals(organisation)).findFirst().orElse(null);
         return organisationUser.getProviderType();
     }
+
+    public void addProviderType(ProviderType providerType, UserType userType, Organisation organisation) {
+        OrganisationUser organisationUser = new OrganisationUser();
+        organisationUser.setProviderType(providerType);
+        organisationUser.setOrganisation(organisation);
+        organisationUser.setUserType(userType);
+        this.organisationUsers.add(organisationUser);
+        organisationUser.setUser(this);
+    }
 }
