@@ -18,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,13 +58,13 @@ public class OrganisationController extends BaseController {
 
     @RequestMapping(value = "/api/organisation/user", method = {RequestMethod.PUT})
     @PreAuthorize("hasRole('OrgAdmin')")
-    public ResponseEntity<String> createUser(@RequestBody OrganisationUserRequest request) {
+    public ResponseEntity<String> createUser(@RequestBody OrganisationUserRequest request, Principal principal) {
         String error = userService.validateNewUser(request.getEmail(), request.getMobile());
         if (error != null)
             return new ResponseEntity<>(error, HttpStatus.CONFLICT);
 
         User user = request.toUser(getCurrentOrganisation(), bCryptPasswordEncoder.encode(request.getPassword()));
-        userService.save(user);
+        userService.save(user, getCurrentUser(principal));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

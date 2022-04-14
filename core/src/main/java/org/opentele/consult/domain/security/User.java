@@ -1,16 +1,21 @@
 package org.opentele.consult.domain.security;
 
 import org.opentele.consult.domain.Organisation;
+import org.opentele.consult.domain.framework.AbstractAuditableEntity;
 import org.opentele.consult.domain.framework.AbstractEntity;
+import org.springframework.data.annotation.*;
 import org.springframework.data.annotation.Transient;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "users")
 public class User extends AbstractEntity {
+    public static final String AppUserName = "server@opentele.org";
+
     @Column(name = "email")
     private String email;
 
@@ -26,6 +31,22 @@ public class User extends AbstractEntity {
 
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, mappedBy = "user")
     private Set<OrganisationUser> organisationUsers = new HashSet<>();
+
+    @JoinColumn(name = "created_by_id", nullable = false)
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
+    private User createdBy;
+
+    @JoinColumn(name = "last_modified_by_id", nullable = false)
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
+    private User lastModifiedBy;
+
+    @Column(name = "created_date", updatable = false, nullable = false, columnDefinition = "timestamp default (now()):: timestamp without time zone")
+    @Temporal(TemporalType.TIMESTAMP)
+    private java.util.Date createdDate;
+
+    @Column(name = "last_modified_date", nullable = false, columnDefinition = "timestamp default (now()):: timestamp without time zone")
+    @Temporal(TemporalType.TIMESTAMP)
+    private java.util.Date lastModifiedDate;
 
     public String getPassword() {
         return password;
@@ -71,5 +92,21 @@ public class User extends AbstractEntity {
         organisationUser.setUserType(userType);
         this.organisationUsers.add(organisationUser);
         organisationUser.setUser(this);
+    }
+
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public void setLastModifiedBy(User lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public void setLastModifiedDate(Date lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
     }
 }

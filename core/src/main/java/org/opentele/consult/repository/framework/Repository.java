@@ -1,6 +1,6 @@
 package org.opentele.consult.repository.framework;
 
-import org.opentele.consult.domain.framework.AbstractEntity;
+import org.opentele.consult.domain.framework.AbstractAuditableEntity;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.HashSet;
@@ -32,20 +32,20 @@ public class Repository {
         }
     }
 
-    public static <T extends AbstractEntity> T findByIdOrCreate(Integer id, AbstractRepository<T> repository, T newEntity) {
+    public static <T extends AbstractAuditableEntity> T findByIdOrCreate(Integer id, AbstractRepository<T> repository, T newEntity) {
         if (id == null || id == 0) {
             return newEntity;
         }
         T t = findById(id, repository);
         if (t == null) {
-            if (newEntity instanceof AbstractEntity)
-                ((AbstractEntity)newEntity).setInactive(false);
+            if (newEntity instanceof AbstractAuditableEntity)
+                ((AbstractAuditableEntity)newEntity).setInactive(false);
             return newEntity;
         }
         return t;
     }
 
-    public static <T extends AbstractEntity> T findByUuidOrCreate(String uuid, AbstractRepository<T> abstractRepository, T newEntity) {
+    public static <T extends AbstractAuditableEntity> T findByUuidOrCreate(String uuid, AbstractRepository<T> abstractRepository, T newEntity) {
         if (uuid == null || uuid.isEmpty()) {
             newEntity.setUuid(UUID.randomUUID());
             return newEntity;
@@ -59,7 +59,7 @@ public class Repository {
         return entity;
     }
 
-    public static <T extends AbstractEntity> void mergeChildren(List<Integer> proposedChildrenIds, List<Integer> existingChildrenIds, AbstractRepository<T> childRepository, Consumer<AbstractEntity> removeChild, Consumer<AbstractEntity> addChild) {
+    public static <T extends AbstractAuditableEntity> void mergeChildren(List<Integer> proposedChildrenIds, List<Integer> existingChildrenIds, AbstractRepository<T> childRepository, Consumer<AbstractAuditableEntity> removeChild, Consumer<AbstractAuditableEntity> addChild) {
         Set<Integer> proposedChildrenIdSet = new HashSet<>(proposedChildrenIds);
         HashSet<Integer> toRemoveChildrenIds = new HashSet<>(existingChildrenIds);
         toRemoveChildrenIds.removeAll(proposedChildrenIdSet);
@@ -70,7 +70,7 @@ public class Repository {
         }
     }
 
-    public static <T extends AbstractEntity> T delete(Integer id, CrudRepository<T, Integer> repository) {
+    public static <T extends AbstractAuditableEntity> T delete(Integer id, CrudRepository<T, Integer> repository) {
         T t = repository.findById(id).get();
         repository.delete(t);
         return t;

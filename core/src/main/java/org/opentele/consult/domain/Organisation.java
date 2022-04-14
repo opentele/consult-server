@@ -1,6 +1,6 @@
 package org.opentele.consult.domain;
 
-import org.opentele.consult.domain.framework.AbstractEntity;
+import org.opentele.consult.domain.framework.AbstractAuditableEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,7 +8,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "organisation")
-public class Organisation extends AbstractEntity {
+public class Organisation extends AbstractAuditableEntity {
     @Column(nullable = false)
     private String name;
 

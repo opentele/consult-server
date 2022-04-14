@@ -8,7 +8,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
-public class OrganisationalEntity extends AbstractEntity {
+public class OrganisationalEntity extends AbstractAuditableEntity {
     @ManyToOne(targetEntity = Organisation.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "organisation_id", columnDefinition = "integer not null")
     private Organisation organisation;

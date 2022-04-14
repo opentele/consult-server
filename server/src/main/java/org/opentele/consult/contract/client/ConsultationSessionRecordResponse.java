@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 public class ConsultationSessionRecordResponse extends ConsultationSessionRecordContract {
     private LocalDateTime createdOn;
     private LocalDateTime updatedOn;
+    private String createdBy;
+    private String lastModifiedBy;
 
     public static ConsultationSessionRecordResponse from(ConsultationSessionRecord entity) {
         ConsultationSessionRecordResponse contract = new ConsultationSessionRecordResponse();
@@ -19,6 +21,8 @@ public class ConsultationSessionRecordResponse extends ConsultationSessionRecord
         contract.setCreatedOn(DateTimeUtil.fromDate(entity.getCreatedDate()));
         contract.setUpdatedOn(DateTimeUtil.fromDate(entity.getLastModifiedDate()));
         contract.setClientId(entity.getClient().getId());
+        contract.setCreatedBy(entity.getCreatedBy().getName());
+        contract.setLastModifiedBy(entity.getLastModifiedBy().getName());
         return contract;
     }
 
@@ -36,5 +40,21 @@ public class ConsultationSessionRecordResponse extends ConsultationSessionRecord
 
     public void setUpdatedOn(LocalDateTime updatedOn) {
         this.updatedOn = updatedOn;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public String getLastModifiedBy() {
+        return lastModifiedBy;
+    }
+
+    public void setLastModifiedBy(String lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
     }
 }

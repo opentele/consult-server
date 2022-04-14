@@ -1,13 +1,13 @@
 package org.opentele.consult.domain.security;
 
-import org.opentele.consult.domain.framework.AbstractEntity;
+import org.opentele.consult.domain.framework.AbstractAuditableEntity;
 
 import javax.persistence.*;
 import java.util.Calendar;
 import java.util.Date;
 
 @Entity
-public class PasswordResetToken extends AbstractEntity {
+public class PasswordResetToken extends AbstractAuditableEntity {
     private static final int EXPIRATION = 3 * 24;
 
     @Column(nullable = false)

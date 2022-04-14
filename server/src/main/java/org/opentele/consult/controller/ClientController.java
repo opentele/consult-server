@@ -64,4 +64,10 @@ public class ClientController extends BaseController {
         Client client = clientRepository.findEntity(id);
         return ClientContract.from(client);
     }
+
+    @GetMapping("/api/client/full")
+    public ClientContract getFull(@RequestParam("id") int id) {
+        Client client = clientRepository.findEntity(id);
+        return ClientContract.fromWithChidren(client);
+    }
 }

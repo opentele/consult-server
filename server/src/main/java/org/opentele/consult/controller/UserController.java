@@ -54,7 +54,7 @@ public class UserController extends BaseController {
             return new ResponseEntity<>(error, HttpStatus.CONFLICT);
 
         User user = request.toUser(bCryptPasswordEncoder.encode(request.getPassword()));
-        userService.save(user);
+        userService.save(user, userService.getUser(User.AppUserName));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

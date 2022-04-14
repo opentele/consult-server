@@ -1,6 +1,5 @@
 package org.opentele.consult.repository;
 
-import org.opentele.consult.domain.security.OrganisationUser;
 import org.opentele.consult.domain.security.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

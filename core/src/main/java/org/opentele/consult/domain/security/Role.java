@@ -1,6 +1,6 @@
 package org.opentele.consult.domain.security;
 
-import org.opentele.consult.domain.framework.AbstractEntity;
+import org.opentele.consult.domain.framework.AbstractAuditableEntity;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "role")
-public class Role extends AbstractEntity {
+public class Role extends AbstractAuditableEntity {
     public static final String USER = "USER";
     public static final String ADMIN = "ADMIN";
 
@@ -35,7 +35,7 @@ public class Role extends AbstractEntity {
 
     // Used by the web app
     public List<Integer> getPrivilegeIds() {
-        return this.getPrivileges().stream().map(AbstractEntity::getId).collect(Collectors.toList());
+        return this.getPrivileges().stream().map(AbstractAuditableEntity::getId).collect(Collectors.toList());
     }
 
     public void removePrivilege(Privilege privilege) {

@@ -6,8 +6,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ClientContract extends BaseClientContract {
+    private String createdBy;
+    private String lastModifiedBy;
     private LocalDate dateOfBirth;
     private List<ConsultationSessionRecordContract> consultationSessionRecords;
+
+    public static ClientContract fromWithChidren(Client client) {
+        ClientContract contract = from(client);
+        mapChildren(client, contract);
+        return contract;
+    }
 
     public static ClientContract from(Client client) {
         ClientContract contract = new ClientContract();
@@ -16,8 +24,29 @@ public class ClientContract extends BaseClientContract {
         contract.setName(client.getName());
         contract.setRegistrationNumber(client.getRegistrationNumber());
         contract.setAge(client.getAge());
-        contract.setConsultationSessionRecords(client.getConsultationSessionRecords().stream().map(ConsultationSessionRecordResponse::from).collect(Collectors.toList()));
+        contract.setCreatedBy(client.getCreatedBy().getName());
+        contract.setLastModifiedBy(client.getLastModifiedBy().getName());
         return contract;
+    }
+
+    public static void mapChildren(Client client, ClientContract contract) {
+        contract.setConsultationSessionRecords(client.getConsultationSessionRecords().stream().map(ConsultationSessionRecordResponse::from).collect(Collectors.toList()));
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public String getLastModifiedBy() {
+        return lastModifiedBy;
+    }
+
+    public void setLastModifiedBy(String lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
     }
 
     public LocalDate getDateOfBirth() {

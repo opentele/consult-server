@@ -7,12 +7,12 @@ import org.opentele.consult.repository.OrganisationRepository;
 import org.opentele.consult.repository.OrganisationUserRepository;
 import org.opentele.consult.repository.PasswordResetTokenRepository;
 import org.opentele.consult.repository.UserRepository;
-import org.opentele.consult.repository.framework.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -56,7 +56,7 @@ public class UserService {
 
     public void createNewOrganisation(User user, Organisation organisation) {
         Organisation savedOrg = organisationRepository.save(organisation);
-        User savedUser = userRepository.save(user);
+        User savedUser = save(user, getUser(User.AppUserName));
         addUser(savedOrg, savedUser, UserType.OrgAdmin, ProviderType.Consultant);
     }
 
@@ -102,7 +102,7 @@ public class UserService {
         PasswordResetToken passwordResetToken = passwordResetTokenRepository.findByToken(token);
         User user = passwordResetToken.getUser();
         user.setPassword(newPassword);
-        userRepository.save(user);
+        save(user, getUser(User.AppUserName));
     }
 
     public String validateResetPassword(String email, String mobile) {
@@ -150,6 +150,7 @@ public class UserService {
     public OrganisationUser getOrganisationUser(String email, String mobile) {
         User user = this.getUser(email, mobile);
         List<OrganisationUser> organisationUsers = organisationUserRepository.findAllByUser(user);
+//        currently only one org per user is supported
         if (organisationUsers.size() != 1)
             return null;
 
@@ -170,7 +171,13 @@ public class UserService {
         return organisationUserRepository.findTop10ByUserEmailContainsOrUserMobileContains(searchParam, searchParam);
     }
 
-    public void save(User user) {
-        userRepository.save(user);
+    public User save(User user, User currentUser) {
+        if (user.isNew()) {
+            user.setCreatedBy(currentUser);
+            user.setCreatedDate(new Date());
+        }
+        user.setLastModifiedBy(currentUser);
+        user.setLastModifiedDate(new Date());
+        return userRepository.save(user);
     }
 }
