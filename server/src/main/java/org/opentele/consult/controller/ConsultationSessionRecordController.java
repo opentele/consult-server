@@ -35,9 +35,9 @@ public class ConsultationSessionRecordController extends BaseController {
     public ResponseEntity<ConsultationSessionRecordResponse> getConsultationSessionRecords(@RequestParam(value = "id", required = false) int id,
                                                                                            @RequestParam(value = "clientId", required = false) int clientId) {
         if (id > 0)
-            return new ResponseEntity<>(ConsultationSessionRecordResponse.from(consultationSessionRecordRepository.findEntity(id)), HttpStatus.OK);
+            return new ResponseEntity<>(ConsultationSessionRecordResponse.from(consultationSessionRecordRepository.findEntity(id, getCurrentOrganisation())), HttpStatus.OK);
         if (clientId > 0)
-            return new ResponseEntity<>(ConsultationSessionRecordResponse.from(consultationSessionRecordRepository.findByClientId(clientId)), HttpStatus.OK);
+            return new ResponseEntity<>(ConsultationSessionRecordResponse.from(consultationSessionRecordRepository.findByClientIdAndOrganisation(clientId, getCurrentOrganisation())), HttpStatus.OK);
 
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
@@ -56,7 +56,7 @@ public class ConsultationSessionRecordController extends BaseController {
         entity.setRecommendations(contract.getRecommendations());
         entity.setKeyInference(contract.getKeyInference());
         entity.setOrganisation(getCurrentOrganisation());
-        Client client = clientRepository.findEntity(contract.getClientId());
+        Client client = clientRepository.findEntity(contract.getClientId(), getCurrentOrganisation());
         client.addConsultationSessionRecord(entity);
         clientRepository.save(client);
         return new ResponseEntity<>(entity.getId(), HttpStatus.OK);

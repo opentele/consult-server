@@ -61,13 +61,13 @@ public class ClientController extends BaseController {
 
     @GetMapping("/api/client")
     public ClientContract get(@RequestParam("id") int id) {
-        Client client = clientRepository.findEntity(id);
+        Client client = clientRepository.findEntity(id, getCurrentOrganisation());
         return ClientContract.from(client);
     }
 
     @GetMapping("/api/client/full")
     public ClientContract getFull(@RequestParam("id") int id) {
-        Client client = clientRepository.findEntity(id);
-        return ClientContract.fromWithChidren(client);
+        Client client = clientRepository.findEntity(id, getCurrentOrganisation());
+        return ClientContract.fromWithChildren(client);
     }
 }

@@ -7,13 +7,14 @@ import org.springframework.data.annotation.*;
 import org.springframework.data.annotation.Transient;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class User extends AbstractEntity {
+public class User extends AbstractEntity implements Serializable {
     public static final String AppUserName = "server@opentele.org";
 
     @Column(name = "email")

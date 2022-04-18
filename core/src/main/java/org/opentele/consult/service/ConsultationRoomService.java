@@ -58,8 +58,8 @@ public class ConsultationRoomService {
         return summary;
     }
 
-    public TeleConference setup(int consultationRoomId) {
-        ConsultationRoom consultationRoom = consultationRoomRepository.findEntity(consultationRoomId);
+    public TeleConference setup(int consultationRoomId, Organisation organisation) {
+        ConsultationRoom consultationRoom = consultationRoomRepository.findEntity(consultationRoomId, organisation);
         TeleConference activeTeleConference = consultationRoom.getActiveTeleConference();
         if (activeTeleConference != null) return activeTeleConference;
 
@@ -74,7 +74,7 @@ public class ConsultationRoomService {
     }
 
     public void moveToNextToken(int consultationRoomId, User user, Organisation organisation) {
-        ConsultationRoom consultationRoom = consultationRoomRepository.findEntity(consultationRoomId);
+        ConsultationRoom consultationRoom = consultationRoomRepository.findEntity(consultationRoomId, organisation);
         Appointment currentAppointment = consultationRoom.getCurrentAppointment();
 
         Appointment nextToken = appointmentService.getNextToken(user, organisation, consultationRoom);
@@ -85,7 +85,7 @@ public class ConsultationRoomService {
     }
 
     public void moveToPreviousToken(int consultationRoomId, User user, Organisation organisation) {
-        ConsultationRoom consultationRoom = consultationRoomRepository.findEntity(consultationRoomId);
+        ConsultationRoom consultationRoom = consultationRoomRepository.findEntity(consultationRoomId, organisation);
         Appointment currentAppointment = consultationRoom.getCurrentAppointment();
 
         Appointment previousToken = appointmentService.getPreviousToken(user, organisation, consultationRoom);
@@ -96,7 +96,7 @@ public class ConsultationRoomService {
     }
 
     public void appointmentMoveDown(int consultationRoomId, int tokenId, User user, Organisation organisation) {
-        ConsultationRoom consultationRoom = consultationRoomRepository.findEntity(consultationRoomId);
+        ConsultationRoom consultationRoom = consultationRoomRepository.findEntity(consultationRoomId, organisation);
         Appointment appointment = consultationRoom.getAppointment(tokenId);
         int queueNumber = appointment.getQueueNumber();
         Appointment nextToken = appointmentService.getNextToken(user, organisation, consultationRoom, appointment);
@@ -108,7 +108,7 @@ public class ConsultationRoomService {
     }
 
     public void appointmentMoveUp(int consultationRoomId, int tokenId, User user, Organisation organisation) {
-        ConsultationRoom consultationRoom = consultationRoomRepository.findEntity(consultationRoomId);
+        ConsultationRoom consultationRoom = consultationRoomRepository.findEntity(consultationRoomId, organisation);
         Appointment appointment = consultationRoom.getAppointment(tokenId);
         int queueNumber = appointment.getQueueNumber();
         Appointment previousToken = appointmentService.getPreviousToken(user, organisation, consultationRoom, appointment);

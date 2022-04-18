@@ -74,9 +74,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             OrganisationUser organisationUser = userService.getOrganisationUser(request.getParameter("email"), request.getParameter("mobile"));
             if (!UserType.User.equals(organisationUser.getUserType())) {
                 SecurityService.elevateToRole(organisationUser.getUserType());
-                userSession.setCurrentUser(organisationUser.getUser());
-                userSession.setCurrentOrganisationId(organisationUser.getOrganisation().getId());
             }
+            userSession.setCurrentUser(organisationUser.getUser());
+            userSession.setCurrentOrganisationId(organisationUser.getOrganisation().getId());
             response.setStatus(HttpServletResponse.SC_OK);
             logger.info("Login Successful");
         }).failureHandler((request, response, exception) -> {

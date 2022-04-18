@@ -1,10 +1,13 @@
 package org.opentele.consult.repository;
 
 import org.opentele.consult.domain.Organisation;
-import org.opentele.consult.repository.framework.AbstractRepository;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface OrganisationRepository extends AbstractRepository<Organisation> {
+public interface OrganisationRepository extends CrudRepository<Organisation, Integer> {
     Organisation findByName(String name);
+    default Organisation findEntity(int id) {
+        return findById(id).get();
+    }
 }

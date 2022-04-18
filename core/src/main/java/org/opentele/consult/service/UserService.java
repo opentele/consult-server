@@ -167,8 +167,8 @@ public class UserService {
         return organisationRepository.findEntity(organisationId);
     }
 
-    public List<OrganisationUser> findUsers(String searchParam) {
-        return organisationUserRepository.findTop10ByUserEmailContainsOrUserMobileContains(searchParam, searchParam);
+    public List<OrganisationUser> findUsers(String searchParam, Organisation organisation) {
+        return organisationUserRepository.findTop10ByUserEmailContainsOrUserMobileContainsAndOrganisation(searchParam, searchParam, organisation);
     }
 
     public User save(User user, User currentUser) {

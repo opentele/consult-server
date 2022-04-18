@@ -74,7 +74,7 @@ public class ConsultationRoomController extends BaseController {
 
     @GetMapping(value = "/api/consultationRoom/{id}")
     public ConsultationRoomContract get(@PathVariable("id") int id) {
-        return consultationRoomMapper.map(consultationRoomRepository.findEntity(id));
+        return consultationRoomMapper.map(consultationRoomRepository.findEntity(id, getCurrentOrganisation()));
     }
 
     @RequestMapping(value = "/api/consultationRoom", method = {RequestMethod.PUT, RequestMethod.POST})
@@ -105,13 +105,13 @@ public class ConsultationRoomController extends BaseController {
 
     @RequestMapping(value = "/api/consultationRoom/teleConference", method = {RequestMethod.POST, RequestMethod.PUT})
     public int saveTeleConference(@RequestBody int consultationRoomId) {
-        consultationRoomService.setup(consultationRoomId);
+        consultationRoomService.setup(consultationRoomId, getCurrentOrganisation());
         return consultationRoomId;
     }
 
     @GetMapping("/api/consultationRoom/teleConference/{consultationRoomId}")
     public ConsultationRoomConferenceResponse getConsultationRoomTeleConference(@PathVariable("consultationRoomId") int id, Principal principal) {
-        ConsultationRoom consultationRoom = consultationRoomRepository.findEntity(id);
+        ConsultationRoom consultationRoom = consultationRoomRepository.findEntity(id, getCurrentOrganisation());
         return consultationRoomMapper.mapForConference(consultationRoom, getCurrentUser(principal));
     }
 

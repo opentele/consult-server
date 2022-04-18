@@ -23,10 +23,4 @@ public interface ConsultationRoomRepository extends AbstractRepository<Consultat
     }
 
     List<ConsultationRoom> findAllByScheduledOnAfterAndScheduledOnBeforeAndOrganisation(LocalDate from, LocalDate to, Organisation organisation);
-
-    default int getNumberOfAppointmentsFor(User user) {
-        return countAllByAppointmentsAppointmentProvider(user);
-    }
-
-    int countAllByAppointmentsAppointmentProvider(User user);
 }

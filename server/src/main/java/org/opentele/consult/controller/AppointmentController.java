@@ -34,8 +34,8 @@ public class AppointmentController extends BaseController {
         Appointment appointment = new Appointment();
         appointment.setAppointmentProvider(getCurrentUser(principal));
         appointment.setOrganisation(getCurrentOrganisation());
-        appointment.setClient(clientRepository.findEntity(request.getClientId()));
-        ConsultationRoom consultationRoom = consultationRoomRepository.findEntity(request.getConsultationRoomId());
+        appointment.setClient(clientRepository.findEntity(request.getClientId(), getCurrentOrganisation()));
+        ConsultationRoom consultationRoom = consultationRoomRepository.findEntity(request.getConsultationRoomId(), getCurrentOrganisation());
         appointment.setConsultationRoom(consultationRoom);
         if (request.getQueueNumber() <= 0) {
             String lockString = String.format("consultationRoom-%d", request.getConsultationRoomId());

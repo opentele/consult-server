@@ -56,6 +56,4 @@ public interface ClientRepository extends AbstractRepository<Client> {
     }
 
     int countAllByOrganisation(Organisation organisation);
-
-    List<Client> findTop10ByRegistrationNumberContainingAndOrganisation(String q, Organisation organisation);
 }

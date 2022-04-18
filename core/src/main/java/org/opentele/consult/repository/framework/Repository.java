@@ -1,5 +1,6 @@
 package org.opentele.consult.repository.framework;
 
+import org.opentele.consult.domain.Organisation;
 import org.opentele.consult.domain.framework.AbstractAuditableEntity;
 import org.springframework.data.repository.CrudRepository;
 
@@ -19,16 +20,16 @@ public class Repository {
         return (id == null || id == 0) ? null : (T) crudRepository.findById(id);
     }
 
-    public static <T> T findByUuidOrId(UUID uuid, Integer id, AbstractRepository<T> abstractRepository) {
+    public static <T> T findByUuidOrId(UUID uuid, Integer id, AbstractRepository<T> abstractRepository, Organisation organisation) {
         // Simplifying based IntelliJ's suggestion could lead to recursive loop
-        return Repository.findByUuidOrId(uuid == null ? null : uuid.toString(), id, abstractRepository);
+        return Repository.findByUuidOrId(uuid == null ? null : uuid.toString(), id, abstractRepository, organisation);
     }
 
-    public static <T> T findByUuidOrId(String uuid, Integer id, AbstractRepository<T> abstractRepository) {
+    public static <T> T findByUuidOrId(String uuid, Integer id, AbstractRepository<T> abstractRepository, Organisation organisation) {
         if (uuid == null) {
             return findById(id, abstractRepository);
         } else {
-            return abstractRepository.findByUuid(UUID.fromString(uuid));
+            return abstractRepository.findByUuidAndOrganisation(UUID.fromString(uuid), organisation);
         }
     }
 
@@ -45,12 +46,12 @@ public class Repository {
         return t;
     }
 
-    public static <T extends AbstractAuditableEntity> T findByUuidOrCreate(String uuid, AbstractRepository<T> abstractRepository, T newEntity) {
+    public static <T extends AbstractAuditableEntity> T findByUuidOrCreate(String uuid, AbstractRepository<T> abstractRepository, T newEntity, Organisation organisation) {
         if (uuid == null || uuid.isEmpty()) {
             newEntity.setUuid(UUID.randomUUID());
             return newEntity;
         }
-        T entity = abstractRepository.findByUuid(UUID.fromString(uuid));
+        T entity = abstractRepository.findByUuidAndOrganisation(UUID.fromString(uuid), organisation);
         if (entity == null) {
             newEntity.setUuid(UUID.fromString(uuid));
             newEntity.setInactive(false);
