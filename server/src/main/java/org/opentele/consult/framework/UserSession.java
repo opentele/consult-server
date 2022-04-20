@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Scope(value="session", proxyMode= ScopedProxyMode.TARGET_CLASS)
 public class UserSession implements Serializable {
     private int currentOrganisationId;
-    private User currentUser;
+    private int userId;
 
     public int getCurrentOrganisationId() {
         return currentOrganisationId;
@@ -21,11 +21,11 @@ public class UserSession implements Serializable {
         this.currentOrganisationId = currentOrganisationId;
     }
 
-    public User getCurrentUser() {
-        return currentUser;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setCurrentUser(User currentUser) {
-        this.currentUser = currentUser;
+    public void setCurrentUserId(int userId) {
+        this.userId = userId;
     }
 }

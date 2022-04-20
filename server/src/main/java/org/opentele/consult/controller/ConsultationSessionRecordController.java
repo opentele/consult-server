@@ -31,15 +31,9 @@ public class ConsultationSessionRecordController extends BaseController {
         this.clientRepository = clientRepository;
     }
 
-    @GetMapping("/api/consultationSessionRecord")
-    public ResponseEntity<ConsultationSessionRecordResponse> getConsultationSessionRecords(@RequestParam(value = "id", required = false) int id,
-                                                                                           @RequestParam(value = "clientId", required = false) int clientId) {
-        if (id > 0)
-            return new ResponseEntity<>(ConsultationSessionRecordResponse.from(consultationSessionRecordRepository.findEntity(id, getCurrentOrganisation())), HttpStatus.OK);
-        if (clientId > 0)
-            return new ResponseEntity<>(ConsultationSessionRecordResponse.from(consultationSessionRecordRepository.findByClientIdAndOrganisation(clientId, getCurrentOrganisation())), HttpStatus.OK);
-
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    @GetMapping("/api/consultationSessionRecord/{id}")
+    public ConsultationSessionRecordResponse getConsultationSessionRecord(@PathVariable("id") int id) {
+        return ConsultationSessionRecordResponse.from(consultationSessionRecordRepository.findEntity(id, getCurrentOrganisation()));
     }
 
     @RequestMapping(value = "/api/consultationSessionRecords", method = {RequestMethod.PUT})
@@ -50,15 +44,19 @@ public class ConsultationSessionRecordController extends BaseController {
     @Transactional
     @RequestMapping(value = "/api/consultationSessionRecord", method = {RequestMethod.POST, RequestMethod.PUT})
     public ResponseEntity<Integer> save(@RequestBody ConsultationSessionRecordContract contract) {
-        ConsultationSessionRecord entity = Repository.findByIdOrCreate(contract.getId(), consultationSessionRecordRepository, new ConsultationSessionRecord());
+        ConsultationSessionRecord entity = Repository.findByIdOrCreate(contract.getId(), getCurrentOrganisation(), consultationSessionRecordRepository, new ConsultationSessionRecord());
         entity.setComplaints(contract.getComplaints());
         entity.setObservations(contract.getObservations());
         entity.setRecommendations(contract.getRecommendations());
         entity.setKeyInference(contract.getKeyInference());
-        entity.setOrganisation(getCurrentOrganisation());
-        Client client = clientRepository.findEntity(contract.getClientId(), getCurrentOrganisation());
-        client.addConsultationSessionRecord(entity);
-        clientRepository.save(client);
+        if (entity.isNew()) {
+            entity.setOrganisation(getCurrentOrganisation());
+            Client client = clientRepository.findEntity(contract.getClientId(), getCurrentOrganisation());
+            client.addConsultationSessionRecord(entity);
+            clientRepository.save(client);
+        } else {
+            consultationSessionRecordRepository.save(entity);
+        }
         return new ResponseEntity<>(entity.getId(), HttpStatus.OK);
     }
 }

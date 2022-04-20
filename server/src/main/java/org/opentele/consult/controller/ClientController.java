@@ -35,7 +35,7 @@ public class ClientController extends BaseController {
     @RequestMapping(value = "/api/client", method = {RequestMethod.POST, RequestMethod.PUT})
     @Transactional
     public ClientContract createUpdate(@RequestBody ClientContract contract) {
-        Client client = Repository.findByIdOrCreate(contract.getId(), clientRepository, new Client());
+        Client client = Repository.findByIdOrCreate(contract.getId(), getCurrentOrganisation(), clientRepository, new Client());
         client.setGender(contract.getGender());
         client.setDateOfBirth(contract.getDateOfBirth());
         client.setName(contract.getName());
@@ -59,14 +59,14 @@ public class ClientController extends BaseController {
         return new ClientSearchResults(count, clientSearchResponses);
     }
 
-    @GetMapping("/api/client")
-    public ClientContract get(@RequestParam("id") int id) {
+    @GetMapping("/api/client/{id}")
+    public ClientContract get(@PathVariable("id") int id) {
         Client client = clientRepository.findEntity(id, getCurrentOrganisation());
         return ClientContract.from(client);
     }
 
-    @GetMapping("/api/client/full")
-    public ClientContract getFull(@RequestParam("id") int id) {
+    @GetMapping("/api/client/{id}/full")
+    public ClientContract getFull(@PathVariable("id") int id) {
         Client client = clientRepository.findEntity(id, getCurrentOrganisation());
         return ClientContract.fromWithChildren(client);
     }

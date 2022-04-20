@@ -5,6 +5,7 @@ import org.opentele.consult.util.DateTimeUtil;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,7 +15,7 @@ public class ClientContract extends BaseClientContract {
     private LocalDateTime createdOn;
     private LocalDateTime updatedOn;
     private LocalDate dateOfBirth;
-    private List<ConsultationSessionRecordContract> consultationSessionRecords;
+    private List<ConsultationSessionRecordContract> consultationSessionRecords = new ArrayList<>();
 
     public static ClientContract fromWithChildren(Client client) {
         ClientContract contract = from(client);

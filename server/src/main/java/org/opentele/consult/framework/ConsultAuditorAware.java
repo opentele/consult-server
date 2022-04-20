@@ -30,7 +30,7 @@ public class ConsultAuditorAware implements AuditorAware<User> {
         if (principal instanceof String && "anonymousUser".equals(principal)) {
             user = userService.getUser(AppUserName);
         } else {
-            user = userSession.getCurrentUser();
+            user = userService.getUser(userSession.getUserId());
         }
         return user == null ? Optional.empty() : Optional.of(user);
     }
