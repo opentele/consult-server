@@ -6,6 +6,7 @@ import org.opentele.consult.domain.client.Client;
 import org.opentele.consult.domain.client.ConsultationSessionRecord;
 import org.opentele.consult.framework.UserSession;
 import org.opentele.consult.repository.ClientRepository;
+import org.opentele.consult.repository.ConsultationRoomRepository;
 import org.opentele.consult.repository.ConsultationSessionRecordRepository;
 import org.opentele.consult.repository.framework.Repository;
 import org.opentele.consult.service.UserService;
@@ -23,12 +24,14 @@ import java.util.List;
 public class ConsultationSessionRecordController extends BaseController {
     private final ConsultationSessionRecordRepository consultationSessionRecordRepository;
     private final ClientRepository clientRepository;
+    private final ConsultationRoomRepository consultationRoomRepository;
 
     @Autowired
-    public ConsultationSessionRecordController(UserService userService, UserSession userSession, ConsultationSessionRecordRepository consultationSessionRecordRepository, ClientRepository clientRepository) {
+    public ConsultationSessionRecordController(UserService userService, UserSession userSession, ConsultationSessionRecordRepository consultationSessionRecordRepository, ClientRepository clientRepository, ConsultationRoomRepository consultationRoomRepository) {
         super(userService, userSession);
         this.consultationSessionRecordRepository = consultationSessionRecordRepository;
         this.clientRepository = clientRepository;
+        this.consultationRoomRepository = consultationRoomRepository;
     }
 
     @GetMapping("/api/consultationSessionRecord/{id}")
@@ -49,6 +52,8 @@ public class ConsultationSessionRecordController extends BaseController {
         entity.setObservations(contract.getObservations());
         entity.setRecommendations(contract.getRecommendations());
         entity.setKeyInference(contract.getKeyInference());
+        if (contract.getConsultationRoomId() > 0)
+            entity.setConsultationRoom(consultationRoomRepository.findEntity(contract.getConsultationRoomId(), getCurrentOrganisation()));
         if (entity.isNew()) {
             entity.setOrganisation(getCurrentOrganisation());
             Client client = clientRepository.findEntity(contract.getClientId(), getCurrentOrganisation());

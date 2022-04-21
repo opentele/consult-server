@@ -8,6 +8,7 @@ public class ConsultationSessionRecordContract extends BaseEntityContract {
     private String keyInference;
     private String recommendations;
     private int clientId;
+    private int consultationRoomId;
 
     public int getClientId() {
         return clientId;
@@ -47,5 +48,13 @@ public class ConsultationSessionRecordContract extends BaseEntityContract {
 
     public void setRecommendations(String recommendations) {
         this.recommendations = recommendations;
+    }
+
+    public int getConsultationRoomId() {
+        return consultationRoomId;
+    }
+
+    public void setConsultationRoomId(int consultationRoomId) {
+        this.consultationRoomId = consultationRoomId;
     }
 }

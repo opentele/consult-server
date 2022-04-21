@@ -107,15 +107,23 @@ public class ConsultationRoomService {
         consultationRoomRepository.save(consultationRoom);
     }
 
-    public void appointmentMoveUp(int consultationRoomId, int tokenId, User user, Organisation organisation) {
+    public void appointmentMoveUp(int consultationRoomId, int appointmentId, User user, Organisation organisation) {
         ConsultationRoom consultationRoom = consultationRoomRepository.findEntity(consultationRoomId, organisation);
-        Appointment appointment = consultationRoom.getAppointment(tokenId);
+        Appointment appointment = consultationRoom.getAppointment(appointmentId);
         int queueNumber = appointment.getQueueNumber();
         Appointment previousToken = appointmentService.getPreviousToken(user, organisation, consultationRoom, appointment);
         int previousQueueNumber = previousToken.getQueueNumber();
 
         appointment.setQueueNumber(previousQueueNumber);
         previousToken.setQueueNumber(queueNumber);
+        consultationRoomRepository.save(consultationRoom);
+    }
+
+    public void setCurrentAppointment(int consultationRoomId, int appointmentId, Organisation organisation) {
+        ConsultationRoom consultationRoom = consultationRoomRepository.findEntity(consultationRoomId, organisation);
+        Appointment appointment = consultationRoom.getAppointment(appointmentId);
+        consultationRoom.getCurrentAppointment().setCurrent(false);
+        appointment.setCurrent(true);
         consultationRoomRepository.save(consultationRoom);
     }
 }

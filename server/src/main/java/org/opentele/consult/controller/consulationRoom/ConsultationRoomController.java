@@ -19,6 +19,7 @@ import org.opentele.consult.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -138,8 +139,9 @@ public class ConsultationRoomController extends BaseController {
     }
 
     @PostMapping("/api/consultationRoom/appointment/setCurrent")
+    @Transactional
     public void setCurrentAppointment(@RequestParam("consultationRoomId") int consultationRoomId,
-                                         @RequestParam("appointmentId") int tokenId, Principal principal) {
-        consultationRoomService.appointmentMoveUp(consultationRoomId, tokenId, getCurrentUser(principal), getCurrentOrganisation());
+                                         @RequestParam("appointmentId") int appointmentId) {
+        consultationRoomService.setCurrentAppointment(consultationRoomId, appointmentId, getCurrentOrganisation());
     }
 }

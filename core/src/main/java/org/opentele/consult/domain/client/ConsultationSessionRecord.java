@@ -1,5 +1,6 @@
 package org.opentele.consult.domain.client;
 
+import org.opentele.consult.domain.consultationRoom.ConsultationRoom;
 import org.opentele.consult.domain.framework.OrganisationalEntity;
 
 import javax.persistence.*;
@@ -22,6 +23,10 @@ public class ConsultationSessionRecord extends OrganisationalEntity {
     @ManyToOne(targetEntity = Client.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id", columnDefinition = "integer not null")
     private Client client;
+
+    @ManyToOne(targetEntity = ConsultationRoom.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "consultation_room_id", columnDefinition = "integer")
+    private ConsultationRoom consultationRoom;
 
     public String getComplaints() {
         return complaints;
@@ -61,5 +66,13 @@ public class ConsultationSessionRecord extends OrganisationalEntity {
 
     public void setClient(Client client) {
         this.client = client;
+    }
+
+    public ConsultationRoom getConsultationRoom() {
+        return consultationRoom;
+    }
+
+    public void setConsultationRoom(ConsultationRoom consultationRoom) {
+        this.consultationRoom = consultationRoom;
     }
 }

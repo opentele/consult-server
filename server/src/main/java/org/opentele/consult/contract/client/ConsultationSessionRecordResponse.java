@@ -21,6 +21,8 @@ public class ConsultationSessionRecordResponse extends ConsultationSessionRecord
         contract.setCreatedOn(DateTimeUtil.fromDate(entity.getCreatedDate()));
         contract.setUpdatedOn(DateTimeUtil.fromDate(entity.getLastModifiedDate()));
         contract.setClientId(entity.getClient().getId());
+        if (entity.getConsultationRoom() != null)
+            contract.setConsultationRoomId(entity.getConsultationRoom().getId());
         contract.setCreatedBy(entity.getCreatedBy().getName());
         contract.setLastModifiedBy(entity.getLastModifiedBy().getName());
         return contract;
