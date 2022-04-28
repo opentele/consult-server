@@ -11,8 +11,7 @@ import org.opentele.consult.domain.security.User;
 import java.util.stream.Collectors;
 
 public class ConsultationRoomScheduleMapper {
-    public static ConsultationRoomSchedule mapNew(ConsultationRoomScheduleRequest request, Organisation organisation) {
-        ConsultationRoomSchedule consultationRoomSchedule = new ConsultationRoomSchedule();
+    public static void map(ConsultationRoomScheduleRequest request, Organisation organisation, ConsultationRoomSchedule consultationRoomSchedule) {
         consultationRoomSchedule.setEndTime(request.getEndTime());
         consultationRoomSchedule.setOrganisation(organisation);
         consultationRoomSchedule.setRecurrenceRule(request.getRecurrenceRule());
@@ -20,7 +19,6 @@ public class ConsultationRoomScheduleMapper {
         consultationRoomSchedule.setStartTime(request.getStartTime());
         consultationRoomSchedule.setTitle(request.getTitle());
         consultationRoomSchedule.setTotalSlots(request.getTotalSlots());
-        return consultationRoomSchedule;
     }
 
     public static ConsultationRoomScheduleResponse map(ConsultationRoomSchedule consultationRoomSchedule) {

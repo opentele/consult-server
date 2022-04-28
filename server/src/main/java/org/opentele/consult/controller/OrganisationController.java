@@ -33,7 +33,7 @@ public class OrganisationController extends BaseController {
     }
 
     @RequestMapping(value = "/api/organisation/user", method = {RequestMethod.GET})
-    @PreAuthorize("hasRole('OrgAdmin')")
+    @PreAuthorize("hasRole('User')")
     public List<OrganisationUserContract> getUsers(@RequestParam(name = "providerType", required = false) ProviderType providerType) {
         return userService.getOrganisationUsers(getCurrentOrganisation(), providerType).stream().map(OrganisationUserContract::create).collect(Collectors.toList());
     }

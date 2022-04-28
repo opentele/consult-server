@@ -2,6 +2,7 @@ package org.opentele.consult.repository.framework;
 
 import org.opentele.consult.domain.Organisation;
 import org.opentele.consult.domain.framework.AbstractAuditableEntity;
+import org.opentele.consult.domain.framework.AbstractEntity;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.HashSet;
@@ -9,6 +10,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class Repository {
@@ -60,14 +63,14 @@ public class Repository {
         return entity;
     }
 
-    public static <T extends AbstractAuditableEntity> void mergeChildren(List<Integer> proposedChildrenIds, List<Integer> existingChildrenIds, Organisation organisation, AbstractRepository<T> childRepository, Consumer<AbstractAuditableEntity> removeChild, Consumer<AbstractAuditableEntity> addChild) {
+    public static <T extends AbstractEntity> void mergeChildren(List<Integer> proposedChildrenIds, List<Integer> existingChildrenIds, Consumer<AbstractEntity> removeChild, Consumer<AbstractEntity> addChild, Function<Integer, AbstractEntity> findEntity, Function<Integer, AbstractEntity> createEntity) {
         Set<Integer> proposedChildrenIdSet = new HashSet<>(proposedChildrenIds);
         HashSet<Integer> toRemoveChildrenIds = new HashSet<>(existingChildrenIds);
         toRemoveChildrenIds.removeAll(proposedChildrenIdSet);
-        toRemoveChildrenIds.forEach(existingChildId -> removeChild.accept(childRepository.findEntity(existingChildId, organisation)));
+        toRemoveChildrenIds.forEach(existingChildId -> removeChild.accept(findEntity.apply(existingChildId)));
 
         for (Integer proposedChildId : proposedChildrenIdSet) {
-            addChild.accept(childRepository.findEntity(proposedChildId, organisation));
+            addChild.accept(createEntity.apply(proposedChildId));
         }
     }
 

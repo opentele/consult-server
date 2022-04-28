@@ -153,4 +153,13 @@ public class ConsultationRoomSchedule extends OrganisationalEntity {
         consultationRoom.setOrganisation(this.getOrganisation());
         return consultationRoom;
     }
+
+    public void removeUser(ConsultationRoomScheduleUser user) {
+        providers.remove(user);
+    }
+
+    public void addUser(ConsultationRoomScheduleUser user) {
+        providers.add(user);
+        user.setConsultationRoomSchedule(this);
+    }
 }

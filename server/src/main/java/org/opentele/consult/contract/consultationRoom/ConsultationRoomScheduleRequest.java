@@ -1,11 +1,13 @@
 package org.opentele.consult.contract.consultationRoom;
 
+import org.opentele.consult.contract.framework.BaseEntityContract;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConsultationRoomScheduleRequest {
+public class ConsultationRoomScheduleRequest extends BaseEntityContract {
     private String title;
     private int totalSlots;
     private List<Integer> providers = new ArrayList<>();
