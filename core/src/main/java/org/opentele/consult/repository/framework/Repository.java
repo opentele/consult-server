@@ -67,6 +67,7 @@ public class Repository {
         Set<Integer> proposedChildrenIdSet = new HashSet<>(proposedChildrenIds);
         HashSet<Integer> toRemoveChildrenIds = new HashSet<>(existingChildrenIds);
         toRemoveChildrenIds.removeAll(proposedChildrenIdSet);
+        proposedChildrenIdSet.removeAll(existingChildrenIds);
         toRemoveChildrenIds.forEach(existingChildId -> removeChild.accept(findEntity.apply(existingChildId)));
 
         for (Integer proposedChildId : proposedChildrenIdSet) {

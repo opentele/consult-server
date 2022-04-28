@@ -7,7 +7,7 @@ import org.opentele.consult.domain.security.User;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "consultation_room_schedule_user")
+@Table(name = "consultation_room_schedule_user", uniqueConstraints = {@UniqueConstraint(columnNames = {"consultation_room_schedule_id", "user_id"})})
 public class ConsultationRoomScheduleUser extends OrganisationalEntity {
     @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", columnDefinition = "integer not null")

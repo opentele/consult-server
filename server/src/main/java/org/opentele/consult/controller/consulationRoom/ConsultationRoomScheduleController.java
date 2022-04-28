@@ -51,7 +51,7 @@ public class ConsultationRoomScheduleController extends BaseController  {
         var schedule = Repository.findById(request.getId(), getCurrentOrganisation(), consultationRoomScheduleRepository);
         ConsultationRoomScheduleMapper.map(request, getCurrentOrganisation(), schedule);
 
-        List<Integer> existingProviderIds = schedule.getProviders().stream().map(ConsultationRoomScheduleUser::getId).collect(Collectors.toList());
+        List<Integer> existingProviderIds = schedule.getProviders().stream().map(x -> x.getUser().getId()).collect(Collectors.toList());
         Repository.mergeChildren(request.getProviders(), existingProviderIds,
                 x -> schedule.removeUser((ConsultationRoomScheduleUser)x),
                 x -> schedule.addUser((ConsultationRoomScheduleUser)x),
