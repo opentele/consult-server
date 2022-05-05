@@ -1,8 +1,10 @@
 package org.opentele.consult.controller;
 
 import org.apache.log4j.Logger;
-import org.opentele.consult.contract.security.*;
-import org.opentele.consult.domain.Organisation;
+import org.opentele.consult.contract.security.OrganisationUserContract;
+import org.opentele.consult.contract.security.PasswordChangeRequest;
+import org.opentele.consult.contract.security.ResetPasswordRequest;
+import org.opentele.consult.contract.security.UserRequest;
 import org.opentele.consult.domain.security.OrganisationUser;
 import org.opentele.consult.domain.security.PasswordResetToken;
 import org.opentele.consult.domain.security.User;
@@ -76,20 +78,13 @@ public class UserController extends BaseController {
 
     @PreAuthorize("hasAnyRole('User','OrgAdmin')")
     @RequestMapping(value = "/api/user/current", method = RequestMethod.GET)
-    public UserResponse getLoggedInUser(Principal principal) {
+    public OrganisationUserContract getLoggedInUser(Principal principal) {
         try {
             String name = principal.getName();
             OrganisationUser organisationUser = userService.getOrganisationUser(name, getCurrentOrganisation());
             User user = organisationUser.getUser();
 
-            UserResponse userResponse = new UserResponse();
-            userResponse.setUserType(organisationUser.getUserType());
-            userResponse.setMobile(user.getMobile());
-            userResponse.setEmail(user.getEmail());
-            userResponse.setOrganisationName(getCurrentOrganisation().getName());
-            userResponse.setName(user.getName());
-            userResponse.setProviderType(organisationUser.getProviderType());
-            return userResponse;
+            return OrganisationUserContract.from(organisationUser);
         } finally {
             logger.info("Returned user info");
         }
@@ -145,6 +140,6 @@ public class UserController extends BaseController {
     @GetMapping("/api/user/search")
     @PreAuthorize("hasRole('User')")
     public List<OrganisationUserContract> search(@RequestParam("q") String searchParam) {
-        return userService.findUsers(searchParam, getCurrentOrganisation()).stream().map(OrganisationUserContract::create).collect(Collectors.toList());
+        return userService.findUsers(searchParam, getCurrentOrganisation()).stream().map(OrganisationUserContract::from).collect(Collectors.toList());
     }
 }

@@ -5,6 +5,7 @@ import org.opentele.consult.contract.security.OrganisationCreateRequest;
 import org.opentele.consult.contract.security.OrganisationUserContract;
 import org.opentele.consult.contract.security.OrganisationUserRequest;
 import org.opentele.consult.domain.Organisation;
+import org.opentele.consult.domain.security.OrganisationUser;
 import org.opentele.consult.domain.security.ProviderType;
 import org.opentele.consult.domain.security.User;
 import org.opentele.consult.domain.security.UserType;
@@ -35,7 +36,14 @@ public class OrganisationController extends BaseController {
     @RequestMapping(value = "/api/organisation/user", method = {RequestMethod.GET})
     @PreAuthorize("hasRole('User')")
     public List<OrganisationUserContract> getUsers(@RequestParam(name = "providerType", required = false) ProviderType providerType) {
-        return userService.getOrganisationUsers(getCurrentOrganisation(), providerType).stream().map(OrganisationUserContract::create).collect(Collectors.toList());
+        return userService.getOrganisationUsers(getCurrentOrganisation(), providerType).stream().map(OrganisationUserContract::from).collect(Collectors.toList());
+    }
+
+    @RequestMapping(value = "/api/organisation/user/{id}", method = {RequestMethod.GET})
+    @PreAuthorize("hasRole('User')")
+    public OrganisationUserContract getOrganisationUser(@PathVariable("id") int id) {
+        OrganisationUser organisationUser = userService.getOrganisationUser(id, getCurrentOrganisation());
+        return OrganisationUserContract.from(organisationUser);
     }
 
     @RequestMapping(value = "/api/organisation/users", method = {RequestMethod.POST, RequestMethod.PUT})

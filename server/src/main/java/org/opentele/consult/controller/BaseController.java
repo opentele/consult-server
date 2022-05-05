@@ -1,7 +1,7 @@
 package org.opentele.consult.controller;
 
+import org.opentele.consult.contract.security.OrganisationUserContract;
 import org.opentele.consult.domain.Organisation;
-import org.opentele.consult.domain.security.OrganisationUser;
 import org.opentele.consult.domain.security.User;
 import org.opentele.consult.framework.UserSession;
 import org.opentele.consult.service.UserService;

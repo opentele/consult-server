@@ -10,10 +10,15 @@ public class UserContract extends BaseEntityContract {
 
     public static UserContract from(User user) {
         UserContract userContract = new UserContract();
+        from(user, userContract);
+        return userContract;
+    }
+
+    public static void from(User user, UserContract userContract) {
+        userContract.setId(user.getId());
         userContract.setName(user.getName());
         userContract.setMobile(user.getMobile());
         userContract.setEmail(user.getEmail());
-        return userContract;
     }
 
     public String getEmail() {
