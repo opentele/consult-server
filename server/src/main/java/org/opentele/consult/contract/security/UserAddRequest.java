@@ -1,6 +1,6 @@
 package org.opentele.consult.contract.security;
 
-public class AddUserRequest {
+public class UserAddRequest {
     private int userId;
     private String providerType;
 

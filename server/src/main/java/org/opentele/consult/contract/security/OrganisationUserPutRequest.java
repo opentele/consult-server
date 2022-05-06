@@ -5,26 +5,9 @@ import org.opentele.consult.domain.security.ProviderType;
 import org.opentele.consult.domain.security.User;
 import org.opentele.consult.domain.security.UserType;
 
-public class OrganisationUserRequest extends UserContract {
-    private String password;
-    private int organisationId;
+public class OrganisationUserPutRequest extends UserContract {
     private ProviderType providerType;
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public int getOrganisationId() {
-        return organisationId;
-    }
-
-    public void setOrganisationId(int organisationId) {
-        this.organisationId = organisationId;
-    }
+    private UserType userType;
 
     public ProviderType getProviderType() {
         return providerType;
@@ -32,6 +15,14 @@ public class OrganisationUserRequest extends UserContract {
 
     public void setProviderType(ProviderType providerType) {
         this.providerType = providerType;
+    }
+
+    public UserType getUserType() {
+        return userType;
+    }
+
+    public void setUserType(UserType userType) {
+        this.userType = userType;
     }
 
     public User toUser(Organisation organisation, String hashedPassword) {

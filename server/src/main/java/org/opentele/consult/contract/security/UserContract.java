@@ -7,6 +7,7 @@ public class UserContract extends BaseEntityContract {
     private String email;
     private String mobile;
     private String name;
+    private String password;
 
     public static UserContract from(User user) {
         UserContract userContract = new UserContract();
@@ -19,6 +20,14 @@ public class UserContract extends BaseEntityContract {
         userContract.setName(user.getName());
         userContract.setMobile(user.getMobile());
         userContract.setEmail(user.getEmail());
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getEmail() {
