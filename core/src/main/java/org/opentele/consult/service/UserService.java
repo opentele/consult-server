@@ -44,11 +44,6 @@ public class UserService {
         return null;
     }
 
-    public OrganisationUser getOrganisationUser(String userName, Organisation currentOrganisation) {
-        User user = this.getUser(userName);
-        return organisationUserRepository.findByUserAndOrganisation(user, currentOrganisation);
-    }
-
     public OrganisationUser getOrganisationUser(int userId, Organisation currentOrganisation) {
         User user = this.getUser(userId);
         return organisationUserRepository.findByUserAndOrganisation(user, currentOrganisation);
@@ -147,20 +142,10 @@ public class UserService {
         return organisationUser.getUserType();
     }
 
-    public OrganisationUser getOrganisationUser(String email, String mobile) {
-        User user = this.getUser(email, mobile);
-        List<OrganisationUser> organisationUsers = organisationUserRepository.findAllByUser(user);
-//        currently only one org per user is supported
-        if (organisationUsers.size() != 1)
-            return null;
-
-        return organisationUsers.get(0);
-    }
-
     public List<OrganisationUser> getOrganisationUsers(Organisation organisation, ProviderType providerType) {
         if (providerType != null)
-            return organisationUserRepository.findAllByOrganisationAndProviderType(organisation, providerType);
-        return organisationUserRepository.findAllByOrganisation(organisation);
+            return organisationUserRepository.findAllByOrganisationAndProviderTypeOrderByUserName(organisation, providerType);
+        return organisationUserRepository.findAllByOrganisationOrderByUserName(organisation);
     }
 
     public Organisation getOrganisation(int organisationId) {

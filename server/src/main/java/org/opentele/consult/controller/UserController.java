@@ -73,18 +73,6 @@ public class UserController extends BaseController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyRole('User','OrgAdmin')")
-    @RequestMapping(value = "/api/user/current", method = RequestMethod.GET)
-    public OrganisationUserContract getLoggedInUser(Principal principal) {
-        try {
-            String name = principal.getName();
-            OrganisationUser organisationUser = userService.getOrganisationUser(name, getCurrentOrganisation());
-            return OrganisationUserContract.from(organisationUser);
-        } finally {
-            logger.info("Returned user info");
-        }
-    }
-
     @RequestMapping(value = "/api/user/loggedIn", method = RequestMethod.GET)
     @PreAuthorize("hasAnyRole('User','OrgAdmin')")
     public boolean loggedIn() {
@@ -136,20 +124,5 @@ public class UserController extends BaseController {
     @PreAuthorize("hasRole('User')")
     public List<OrganisationUserContract> search(@RequestParam("q") String searchParam) {
         return userService.findUsers(searchParam, getCurrentOrganisation()).stream().map(OrganisationUserContract::from).collect(Collectors.toList());
-    }
-
-    @GetMapping("/api/user")
-    @PreAuthorize("hasRole('OrgAdmin')")
-    public SearchedUserResponse getUser(@RequestParam(value = "userName", required = true) String userName) {
-        OrganisationUser ou = userService.getOrganisationUser(userName, getCurrentOrganisation());
-        User user = userService.getUser(userName);
-        SearchedUserResponse response = new SearchedUserResponse();
-        response.setFound(user != null);
-        response.setAlreadyPartOfOrganisation(ou != null);
-        if (user != null) {
-            response.setUserId(user.getId());
-            response.setName(user.getName());
-        }
-        return response;
     }
 }

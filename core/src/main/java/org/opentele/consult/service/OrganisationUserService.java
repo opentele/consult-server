@@ -10,6 +10,8 @@ import org.opentele.consult.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class OrganisationUserService {
     private final OrganisationUserRepository organisationUserRepository;
@@ -33,5 +35,25 @@ public class OrganisationUserService {
     public OrganisationUser createNewUser(User user, UserType userType, ProviderType providerType, Organisation organisation) {
         User savedUser = userRepository.save(user);
         return associateExistingUser(savedUser, userType, providerType, organisation);
+    }
+
+    public OrganisationUser getOrganisationUser(User user) {
+        List<OrganisationUser> organisationUsers = organisationUserRepository.findAllByUser(user);
+//        currently only one org per user is supported
+        if (organisationUsers.size() != 1)
+            return null;
+
+        return organisationUsers.get(0);
+    }
+
+    public OrganisationUser getOrganisationUser(User user, Organisation currentOrganisation) {
+        return organisationUserRepository.findByUserAndOrganisation(user, currentOrganisation);
+    }
+
+    public OrganisationUser update(User user, UserType userType, ProviderType providerType, Organisation organisation) {
+        OrganisationUser organisationUser = organisationUserRepository.findByUserAndOrganisation(user, organisation);
+        organisationUser.setUserType(userType);
+        organisationUser.setProviderType(providerType);
+        return organisationUserRepository.save(organisationUser);
     }
 }

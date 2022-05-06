@@ -1,7 +1,9 @@
 package org.opentele.consult.controller;
 
+import org.apache.log4j.Logger;
 import org.opentele.consult.contract.security.OrganisationUserContract;
-import org.opentele.consult.contract.security.OrganisationUserPutRequest;
+import org.opentele.consult.contract.security.OrganisationUserPutPostRequest;
+import org.opentele.consult.contract.security.SearchedUserResponse;
 import org.opentele.consult.domain.security.OrganisationUser;
 import org.opentele.consult.domain.security.ProviderType;
 import org.opentele.consult.domain.security.User;
@@ -23,6 +25,7 @@ import java.util.stream.Collectors;
 public class OrganisationUserController extends BaseController {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final OrganisationUserService organisationUserService;
+    private static final Logger logger = Logger.getLogger(OrganisationUserController.class);
 
     @Autowired
     public OrganisationUserController(UserService userService, UserSession userSession, BCryptPasswordEncoder bCryptPasswordEncoder, OrganisationUserService organisationUserService) {
@@ -46,7 +49,7 @@ public class OrganisationUserController extends BaseController {
 
     @RequestMapping(value = "/api/organisationUser", method = {RequestMethod.PUT})
     @PreAuthorize("hasRole('OrgAdmin')")
-    public ResponseEntity createUser(@RequestBody OrganisationUserPutRequest request) {
+    public ResponseEntity createUser(@RequestBody OrganisationUserPutPostRequest request) {
         User user;
         OrganisationUser organisationUser;
         if (request.getId() > 0) {
@@ -60,5 +63,41 @@ public class OrganisationUserController extends BaseController {
             organisationUser = organisationUserService.createNewUser(user, request.getUserType(), request.getProviderType(), getCurrentOrganisation());
         }
         return new ResponseEntity<>(OrganisationUserContract.from(organisationUser), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/api/organisationUser", method = {RequestMethod.POST})
+    @PreAuthorize("hasRole('User')")
+    public OrganisationUserContract updateUser(@RequestBody OrganisationUserPutPostRequest request) {
+        User user = userService.getUser(request.getId());
+        OrganisationUser organisationUser = organisationUserService.update(user, request.getUserType(), request.getProviderType(), getCurrentOrganisation());
+        return OrganisationUserContract.from(organisationUser);
+    }
+
+    @PreAuthorize("hasAnyRole('User','OrgAdmin')")
+    @RequestMapping(value = "/api/organisationUser/current", method = RequestMethod.GET)
+    public OrganisationUserContract getLoggedInUser(Principal principal) {
+        try {
+            String name = principal.getName();
+            User user = userService.getUser(name);
+            OrganisationUser organisationUser = organisationUserService.getOrganisationUser(user, getCurrentOrganisation());
+            return OrganisationUserContract.from(organisationUser);
+        } finally {
+            logger.info("Returned user info");
+        }
+    }
+
+    @GetMapping("/api/user")
+    @PreAuthorize("hasRole('OrgAdmin')")
+    public SearchedUserResponse getUser(@RequestParam(value = "userName", required = true) String userName) {
+        User user = userService.getUser(userName);
+        OrganisationUser ou = organisationUserService.getOrganisationUser(user, getCurrentOrganisation());
+        SearchedUserResponse response = new SearchedUserResponse();
+        response.setFound(user != null);
+        response.setAlreadyPartOfOrganisation(ou != null);
+        if (user != null) {
+            response.setUserId(user.getId());
+            response.setName(user.getName());
+        }
+        return response;
     }
 }
