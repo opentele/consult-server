@@ -19,10 +19,12 @@ alter table if exists appointment add constraint UKgldxvfhif8y51210rt4je8ucl uni
 alter table if exists appointment add constraint UK_ax5xe41hcl38kiq3tr9oapt5y unique (uuid);
 alter table if exists appointment_user add constraint UK_72s0sgnltk1eitp8bw61f5w8t unique (uuid);
 alter table if exists client add constraint UK_ffov2uk8f9qvop5b4nvt9hgvw unique (uuid);
+alter table if exists consultant_room_user add constraint UK4ik27jrdmoyx4is3ivtgynomh unique (consultation_room_id, user_id);
 alter table if exists consultant_room_user add constraint UK_dwlq6qt8m7ebih9f5gev268bi unique (uuid);
 alter table if exists consultation add constraint UK_g5j68qd6m5yvuqqeuoq7mknxv unique (uuid);
 alter table if exists consultation_room add constraint UK_s1ghvv4d4p4h80jbm4q8qa1kc unique (uuid);
 alter table if exists consultation_room_schedule add constraint UK_am9e1jc133umpuu0mjrx2p4ht unique (uuid);
+alter table if exists consultation_room_schedule_user add constraint UK1gucky1hf43cdde8yqsflrjil unique (consultation_room_schedule_id, user_id);
 alter table if exists consultation_room_schedule_user add constraint UK_85pd36hc5vj81l3g8cboc25ke unique (uuid);
 alter table if exists consultation_session_record add constraint UK_p4k8glsc30w3orw1kxibhabe4 unique (uuid);
 alter table if exists organisation add constraint UK_a0spar1od6i2qp7n3b3l0ug5y unique (uuid);

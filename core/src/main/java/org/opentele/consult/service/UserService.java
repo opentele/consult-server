@@ -49,10 +49,8 @@ public class UserService {
         return organisationUserRepository.findByUserAndOrganisation(user, currentOrganisation);
     }
 
-    public void createNewOrganisation(User user, Organisation organisation) {
-        Organisation savedOrg = organisationRepository.save(organisation);
-        User savedUser = save(user, getUser(User.AppUserName));
-        addUser(savedOrg, savedUser, UserType.OrgAdmin, ProviderType.Consultant);
+    public User getAppUser() {
+        return getUser(User.AppUserName);
     }
 
     public void addUser(Organisation organisation, User user, UserType role, ProviderType providerType) {
@@ -97,7 +95,7 @@ public class UserService {
         PasswordResetToken passwordResetToken = passwordResetTokenRepository.findByToken(token);
         User user = passwordResetToken.getUser();
         user.setPassword(newPassword);
-        save(user, getUser(User.AppUserName));
+        save(user, getAppUser());
     }
 
     public String validateResetPassword(String email, String mobile) {
@@ -164,5 +162,14 @@ public class UserService {
         user.setLastModifiedBy(currentUser);
         user.setLastModifiedDate(new Date());
         return userRepository.save(user);
+    }
+
+    public User createUser(String name, String email, String mobile, String hashedPassword, User currentUser) {
+        User user = new User();
+        user.setName(name);
+        user.setEmail(email);
+        user.setMobile(mobile);
+        user.setPassword(hashedPassword);
+        return this.save(user, currentUser);
     }
 }

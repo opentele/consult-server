@@ -32,11 +32,6 @@ public class OrganisationUserService {
         return organisationUserRepository.save(organisationUser);
     }
 
-    public OrganisationUser createNewUser(User user, UserType userType, ProviderType providerType, Organisation organisation) {
-        User savedUser = userRepository.save(user);
-        return associateExistingUser(savedUser, userType, providerType, organisation);
-    }
-
     public OrganisationUser getOrganisationUser(User user) {
         List<OrganisationUser> organisationUsers = organisationUserRepository.findAllByUser(user);
 //        currently only one org per user is supported

@@ -7,6 +7,8 @@ import org.opentele.consult.domain.security.ProviderType;
 import org.opentele.consult.domain.security.User;
 import org.opentele.consult.domain.security.UserType;
 import org.opentele.consult.framework.UserSession;
+import org.opentele.consult.service.OrganisationService;
+import org.opentele.consult.service.OrganisationUserService;
 import org.opentele.consult.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,11 +26,15 @@ import java.util.List;
 @RestController
 public class OrganisationController extends BaseController {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final OrganisationService organisationService;
+    private final OrganisationUserService ouService;
 
     @Autowired
-    public OrganisationController(UserService userService, UserSession userSession, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public OrganisationController(UserService userService, UserSession userSession, BCryptPasswordEncoder bCryptPasswordEncoder, OrganisationService organisationService, OrganisationUserService ouService) {
         super(userService, userSession);
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.organisationService = organisationService;
+        this.ouService = ouService;
     }
 
     @RequestMapping(value = "/api/organisation", method = {RequestMethod.PUT})
@@ -38,10 +44,9 @@ public class OrganisationController extends BaseController {
         if (error != null)
             return new ResponseEntity<>(error, HttpStatus.CONFLICT);
 
-        Organisation organisation = new Organisation();
-        organisation.setName(request.getOrganisationName());
-        User user = request.toUser(bCryptPasswordEncoder.encode(request.getPassword()));
-        userService.createNewOrganisation(user, organisation);
+        Organisation organisation = organisationService.createOrg(request.getOrganisationName());
+        User user = userService.createUser(request.getName(), request.getEmail(), request.getMobile(), bCryptPasswordEncoder.encode(request.getPassword()), userService.getAppUser());
+        ouService.associateExistingUser(user, UserType.OrgAdmin, ProviderType.None, organisation);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

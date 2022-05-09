@@ -101,11 +101,11 @@
 				{
 					"name": "Add Users to Organisation",
 					"request": {
-						"method": "POST",
+						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "[\n    {\n        \"comment\": \"UserId 1 and 2 are for admin and org admin\",\n        \"userId\": 3,\n        \"providerType\": \"Consultant\"\n    },\n    {\n        \"userId\": 4,\n        \"providerType\": \"Usher\"\n    },\n    {\n        \"userId\": 5,\n        \"providerType\": \"Consultant\"\n    }\n]",
+							"raw": "[\n    {\n        \"comment\": \"UserId 1 and 2 are for admin and org admin\",\n        \"id\": 3,\n        \"providerType\": \"Consultant\",\n        \"userType\": \"User\"\n    },\n    {\n        \"id\": 4,\n        \"providerType\": \"Usher\",\n        \"userType\": \"User\"\n    },\n    {\n        \"id\": 5,\n        \"providerType\": \"Consultant\",\n        \"userType\": \"User\"\n    }\n]",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -113,13 +113,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_API_URL}}/organisation/users",
+							"raw": "{{BASE_API_URL}}/organisationUsers",
 							"host": [
 								"{{BASE_API_URL}}"
 							],
 							"path": [
-								"organisation",
-								"users"
+								"organisationUsers"
 							]
 						}
 					},

@@ -12,11 +12,4 @@ public class OrganisationCreateRequest extends OrganisationUserContract {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    public User toUser(String hashedPassword) {
-        User user = new User();
-        user.setPassword(hashedPassword);
-        this.mapToUser(user);
-        return user;
-    }
 }

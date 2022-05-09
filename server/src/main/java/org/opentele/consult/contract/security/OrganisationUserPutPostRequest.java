@@ -25,12 +25,4 @@ public class OrganisationUserPutPostRequest extends UserContract {
     public void setUserType(UserType userType) {
         this.userType = userType;
     }
-
-    public User toUser(Organisation organisation, String hashedPassword) {
-        User user = new User();
-        this.mapToUser(user);
-        user.setPassword(hashedPassword);
-        user.addProviderType(providerType, UserType.User, organisation);
-        return user;
-    }
 }

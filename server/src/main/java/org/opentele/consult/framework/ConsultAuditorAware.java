@@ -7,10 +7,7 @@ import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import java.util.Objects;
 import java.util.Optional;
-
-import static org.opentele.consult.domain.security.User.AppUserName;
 
 @Component
 public class ConsultAuditorAware implements AuditorAware<User> {
@@ -28,7 +25,7 @@ public class ConsultAuditorAware implements AuditorAware<User> {
         User user;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof String && "anonymousUser".equals(principal)) {
-            user = userService.getUser(AppUserName);
+            user = userService.getAppUser();
         } else {
             user = userService.getUser(userSession.getUserId());
         }

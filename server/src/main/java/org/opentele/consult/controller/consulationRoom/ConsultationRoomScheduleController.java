@@ -48,7 +48,7 @@ public class ConsultationRoomScheduleController extends BaseController  {
 
     @RequestMapping(value = "/api/consultationRoomSchedule", method = {RequestMethod.PUT, RequestMethod.POST})
     public ResponseEntity<Integer> put(@RequestBody ConsultationRoomScheduleRequest request) {
-        var schedule = Repository.findById(request.getId(), getCurrentOrganisation(), consultationRoomScheduleRepository);
+        var schedule = Repository.findByIdOrCreate(request.getId(), getCurrentOrganisation(), consultationRoomScheduleRepository, new ConsultationRoomSchedule());
         ConsultationRoomScheduleMapper.map(request, getCurrentOrganisation(), schedule);
 
         List<Integer> existingProviderIds = schedule.getProviders().stream().map(x -> x.getUser().getId()).collect(Collectors.toList());

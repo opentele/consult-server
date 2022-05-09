@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -47,21 +48,32 @@ public class OrganisationUserController extends BaseController {
         return OrganisationUserContract.from(organisationUser);
     }
 
+    @RequestMapping(value = "/api/organisationUsers", method = {RequestMethod.PUT})
+    @PreAuthorize("hasRole('OrgAdmin')")
+    @Transactional
+    public void createUsers(@RequestBody List<OrganisationUserPutPostRequest> request) {
+        request.forEach(this::createUser);
+    }
+
     @RequestMapping(value = "/api/organisationUser", method = {RequestMethod.PUT})
     @PreAuthorize("hasRole('OrgAdmin')")
+    @Transactional
     public ResponseEntity createUser(@RequestBody OrganisationUserPutPostRequest request) {
         User user;
         OrganisationUser organisationUser;
         if (request.getId() > 0) {
             user = userService.getUser(request.getId());
-            organisationUser = organisationUserService.associateExistingUser(user, request.getUserType(), request.getProviderType(), getCurrentOrganisation());
         } else {
+            user = userService.getUser(request.getEmail(), request.getMobile());
+        }
+
+        if (user == null) {
             String error = userService.validateNewUser(request.getEmail(), request.getMobile());
             if (error != null)
                 return new ResponseEntity<>(error, HttpStatus.CONFLICT);
-            user = request.toUser(getCurrentOrganisation(), bCryptPasswordEncoder.encode(request.getPassword()));
-            organisationUser = organisationUserService.createNewUser(user, request.getUserType(), request.getProviderType(), getCurrentOrganisation());
+            user = userService.createUser(request.getName(), request.getEmail(), request.getMobile(), bCryptPasswordEncoder.encode(request.getPassword()), userService.getAppUser());
         }
+        organisationUser = organisationUserService.associateExistingUser(user, request.getUserType(), request.getProviderType(), getCurrentOrganisation());
         return new ResponseEntity<>(OrganisationUserContract.from(organisationUser), HttpStatus.OK);
     }
 
@@ -84,6 +96,13 @@ public class OrganisationUserController extends BaseController {
         } finally {
             logger.info("Returned user info");
         }
+    }
+
+    @PreAuthorize("hasRole('User')")
+    @RequestMapping(value = "/api/organisationUser/current", method = RequestMethod.POST)
+    @Transactional
+    public OrganisationUserContract updateProfile(@RequestBody OrganisationUserPutPostRequest request) {
+        return null;
     }
 
     @GetMapping("/api/user")
