@@ -166,10 +166,30 @@ public class UserService {
 
     public User createUser(String name, String email, String mobile, String hashedPassword, User currentUser) {
         User user = new User();
+        setFields(name, email, mobile, hashedPassword, user);
+        return this.save(user, currentUser);
+    }
+
+    private void setFields(String name, String email, String mobile, String hashedPassword, User user) {
+        setBasicUserFields(name, email, mobile, user);
+        user.setPassword(hashedPassword);
+    }
+
+    private void setBasicUserFields(String name, String email, String mobile, User user) {
         user.setName(name);
         user.setEmail(email);
         user.setMobile(mobile);
-        user.setPassword(hashedPassword);
-        return this.save(user, currentUser);
+    }
+
+    public User updateProfile(int id, String name, String email, String mobile, String hashedPassword) {
+        User user = userRepository.findUser(id);
+        this.setFields(name, email, mobile, hashedPassword, user);
+        return this.save(user, user);
+    }
+
+    public User updateProfile(int id, String name, String email, String mobile) {
+        User user = userRepository.findUser(id);
+        this.setBasicUserFields(name, email, mobile, user);
+        return this.save(user, user);
     }
 }

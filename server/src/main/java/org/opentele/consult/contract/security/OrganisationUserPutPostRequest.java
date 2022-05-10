@@ -1,9 +1,6 @@
 package org.opentele.consult.contract.security;
 
-import org.opentele.consult.domain.Organisation;
-import org.opentele.consult.domain.security.OrganisationUser;
 import org.opentele.consult.domain.security.ProviderType;
-import org.opentele.consult.domain.security.User;
 import org.opentele.consult.domain.security.UserType;
 
 public class OrganisationUserPutPostRequest extends UserContract {

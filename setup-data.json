@@ -105,7 +105,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "[\n    {\n        \"comment\": \"UserId 1 and 2 are for admin and org admin\",\n        \"id\": 3,\n        \"providerType\": \"Consultant\",\n        \"userType\": \"User\"\n    },\n    {\n        \"id\": 4,\n        \"providerType\": \"Usher\",\n        \"userType\": \"User\"\n    },\n    {\n        \"id\": 5,\n        \"providerType\": \"Consultant\",\n        \"userType\": \"User\"\n    }\n]",
+							"raw": "[\n    {\n        \"id\": 4,\n        \"providerType\": \"Usher\",\n        \"userType\": \"User\"\n    },\n    {\n        \"id\": 5,\n        \"providerType\": \"Consultant\",\n        \"userType\": \"User\"\n    }\n]",
 							"options": {
 								"raw": {
 									"language": "json"

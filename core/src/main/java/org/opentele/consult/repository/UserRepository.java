@@ -1,5 +1,6 @@
 package org.opentele.consult.repository;
 
+import org.opentele.consult.domain.Organisation;
 import org.opentele.consult.domain.security.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -8,6 +9,10 @@ import java.util.List;
 
 @Repository
 public interface UserRepository extends CrudRepository<User, Integer> {
+    default User findUser(int id) {
+        return findById(id).get();
+    }
+
     User findByEmail(String email);
     default User getUserByEmail(String email) {
         if (email == null) return null;

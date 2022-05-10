@@ -102,7 +102,14 @@ public class OrganisationUserController extends BaseController {
     @RequestMapping(value = "/api/organisationUser/current", method = RequestMethod.POST)
     @Transactional
     public OrganisationUserContract updateProfile(@RequestBody OrganisationUserPutPostRequest request) {
-        return null;
+        User user;
+        if (request.getPassword() == null || request.getPassword().isEmpty()) {
+            user = userService.updateProfile(request.getId(), request.getName(), request.getEmail(), request.getMobile());
+        } else {
+            user = userService.updateProfile(request.getId(), request.getName(), request.getEmail(), request.getMobile(), bCryptPasswordEncoder.encode(request.getPassword()));
+        }
+        OrganisationUser organisationUser = organisationUserService.update(user, request.getUserType(), request.getProviderType(), getCurrentOrganisation());
+        return OrganisationUserContract.from(organisationUser);
     }
 
     @GetMapping("/api/user")
