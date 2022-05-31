@@ -8,6 +8,8 @@ public class UserContract extends BaseEntityContract {
     private String mobile;
     private String name;
     private String password;
+    private String qualification;
+    private String identification;
 
     public static UserContract from(User user) {
         UserContract userContract = new UserContract();
@@ -20,6 +22,8 @@ public class UserContract extends BaseEntityContract {
         userContract.setName(user.getName());
         userContract.setMobile(user.getMobile());
         userContract.setEmail(user.getEmail());
+        userContract.setIdentification(user.getIdentification());
+        userContract.setQualification(user.getQualification());
     }
 
     public String getPassword() {
@@ -52,6 +56,22 @@ public class UserContract extends BaseEntityContract {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getQualification() {
+        return qualification;
+    }
+
+    public void setQualification(String qualification) {
+        this.qualification = qualification;
+    }
+
+    public String getIdentification() {
+        return identification;
+    }
+
+    public void setIdentification(String identification) {
+        this.identification = identification;
     }
 
     protected void mapToUser(User user) {

@@ -2,11 +2,11 @@ package org.opentele.consult.framework;
 
 import org.opentele.consult.config.ApplicationConfig;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -17,11 +17,11 @@ import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Part;
 import javax.mail.internet.MimeBodyPart;
+import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.net.URISyntaxException;
-import java.util.Arrays;
 import java.util.Locale;
+import java.util.UUID;
 
 @Component
 public class FileUtil {
@@ -61,5 +61,16 @@ public class FileUtil {
             attachmentPart.setFileName(fileName);
             multipart.addBodyPart(attachmentPart);
         }
+    }
+
+    public String saveFile(String folder, MultipartFile multipartFile) throws IOException {
+        String fileName = UUID.randomUUID().toString();
+        File file = new File(String.format("%s/%s", folder, fileName));
+        multipartFile.transferTo(file);
+        return fileName;
+    }
+
+    public long getSizeInMB(MultipartFile multipartFile) {
+        return multipartFile.getSize() * 1024 * 1024;
     }
 }

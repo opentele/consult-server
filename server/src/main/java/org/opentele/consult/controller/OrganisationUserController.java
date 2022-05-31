@@ -104,9 +104,9 @@ public class OrganisationUserController extends BaseController {
     public OrganisationUserContract updateProfile(@RequestBody OrganisationUserPutPostRequest request) {
         User user;
         if (request.getPassword() == null || request.getPassword().isEmpty()) {
-            user = userService.updateProfile(request.getId(), request.getName(), request.getEmail(), request.getMobile());
+            user = userService.updateProfile(request.getId(), request.getName(), request.getEmail(), request.getMobile(), request.getIdentification(), request.getQualification());
         } else {
-            user = userService.updateProfile(request.getId(), request.getName(), request.getEmail(), request.getMobile(), bCryptPasswordEncoder.encode(request.getPassword()));
+            user = userService.updateProfile(request.getId(), request.getName(), request.getEmail(), request.getMobile(), bCryptPasswordEncoder.encode(request.getPassword()), request.getIdentification(), request.getQualification());
         }
         OrganisationUser organisationUser = organisationUserService.update(user, request.getUserType(), request.getProviderType(), getCurrentOrganisation());
         return OrganisationUserContract.from(organisationUser);

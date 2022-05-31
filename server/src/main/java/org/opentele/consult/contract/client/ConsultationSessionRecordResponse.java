@@ -23,8 +23,8 @@ public class ConsultationSessionRecordResponse extends ConsultationSessionRecord
         contract.setClientId(entity.getClient().getId());
         if (entity.getConsultationRoom() != null)
             contract.setConsultationRoomId(entity.getConsultationRoom().getId());
-        contract.setCreatedBy(entity.getCreatedBy().getName());
-        contract.setLastModifiedBy(entity.getLastModifiedBy().getName());
+        contract.setCreatedBy(entity.getCreatedBy().getDetailsForClient());
+        contract.setLastModifiedBy(entity.getLastModifiedBy().getDetailsForClient());
         return contract;
     }
 

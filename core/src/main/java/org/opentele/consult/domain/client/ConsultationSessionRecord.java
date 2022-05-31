@@ -1,9 +1,12 @@
 package org.opentele.consult.domain.client;
 
 import org.opentele.consult.domain.consultationRoom.ConsultationRoom;
+import org.opentele.consult.domain.framework.ConsultationSessionRecordFile;
 import org.opentele.consult.domain.framework.OrganisationalEntity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Table(name = "consultation_session_record")
 @Entity
@@ -27,6 +30,9 @@ public class ConsultationSessionRecord extends OrganisationalEntity {
     @ManyToOne(targetEntity = ConsultationRoom.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "consultation_room_id", columnDefinition = "integer")
     private ConsultationRoom consultationRoom;
+
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, mappedBy = "consultationSessionRecord")
+    private List<ConsultationSessionRecordFile> files = new ArrayList<>();
 
     public String getComplaints() {
         return complaints;
@@ -74,5 +80,10 @@ public class ConsultationSessionRecord extends OrganisationalEntity {
 
     public void setConsultationRoom(ConsultationRoom consultationRoom) {
         this.consultationRoom = consultationRoom;
+    }
+
+    public void addFile(ConsultationSessionRecordFile file) {
+        files.add(file);
+        file.setConsultationSessionRecord(this);
     }
 }

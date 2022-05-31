@@ -30,7 +30,7 @@ public class ConsultationRoomScheduleMapper {
         response.setStartTime(consultationRoomSchedule.getStartTime());
         response.setTitle(consultationRoomSchedule.getTitle());
         response.setTotalSlots(consultationRoomSchedule.getTotalSlots());
-        response.setProviders(consultationRoomSchedule.getProviders().stream().map(x -> new ProviderResponse(x.getUser().getName(), x.getUser().getId())).collect(Collectors.toList()));
+        response.setProviders(consultationRoomSchedule.getProviders().stream().map(x -> new ProviderResponse(x.getUser())).collect(Collectors.toList()));
         return response;
     }
 }

@@ -166,13 +166,9 @@ public class UserService {
 
     public User createUser(String name, String email, String mobile, String hashedPassword, User currentUser) {
         User user = new User();
-        setFields(name, email, mobile, hashedPassword, user);
-        return this.save(user, currentUser);
-    }
-
-    private void setFields(String name, String email, String mobile, String hashedPassword, User user) {
         setBasicUserFields(name, email, mobile, user);
         user.setPassword(hashedPassword);
+        return this.save(user, currentUser);
     }
 
     private void setBasicUserFields(String name, String email, String mobile, User user) {
@@ -181,15 +177,17 @@ public class UserService {
         user.setMobile(mobile);
     }
 
-    public User updateProfile(int id, String name, String email, String mobile, String hashedPassword) {
-        User user = userRepository.findUser(id);
-        this.setFields(name, email, mobile, hashedPassword, user);
+    public User updateProfile(int id, String name, String email, String mobile, String hashedPassword, String identification, String qualification) {
+        User user = this.updateProfile(id, name, email, mobile, identification, qualification);
+        user.setPassword(hashedPassword);
         return this.save(user, user);
     }
 
-    public User updateProfile(int id, String name, String email, String mobile) {
+    public User updateProfile(int id, String name, String email, String mobile, String identification, String qualification) {
         User user = userRepository.findUser(id);
         this.setBasicUserFields(name, email, mobile, user);
+        user.setIdentification(identification);
+        user.setQualification(qualification);
         return this.save(user, user);
     }
 }

@@ -49,6 +49,12 @@ public class User extends AbstractEntity implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private java.util.Date lastModifiedDate;
 
+    @Column
+    private String qualification;
+
+    @Column
+    private String identification;
+
     public String getPassword() {
         return password;
     }
@@ -109,5 +115,25 @@ public class User extends AbstractEntity implements Serializable {
 
     public void setLastModifiedDate(Date lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public String getQualification() {
+        return qualification;
+    }
+
+    public void setQualification(String qualification) {
+        this.qualification = qualification;
+    }
+
+    public String getIdentification() {
+        return identification;
+    }
+
+    public void setIdentification(String identification) {
+        this.identification = identification;
+    }
+
+    public String getDetailsForClient() {
+        return String.format("%s - %s [%s]", this.name, this.identification, this.qualification);
     }
 }

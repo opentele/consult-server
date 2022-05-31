@@ -4,6 +4,7 @@ import org.opentele.consult.domain.Organisation;
 import org.opentele.consult.domain.security.User;
 import org.opentele.consult.framework.UserSession;
 import org.opentele.consult.service.UserService;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.security.Principal;
 
@@ -27,5 +28,9 @@ public abstract class BaseController {
 
     protected User getUser(int userId) {
         return userService.getUser(userId);
+    }
+
+    protected void rollback() {
+        TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
     }
 }

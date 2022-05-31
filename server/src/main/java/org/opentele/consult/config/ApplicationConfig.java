@@ -23,6 +23,12 @@ public class ApplicationConfig {
     @Value("${spring.flyway.enabled}")
     private boolean flywayEnabled;
 
+    @Value("${consult.client.documents.folder}")
+    private String attachmentsLocation;
+
+    @Value("${consult.client.documents.max.mb.size}")
+    private int clientDocumentsMaxMBSize;
+
     public String getEmailLocation() {
         return emailLocation;
     }
@@ -49,5 +55,17 @@ public class ApplicationConfig {
 
     public boolean isFlywayEnabled() {
         return flywayEnabled;
+    }
+
+    public String getAttachmentsLocation() {
+        return attachmentsLocation;
+    }
+
+    public void setAttachmentsLocation(String attachmentsLocation) {
+        this.attachmentsLocation = attachmentsLocation;
+    }
+
+    public long getMaxFileSizeInMegabytes() {
+        return clientDocumentsMaxMBSize;
     }
 }
