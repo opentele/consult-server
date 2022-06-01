@@ -6,9 +6,12 @@ import javax.persistence.*;
 
 @Entity
 public class ConsultationSessionRecordFile extends OrganisationalEntity {
-    @Column(nullable = false)
-    private String fileName;
+    @Column
+    private String name;
 
+    @Column
+    private String fileName;
+    
     @ManyToOne(targetEntity = ConsultationSessionRecord.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "consultation_session_record_id", columnDefinition = "integer not null")
     private ConsultationSessionRecord consultationSessionRecord;
@@ -27,5 +30,13 @@ public class ConsultationSessionRecordFile extends OrganisationalEntity {
 
     public void setConsultationSessionRecord(ConsultationSessionRecord consultationSessionRecord) {
         this.consultationSessionRecord = consultationSessionRecord;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

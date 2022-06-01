@@ -71,6 +71,10 @@ public class FileUtil {
     }
 
     public long getSizeInMB(MultipartFile multipartFile) {
-        return multipartFile.getSize() * 1024 * 1024;
+        return multipartFile.getSize() / (1024 * 1024);
+    }
+
+    public void delete(String folder, String fileName) {
+
     }
 }

@@ -86,4 +86,14 @@ public class ConsultationSessionRecord extends OrganisationalEntity {
         files.add(file);
         file.setConsultationSessionRecord(this);
     }
+
+    public List<ConsultationSessionRecordFile> getFiles() {
+        return files;
+    }
+
+    public ConsultationSessionRecordFile removeFile(int fileId) {
+        ConsultationSessionRecordFile consultationSessionRecordFile = files.stream().filter(x -> x.getId() == fileId).findAny().orElse(null);
+        files.remove(consultationSessionRecordFile);
+        return consultationSessionRecordFile;
+    }
 }
