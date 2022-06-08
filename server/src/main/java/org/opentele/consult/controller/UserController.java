@@ -1,8 +1,6 @@
 package org.opentele.consult.controller;
 
-import org.apache.log4j.Logger;
 import org.opentele.consult.contract.security.*;
-import org.opentele.consult.domain.security.OrganisationUser;
 import org.opentele.consult.domain.security.PasswordResetToken;
 import org.opentele.consult.domain.security.User;
 import org.opentele.consult.domain.security.UserType;
@@ -13,6 +11,8 @@ import org.opentele.consult.service.MailService;
 import org.opentele.consult.service.SecurityService;
 import org.opentele.consult.service.TemplateContextFactory;
 import org.opentele.consult.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +35,7 @@ public class UserController extends BaseController {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final MailService mailService;
     private final TemplateContextFactory templateContextFactory;
-    private static final Logger logger = Logger.getLogger(UserController.class);
+    private final static Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     public UserController(UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder, MailService mailService, TemplateContextFactory templateContextFactory, UserSession userSession) {

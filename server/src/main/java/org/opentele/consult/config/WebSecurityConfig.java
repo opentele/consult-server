@@ -1,6 +1,5 @@
 package org.opentele.consult.config;
 
-import org.apache.log4j.Logger;
 import org.opentele.consult.domain.security.OrganisationUser;
 import org.opentele.consult.domain.security.User;
 import org.opentele.consult.domain.security.UserType;
@@ -8,6 +7,8 @@ import org.opentele.consult.framework.UserSession;
 import org.opentele.consult.service.OrganisationUserService;
 import org.opentele.consult.service.SecurityService;
 import org.opentele.consult.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,7 +33,7 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(jsr250Enabled = true, prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    private static final Logger logger = Logger.getLogger(WebSecurityConfig.class);
+    private final static Logger logger = LoggerFactory.getLogger(WebSecurityConfig.class);
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;

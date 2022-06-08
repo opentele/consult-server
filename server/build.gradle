@@ -49,7 +49,6 @@ dependencies {
     implementation 'com.bugsnag:bugsnag-spring:3.+'
 
     compile group: 'org.json', name: 'json', version: '20201115'
-    compile "log4j:log4j:1.2.16"
     compile "commons-io:commons-io:2.4"
     compile "commons-lang:commons-lang:2.6"
 

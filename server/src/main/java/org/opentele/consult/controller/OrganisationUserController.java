@@ -1,6 +1,6 @@
 package org.opentele.consult.controller;
 
-import org.apache.log4j.Logger;
+import org.opentele.consult.config.WebSecurityConfig;
 import org.opentele.consult.contract.security.OrganisationUserContract;
 import org.opentele.consult.contract.security.OrganisationUserPutPostRequest;
 import org.opentele.consult.contract.security.SearchedUserResponse;
@@ -10,6 +10,8 @@ import org.opentele.consult.domain.security.User;
 import org.opentele.consult.framework.UserSession;
 import org.opentele.consult.service.OrganisationUserService;
 import org.opentele.consult.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +28,7 @@ import java.util.stream.Collectors;
 public class OrganisationUserController extends BaseController {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final OrganisationUserService organisationUserService;
-    private static final Logger logger = Logger.getLogger(OrganisationUserController.class);
+    private final static Logger logger = LoggerFactory.getLogger(OrganisationUserController.class);
 
     @Autowired
     public OrganisationUserController(UserService userService, UserSession userSession, BCryptPasswordEncoder bCryptPasswordEncoder, OrganisationUserService organisationUserService) {

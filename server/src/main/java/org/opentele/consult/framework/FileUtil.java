@@ -75,6 +75,6 @@ public class FileUtil {
     }
 
     public void delete(String folder, String fileName) {
-
+        new File(folder, fileName).delete();
     }
 }

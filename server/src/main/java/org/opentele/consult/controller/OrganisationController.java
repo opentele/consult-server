@@ -44,8 +44,8 @@ public class OrganisationController extends BaseController {
         if (error != null)
             return new ResponseEntity<>(error, HttpStatus.CONFLICT);
 
-        Organisation organisation = organisationService.createOrg(request.getOrganisationName());
         User user = userService.createUser(request.getName(), request.getEmail(), request.getMobile(), bCryptPasswordEncoder.encode(request.getPassword()), userService.getAppUser());
+        Organisation organisation = organisationService.createOrg(request.getOrganisationName(), user);
         ouService.associateExistingUser(user, UserType.OrgAdmin, ProviderType.None, organisation);
         return new ResponseEntity<>(HttpStatus.OK);
     }
