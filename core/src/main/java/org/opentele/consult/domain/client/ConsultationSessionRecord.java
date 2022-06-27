@@ -31,7 +31,7 @@ public class ConsultationSessionRecord extends OrganisationalEntity {
     @JoinColumn(name = "consultation_room_id", columnDefinition = "integer")
     private ConsultationRoom consultationRoom;
 
-    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, mappedBy = "consultationSessionRecord")
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, mappedBy = "consultationSessionRecord", orphanRemoval = true)
     private List<ConsultationSessionRecordFile> files = new ArrayList<>();
 
     public String getComplaints() {
@@ -91,8 +91,14 @@ public class ConsultationSessionRecord extends OrganisationalEntity {
         return files;
     }
 
-    public ConsultationSessionRecordFile removeFile(int fileId) {
-        ConsultationSessionRecordFile consultationSessionRecordFile = files.stream().filter(x -> x.getId() == fileId).findAny().orElse(null);
+    public ConsultationSessionRecordFile removeFile(String fileName) {
+        ConsultationSessionRecordFile consultationSessionRecordFile = files.stream().filter(x -> x.getFileName().equals(fileName)).findAny().orElse(null);
+        files.remove(consultationSessionRecordFile);
+        return consultationSessionRecordFile;
+    }
+
+    public ConsultationSessionRecordFile removeFile(Integer fileId) {
+        ConsultationSessionRecordFile consultationSessionRecordFile = files.stream().filter(x -> x.getId().equals(fileId)).findAny().orElse(null);
         files.remove(consultationSessionRecordFile);
         return consultationSessionRecordFile;
     }

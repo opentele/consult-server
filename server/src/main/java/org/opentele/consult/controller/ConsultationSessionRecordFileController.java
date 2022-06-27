@@ -48,9 +48,10 @@ public class ConsultationSessionRecordFileController extends BaseController {
 
     @DeleteMapping("/api/consultationSessionRecordFile/{id}")
     @Transactional
-    public void deleteFile(@PathVariable("id") int id) {
+    public void deleteFile(@PathVariable("id") Integer id) {
         ConsultationSessionRecord consultationSessionRecord = consultationSessionRecordRepository.findByFilesId(id);
-        ConsultationSessionRecordFile file = consultationSessionRecord.removeFile(id);
-        fileUtil.delete(applicationConfig.getAttachmentsLocation(), file.getFileName());
+        ConsultationSessionRecordFile consultationSessionRecordFile = consultationSessionRecord.removeFile(id);
+        fileUtil.delete(applicationConfig.getAttachmentsLocation(), consultationSessionRecordFile.getFileName());
+        consultationSessionRecordRepository.save(consultationSessionRecord);
     }
 }

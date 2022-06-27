@@ -54,7 +54,7 @@ public class ConsultationSessionRecordController extends BaseController {
 
     @Transactional
     @RequestMapping(value = "/api/consultationSessionRecord", method = {RequestMethod.POST, RequestMethod.PUT})
-    public ResponseEntity save(ConsultationSessionRecordRequest request) {
+    public ResponseEntity save(@RequestBody ConsultationSessionRecordRequest request) {
         ConsultationSessionRecord entity = Repository.findByIdOrCreate(request.getId(), getCurrentOrganisation(), consultationSessionRecordRepository, new ConsultationSessionRecord());
         entity.setComplaints(request.getComplaints());
         entity.setObservations(request.getObservations());
@@ -64,7 +64,7 @@ public class ConsultationSessionRecordController extends BaseController {
         for (ConsultationSessionRecordFileContract fileRequest : request.getFiles()) {
             ConsultationSessionRecordFile file = new ConsultationSessionRecordFile();
             file.setName(fileRequest.getName());
-            file.setFileName(fileRequest.getFile());
+            file.setFileName(fileRequest.getFileName());
             file.setOrganisation(getCurrentOrganisation());
             entity.addFile(file);
         }

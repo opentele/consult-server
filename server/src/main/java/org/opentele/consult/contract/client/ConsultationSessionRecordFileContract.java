@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 public class ConsultationSessionRecordFileContract extends BaseEntityContract {
     private String name;
-    private String file;
+    private String fileName;
 
     public static List<ConsultationSessionRecordFileContract> from(List<ConsultationSessionRecordFile> files) {
         return files.stream().map(ConsultationSessionRecordFileContract::new).collect(Collectors.toList());
@@ -20,7 +20,7 @@ public class ConsultationSessionRecordFileContract extends BaseEntityContract {
     public ConsultationSessionRecordFileContract(ConsultationSessionRecordFile consultationSessionRecordFile) {
         super(consultationSessionRecordFile);
         this.name = consultationSessionRecordFile.getName();
-        this.file = consultationSessionRecordFile.getFileName();
+        this.fileName = consultationSessionRecordFile.getFileName();
     }
 
     public String getName() {
@@ -31,11 +31,11 @@ public class ConsultationSessionRecordFileContract extends BaseEntityContract {
         this.name = name;
     }
 
-    public String getFile() {
-        return file;
+    public String getFileName() {
+        return fileName;
     }
 
-    public void setFile(String file) {
-        this.file = file;
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 }
