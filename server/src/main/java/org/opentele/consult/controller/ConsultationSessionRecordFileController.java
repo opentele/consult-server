@@ -5,6 +5,7 @@ import org.opentele.consult.domain.client.ConsultationSessionRecord;
 import org.opentele.consult.domain.framework.ConsultationSessionRecordFile;
 import org.opentele.consult.framework.FileUtil;
 import org.opentele.consult.framework.UserSession;
+import org.opentele.consult.repository.ConsultationSessionRecordFileRepository;
 import org.opentele.consult.repository.ConsultationSessionRecordRepository;
 import org.opentele.consult.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.InputStream;
 
 @RestController
 @PreAuthorize("hasRole('User')")
@@ -23,13 +26,15 @@ public class ConsultationSessionRecordFileController extends BaseController {
     private final FileUtil fileUtil;
     private final ApplicationConfig applicationConfig;
     private final ConsultationSessionRecordRepository consultationSessionRecordRepository;
+    private final ConsultationSessionRecordFileRepository consultationSessionRecordFileRepository;
 
     @Autowired
-    public ConsultationSessionRecordFileController(UserService userService, UserSession userSession, FileUtil fileUtil, ApplicationConfig applicationConfig, ConsultationSessionRecordRepository consultationSessionRecordRepository) {
+    public ConsultationSessionRecordFileController(UserService userService, UserSession userSession, FileUtil fileUtil, ApplicationConfig applicationConfig, ConsultationSessionRecordRepository consultationSessionRecordRepository, ConsultationSessionRecordFileRepository consultationSessionRecordFileRepository) {
         super(userService, userSession);
         this.fileUtil = fileUtil;
         this.applicationConfig = applicationConfig;
         this.consultationSessionRecordRepository = consultationSessionRecordRepository;
+        this.consultationSessionRecordFileRepository = consultationSessionRecordFileRepository;
     }
 
     @RequestMapping(value = "/api/consultationSessionRecordFile", method = {RequestMethod.POST})
@@ -53,5 +58,20 @@ public class ConsultationSessionRecordFileController extends BaseController {
         ConsultationSessionRecordFile consultationSessionRecordFile = consultationSessionRecord.removeFile(id);
         fileUtil.delete(applicationConfig.getAttachmentsLocation(), consultationSessionRecordFile.getFileName());
         consultationSessionRecordRepository.save(consultationSessionRecord);
+    }
+
+    @RequestMapping(value = "/api/consultationSessionRecordFile/{id}/contents", method = RequestMethod.GET)
+    public void getFile(@PathVariable("id") Integer id, HttpServletResponse response) {
+        try {
+            ConsultationSessionRecordFile consultationSessionRecordFile = consultationSessionRecordFileRepository.findEntity(id, getCurrentOrganisation());
+            String fileName = consultationSessionRecordFile.getFileName();
+            String attachmentsLocation = applicationConfig.getAttachmentsLocation();
+            InputStream is = fileUtil.getInputStream(attachmentsLocation, fileName);
+            org.apache.commons.io.IOUtils.copy(is, response.getOutputStream());
+            response.setContentType(consultationSessionRecordFile.getMimeType());
+            response.flushBuffer();
+        } catch (IOException ex) {
+            throw new RuntimeException("IOError writing file to output stream", ex);
+        }
     }
 }

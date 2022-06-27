@@ -11,7 +11,10 @@ public class ConsultationSessionRecordFile extends OrganisationalEntity {
 
     @Column
     private String fileName;
-    
+
+    @Column
+    private String mimeType;
+
     @ManyToOne(targetEntity = ConsultationSessionRecord.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "consultation_session_record_id", columnDefinition = "integer not null")
     private ConsultationSessionRecord consultationSessionRecord;
@@ -38,5 +41,13 @@ public class ConsultationSessionRecordFile extends OrganisationalEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getMimeType() {
+        return mimeType;
+    }
+
+    public void setMimeType(String mimeType) {
+        this.mimeType = mimeType;
     }
 }

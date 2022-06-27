@@ -1,5 +1,6 @@
 package org.opentele.consult.framework;
 
+import org.apache.commons.io.FilenameUtils;
 import org.opentele.consult.config.ApplicationConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -17,9 +18,8 @@ import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Part;
 import javax.mail.internet.MimeBodyPart;
-import java.io.File;
-import java.io.IOException;
-import java.io.StringWriter;
+import java.io.*;
+import java.nio.file.Files;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -64,7 +64,8 @@ public class FileUtil {
     }
 
     public String saveFile(String folder, MultipartFile multipartFile) throws IOException {
-        String fileName = UUID.randomUUID().toString();
+        String extension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
+        String fileName = String.format("%s.%s", UUID.randomUUID().toString(), extension);
         File file = new File(String.format("%s/%s", folder, fileName));
         multipartFile.transferTo(file);
         return fileName;
@@ -76,5 +77,14 @@ public class FileUtil {
 
     public void delete(String folder, String fileName) {
         new File(folder, fileName).delete();
+    }
+
+    public InputStream getInputStream(String folder, String fileName) throws FileNotFoundException {
+        File file = new File(folder, fileName);
+        return new FileInputStream(file);
+    }
+
+    public String getMimeType(String folder, String fileName) throws IOException {
+        return Files.probeContentType(new File(folder, fileName).toPath());
     }
 }
