@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
 
 @RestController
 @PreAuthorize("hasRole('User')")
@@ -67,8 +68,9 @@ public class ConsultationSessionRecordFileController extends BaseController {
             String fileName = consultationSessionRecordFile.getFileName();
             String attachmentsLocation = applicationConfig.getAttachmentsLocation();
             InputStream is = fileUtil.getInputStream(attachmentsLocation, fileName);
+            response.setHeader("Content-Type", consultationSessionRecordFile.getMimeType());
+            response.setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", consultationSessionRecordFile.getName()));
             org.apache.commons.io.IOUtils.copy(is, response.getOutputStream());
-            response.setContentType(consultationSessionRecordFile.getMimeType());
             response.flushBuffer();
         } catch (IOException ex) {
             throw new RuntimeException("IOError writing file to output stream", ex);

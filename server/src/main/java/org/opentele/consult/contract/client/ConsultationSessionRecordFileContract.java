@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ConsultationSessionRecordFileContract extends BaseEntityContract {
+    private String mimeType;
     private String name;
     private String fileName;
 
@@ -21,6 +22,7 @@ public class ConsultationSessionRecordFileContract extends BaseEntityContract {
         super(consultationSessionRecordFile);
         this.name = consultationSessionRecordFile.getName();
         this.fileName = consultationSessionRecordFile.getFileName();
+        this.mimeType = consultationSessionRecordFile.getMimeType();
     }
 
     public String getName() {
@@ -37,5 +39,13 @@ public class ConsultationSessionRecordFileContract extends BaseEntityContract {
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+
+    public String getMimeType() {
+        return mimeType;
+    }
+
+    public void setMimeType(String mimeType) {
+        this.mimeType = mimeType;
     }
 }
