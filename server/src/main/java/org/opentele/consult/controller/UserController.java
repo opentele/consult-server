@@ -128,12 +128,12 @@ public class UserController extends BaseController {
 
     @PutMapping("/api/user/organisation")
     @PreAuthorize("hasRole('User')")
-    public void registerOrganisation(@RequestBody String organisationName, Principal principal) {
+    public void registerOrganisation(@RequestBody OrganisationCreateRequest request, Principal principal) {
         Organisation currentOrganisation = getCurrentOrganisation();
         if (currentOrganisation != null)
             throw new RuntimeException("The user is already is part of organisation");
         User currentUser = getCurrentUser(principal);
-        Organisation organisation = organisationService.createOrg(organisationName, currentUser);
+        Organisation organisation = organisationService.createOrg(request.getName(), currentUser);
         OrganisationUser organisationUser = organisationUserService.associateExistingUser(currentUser, UserType.OrgAdmin, ProviderType.None, organisation);
         SecurityService.elevateToRole(organisationUser.getUserType());
         setCurrentOrganisationId(organisationUser.getOrganisation().getId());

@@ -1,6 +1,6 @@
 package org.opentele.consult.controller;
 
-import org.opentele.consult.contract.security.OrganisationCreateRequest;
+import org.opentele.consult.contract.security.OrganisationAndUserCreateRequest;
 import org.opentele.consult.contract.security.UserAddRequest;
 import org.opentele.consult.domain.Organisation;
 import org.opentele.consult.domain.security.ProviderType;
@@ -39,7 +39,7 @@ public class OrganisationController extends BaseController {
 
     @RequestMapping(value = "/api/organisation", method = {RequestMethod.PUT})
     @Transactional
-    public ResponseEntity<String> save(@RequestBody OrganisationCreateRequest request) {
+    public ResponseEntity<String> save(@RequestBody OrganisationAndUserCreateRequest request) {
         String error = userService.validateNewUser(request.getEmail(), request.getMobile());
         if (error != null)
             return new ResponseEntity<>(error, HttpStatus.CONFLICT);
