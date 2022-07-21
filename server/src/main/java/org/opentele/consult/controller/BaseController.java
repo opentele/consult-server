@@ -19,6 +19,7 @@ public abstract class BaseController {
 
     protected Organisation getCurrentOrganisation() {
         int currentOrganisationId = userSession.getCurrentOrganisationId();
+        if (currentOrganisationId == 0) return null;
         return userService.getOrganisation(currentOrganisationId);
     }
 
@@ -32,5 +33,9 @@ public abstract class BaseController {
 
     protected void rollback() {
         TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+    }
+
+    protected void setCurrentOrganisationId(Integer organisationId) {
+        userSession.setCurrentOrganisationId(organisationId);
     }
 }

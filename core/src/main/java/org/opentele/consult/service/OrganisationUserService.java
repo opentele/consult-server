@@ -1,10 +1,7 @@
 package org.opentele.consult.service;
 
 import org.opentele.consult.domain.Organisation;
-import org.opentele.consult.domain.security.OrganisationUser;
-import org.opentele.consult.domain.security.ProviderType;
-import org.opentele.consult.domain.security.User;
-import org.opentele.consult.domain.security.UserType;
+import org.opentele.consult.domain.security.*;
 import org.opentele.consult.repository.OrganisationUserRepository;
 import org.opentele.consult.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,8 +38,9 @@ public class OrganisationUserService {
         return organisationUsers.get(0);
     }
 
-    public OrganisationUser getOrganisationUser(User user, Organisation currentOrganisation) {
-        return organisationUserRepository.findByUserAndOrganisation(user, currentOrganisation);
+    public OrganisationUser getOrganisationUser(User user, Organisation organisation) {
+        if (organisation == null) return new UserWithoutOrganisation(user);
+        return organisationUserRepository.findByUserAndOrganisation(user, organisation);
     }
 
     public OrganisationUser update(User user, UserType userType, ProviderType providerType, Organisation organisation) {

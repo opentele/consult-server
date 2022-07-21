@@ -1,6 +1,5 @@
 package org.opentele.consult.controller;
 
-import org.opentele.consult.config.WebSecurityConfig;
 import org.opentele.consult.contract.security.OrganisationUserContract;
 import org.opentele.consult.contract.security.OrganisationUserPutPostRequest;
 import org.opentele.consult.contract.security.SearchedUserResponse;
@@ -18,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -105,10 +105,10 @@ public class OrganisationUserController extends BaseController {
     @Transactional
     public OrganisationUserContract updateProfile(@RequestBody OrganisationUserPutPostRequest request) {
         User user;
-        if (request.getPassword() == null || request.getPassword().isEmpty()) {
-            user = userService.updateProfile(request.getId(), request.getName(), request.getEmail(), request.getMobile(), request.getIdentification(), request.getQualification());
-        } else {
+        if (StringUtils.hasText(request.getPassword())) {
             user = userService.updateProfile(request.getId(), request.getName(), request.getEmail(), request.getMobile(), bCryptPasswordEncoder.encode(request.getPassword()), request.getIdentification(), request.getQualification());
+        } else {
+            user = userService.updateProfile(request.getId(), request.getName(), request.getEmail(), request.getMobile(), request.getIdentification(), request.getQualification());
         }
         OrganisationUser organisationUser = organisationUserService.update(user, request.getUserType(), request.getProviderType(), getCurrentOrganisation());
         return OrganisationUserContract.from(organisationUser);

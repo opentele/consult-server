@@ -4,6 +4,7 @@ import org.opentele.consult.domain.Organisation;
 import org.opentele.consult.domain.framework.AbstractAuditableEntity;
 import org.opentele.consult.domain.framework.AbstractEntity;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.util.StringUtils;
 
 import java.util.HashSet;
 import java.util.List;
@@ -50,7 +51,7 @@ public class Repository {
     }
 
     public static <T extends AbstractAuditableEntity> T findByUuidOrCreate(String uuid, Organisation organisation, AbstractRepository<T> abstractRepository, T newEntity) {
-        if (uuid == null || uuid.isEmpty()) {
+        if (!StringUtils.hasText(uuid)) {
             newEntity.setUuid(UUID.randomUUID());
             return newEntity;
         }

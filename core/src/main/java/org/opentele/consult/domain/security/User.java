@@ -5,6 +5,7 @@ import org.opentele.consult.domain.framework.AbstractAuditableEntity;
 import org.opentele.consult.domain.framework.AbstractEntity;
 import org.springframework.data.annotation.*;
 import org.springframework.data.annotation.Transient;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -134,6 +135,12 @@ public class User extends AbstractEntity implements Serializable {
     }
 
     public String getDetailsForClient() {
-        return String.format("%s - %s [%s]", this.name, this.identification, this.qualification);
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(this.name);
+        if (StringUtils.hasText(this.identification))
+            stringBuilder.append(String.format("- %s", this.identification));
+        if (StringUtils.hasText(this.qualification))
+            stringBuilder.append(String.format(" [%s]", this.qualification));
+        return stringBuilder.toString();
     }
 }

@@ -1,16 +1,12 @@
 package org.opentele.consult.controller;
 
 import org.opentele.consult.contract.security.*;
-import org.opentele.consult.domain.security.PasswordResetToken;
-import org.opentele.consult.domain.security.User;
-import org.opentele.consult.domain.security.UserType;
+import org.opentele.consult.domain.Organisation;
+import org.opentele.consult.domain.security.*;
 import org.opentele.consult.framework.Translator;
 import org.opentele.consult.framework.UserSession;
 import org.opentele.consult.message.MessageCodes;
-import org.opentele.consult.service.MailService;
-import org.opentele.consult.service.SecurityService;
-import org.opentele.consult.service.TemplateContextFactory;
-import org.opentele.consult.service.UserService;
+import org.opentele.consult.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,14 +31,18 @@ public class UserController extends BaseController {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final MailService mailService;
     private final TemplateContextFactory templateContextFactory;
+    private final OrganisationService organisationService;
+    private final OrganisationUserService organisationUserService;
     private final static Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
-    public UserController(UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder, MailService mailService, TemplateContextFactory templateContextFactory, UserSession userSession) {
+    public UserController(UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder, MailService mailService, TemplateContextFactory templateContextFactory, UserSession userSession, OrganisationService organisationService, OrganisationUserService organisationUserService) {
         super(userService, userSession);
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.mailService = mailService;
         this.templateContextFactory = templateContextFactory;
+        this.organisationService = organisationService;
+        this.organisationUserService = organisationUserService;
     }
 
     @RequestMapping(value = "/api/user", method = {RequestMethod.PUT})
@@ -124,5 +124,18 @@ public class UserController extends BaseController {
     @PreAuthorize("hasRole('User')")
     public List<OrganisationUserContract> search(@RequestParam("q") String searchParam) {
         return userService.findUsers(searchParam, getCurrentOrganisation()).stream().map(OrganisationUserContract::from).collect(Collectors.toList());
+    }
+
+    @PutMapping("/api/user/organisation")
+    @PreAuthorize("hasRole('User')")
+    public void registerOrganisation(@RequestBody String organisationName, Principal principal) {
+        Organisation currentOrganisation = getCurrentOrganisation();
+        if (currentOrganisation != null)
+            throw new RuntimeException("The user is already is part of organisation");
+        User currentUser = getCurrentUser(principal);
+        Organisation organisation = organisationService.createOrg(organisationName, currentUser);
+        OrganisationUser organisationUser = organisationUserService.associateExistingUser(currentUser, UserType.OrgAdmin, ProviderType.None, organisation);
+        SecurityService.elevateToRole(organisationUser.getUserType());
+        setCurrentOrganisationId(organisationUser.getOrganisation().getId());
     }
 }
