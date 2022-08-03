@@ -29,17 +29,11 @@ public class ConsultationRoom  extends OrganisationalEntity {
     @Column(nullable = false)
     private LocalTime scheduledEndTime;
 
-    @Column
-    private LocalTime startTime;
-
-    @Column
-    private LocalTime endTime;
-
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, mappedBy = "consultationRoom")
     private Set<ConsultationRoomUser> providers = new HashSet<>();
 
     @ManyToOne(targetEntity = ConsultationRoomSchedule.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "consultation_room_schedule_id", columnDefinition = "integer not null")
+    @JoinColumn(name = "consultation_room_schedule_id", columnDefinition = "integer null")
     private ConsultationRoomSchedule consultationRoomSchedule;
 
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, mappedBy = "consultationRoom")
@@ -48,7 +42,7 @@ public class ConsultationRoom  extends OrganisationalEntity {
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, mappedBy = "consultationRoom")
     private Set<TeleConference> teleConferences = new HashSet<>();
 
-    @Column
+    @Column(columnDefinition = "int4 check (total_slots > 0)")
     private int totalSlots;
 
     public LocalDate getScheduledOn() {
@@ -75,22 +69,6 @@ public class ConsultationRoom  extends OrganisationalEntity {
         this.scheduledEndTime = scheduledEndTime;
     }
 
-    public LocalTime getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(LocalTime startTime) {
-        this.startTime = startTime;
-    }
-
-    public LocalTime getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(LocalTime endTime) {
-        this.endTime = endTime;
-    }
-
     public ConsultationRoomSchedule getSchedule() {
         return consultationRoomSchedule;
     }
@@ -105,10 +83,6 @@ public class ConsultationRoom  extends OrganisationalEntity {
 
     public Set<ConsultationRoomUser> getProviders() {
         return providers;
-    }
-
-    public void setProviders(Set<ConsultationRoomUser> providers) {
-        this.providers = providers;
     }
 
     public void setConsultationRoomSchedule(ConsultationRoomSchedule consultationRoomSchedule) {
@@ -138,6 +112,10 @@ public class ConsultationRoom  extends OrganisationalEntity {
     public void addProvider(ConsultationRoomUser consultationRoomUser) {
         this.providers.add(consultationRoomUser);
         consultationRoomUser.setConsultationRoom(this);
+    }
+
+    public void removeProvider(ConsultationRoomUser consultationRoomUser) {
+        this.providers.remove(consultationRoomUser);
     }
 
     public boolean isProvider(User user) {
@@ -188,6 +166,10 @@ public class ConsultationRoom  extends OrganisationalEntity {
 
     public Appointment getAppointment(int id) {
         return this.appointments.stream().filter(appointment -> appointment.getId().equals(id)).findFirst().orElse(null);
+    }
+
+    public Object getProviderIds() {
+        return null;
     }
 
     public static class ConsultationRoomCurrentUserSummary {

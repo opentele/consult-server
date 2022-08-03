@@ -3,20 +3,23 @@ package org.opentele.consult.controller.consulationRoom;
 import org.opentele.consult.contract.client.ClientSearchResponse;
 import org.opentele.consult.contract.client.ClientSearchResults;
 import org.opentele.consult.contract.client.ConsultationRoomClientResponse;
-import org.opentele.consult.contract.consultationRoom.ConsultationRoomConferenceResponse;
-import org.opentele.consult.contract.consultationRoom.ConsultationRoomContract;
-import org.opentele.consult.contract.consultationRoom.ConsultationRoomScheduleContract;
-import org.opentele.consult.contract.consultationRoom.ConsultationRoomDetailResponse;
+import org.opentele.consult.contract.consultationRoom.*;
+import org.opentele.consult.contract.framework.BaseEntityContract;
 import org.opentele.consult.controller.BaseController;
 import org.opentele.consult.domain.consultationRoom.ConsultationRoom;
+import org.opentele.consult.domain.consultationRoom.ConsultationRoomScheduleUser;
+import org.opentele.consult.domain.consultationRoom.ConsultationRoomUser;
 import org.opentele.consult.domain.consultationRoom.ConsultationRooms;
 import org.opentele.consult.framework.UserSession;
 import org.opentele.consult.mapper.consultationRoom.ConsultationRoomMapper;
 import org.opentele.consult.repository.ClientRepository;
 import org.opentele.consult.repository.ConsultationRoomRepository;
+import org.opentele.consult.repository.ConsultationRoomUserRepository;
+import org.opentele.consult.repository.framework.Repository;
 import org.opentele.consult.service.ConsultationRoomService;
 import org.opentele.consult.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,16 +38,19 @@ public class ConsultationRoomController extends BaseController {
     private final ConsultationRoomMapper consultationRoomMapper;
     private final ClientRepository clientRepository;
     private final ConsultationRoomService consultationRoomService;
+    private final ConsultationRoomUserRepository consultationRoomUserRepository;
 
     @Autowired
     public ConsultationRoomController(ConsultationRoomRepository consultationRoomRepository,
                                       UserService userService, ConsultationRoomMapper consultationRoomMapper,
-                                      UserSession userSession, ClientRepository clientRepository, ConsultationRoomService consultationRoomService) {
+                                      UserSession userSession, ClientRepository clientRepository,
+                                      ConsultationRoomService consultationRoomService, ConsultationRoomUserRepository consultationRoomUserRepository) {
         super(userService, userSession);
         this.consultationRoomRepository = consultationRoomRepository;
         this.consultationRoomMapper = consultationRoomMapper;
         this.clientRepository = clientRepository;
         this.consultationRoomService = consultationRoomService;
+        this.consultationRoomUserRepository = consultationRoomUserRepository;
     }
 
     @GetMapping(value = "/api/consultationRoom/today")
@@ -79,8 +85,27 @@ public class ConsultationRoomController extends BaseController {
     }
 
     @RequestMapping(value = "/api/consultationRoom", method = {RequestMethod.PUT, RequestMethod.POST})
-    public ResponseEntity<Integer> save(@RequestBody ConsultationRoomScheduleContract request, Principal principal) {
-        return null;
+    public ResponseEntity<Integer> putPost(@RequestBody ConsultationRoomRequest request, Principal principal) {
+        ConsultationRoom consultationRoom = Repository.findByIdOrCreate(request.getId(), getCurrentOrganisation(), consultationRoomRepository, new ConsultationRoom());
+        consultationRoom.setOrganisation(getCurrentOrganisation());
+        consultationRoom.setTitle(request.getTitle());
+        consultationRoom.setTotalSlots(request.getTotalSlots());
+        consultationRoom.setScheduledOn(request.getScheduledOn());
+        consultationRoom.setScheduledStartTime(request.getScheduledStartTime());
+        consultationRoom.setScheduledEndTime(request.getScheduledEndTime());
+        List<Integer> existingProviderIds = consultationRoom.getProviders().stream().map(x -> x.getUser().getId()).collect(Collectors.toList());
+        Repository.mergeChildren(request.getProviders(), existingProviderIds,
+                x -> consultationRoom.removeProvider((ConsultationRoomUser) x),
+                x -> consultationRoom.addProvider((ConsultationRoomUser) x),
+                x -> consultationRoomUserRepository.findByConsultationRoomAndUserIdAndOrganisation(consultationRoom, x, getCurrentOrganisation()),
+                x -> {
+                    var consultationRoomUser = new ConsultationRoomUser();
+                    consultationRoomUser.setUser(userService.getUser(x));
+                    consultationRoomUser.setOrganisation(getCurrentOrganisation());
+                    return consultationRoomUser;
+                });
+        ConsultationRoom saved = consultationRoomRepository.save(consultationRoom);
+        return new ResponseEntity<>(saved.getId(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/api/consultationRoom/client")

@@ -8,3 +8,4 @@ logs
 dump.sql
 superadmin.sql
 postman-env.json
+SESSIONS.ser

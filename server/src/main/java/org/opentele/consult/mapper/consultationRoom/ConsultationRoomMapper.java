@@ -41,7 +41,6 @@ public class ConsultationRoomMapper {
     }
 
     private void mapCore(ConsultationRoomContract contract, ConsultationRoom consultationRoom) {
-        contract.setEndTime(consultationRoom.getEndTime());
         contract.setId(consultationRoom.getId());
         contract.setProviders(consultationRoom.getProviders().stream().map(x -> new ProviderResponse(x.getUser())).collect(Collectors.toList()));
         contract.setScheduledEndTime(consultationRoom.getScheduledEndTime());

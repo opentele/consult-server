@@ -47,7 +47,7 @@ public class ConsultationRoomScheduleController extends BaseController  {
     }
 
     @RequestMapping(value = "/api/consultationRoomSchedule", method = {RequestMethod.PUT, RequestMethod.POST})
-    public ResponseEntity<Integer> put(@RequestBody ConsultationRoomScheduleRequest request) {
+    public ResponseEntity<Integer> putPost(@RequestBody ConsultationRoomScheduleRequest request) {
         var schedule = Repository.findByIdOrCreate(request.getId(), getCurrentOrganisation(), consultationRoomScheduleRepository, new ConsultationRoomSchedule());
         ConsultationRoomScheduleMapper.map(request, getCurrentOrganisation(), schedule);
 
