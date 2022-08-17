@@ -1,6 +1,7 @@
 package org.opentele.consult.controller;
 
 import org.opentele.consult.contract.security.*;
+import org.opentele.consult.domain.Language;
 import org.opentele.consult.domain.Organisation;
 import org.opentele.consult.domain.security.*;
 import org.opentele.consult.framework.Translator;
@@ -134,7 +135,7 @@ public class UserController extends BaseController {
             throw new RuntimeException("The user is already is part of organisation");
         User currentUser = getCurrentUser(principal);
         Organisation organisation = organisationService.createOrg(request.getName(), currentUser);
-        OrganisationUser organisationUser = organisationUserService.associateExistingUser(currentUser, UserType.OrgAdmin, ProviderType.None, organisation);
+        OrganisationUser organisationUser = organisationUserService.associateExistingUser(currentUser, UserType.OrgAdmin, ProviderType.None, organisation, Language.en);
         SecurityService.elevateToRole(organisationUser.getUserType());
         setCurrentOrganisationId(organisationUser.getOrganisation().getId());
     }

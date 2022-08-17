@@ -1,5 +1,6 @@
 package org.opentele.consult.service;
 
+import org.opentele.consult.domain.Language;
 import org.opentele.consult.domain.Organisation;
 import org.opentele.consult.domain.security.*;
 import org.opentele.consult.message.MessageCodes;
@@ -189,5 +190,11 @@ public class UserService {
         user.setIdentification(identification);
         user.setQualification(qualification);
         return this.save(user, user);
+    }
+
+    public OrganisationUser updateLanguagePreference(User user, Organisation organisation, Language language) {
+        OrganisationUser organisationUser = getOrganisationUser(user.getId(), organisation);
+        organisationUser.setLanguage(language);
+        return organisationUserRepository.save(organisationUser);
     }
 }

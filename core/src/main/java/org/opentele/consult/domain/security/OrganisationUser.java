@@ -1,5 +1,6 @@
 package org.opentele.consult.domain.security;
 
+import org.opentele.consult.domain.Language;
 import org.opentele.consult.domain.framework.OrganisationalEntity;
 
 import javax.persistence.*;
@@ -18,6 +19,10 @@ public class OrganisationUser extends OrganisationalEntity {
     @Column(name = "provider_type", nullable = false)
     @Enumerated(EnumType.STRING)
     private ProviderType providerType;
+
+    @Column(name = "language", columnDefinition = "varchar(5) not null default 'en'")
+    @Enumerated(EnumType.STRING)
+    private Language language;
 
     public void setUserType(UserType userType) {
         this.userType = userType;
@@ -41,5 +46,13 @@ public class OrganisationUser extends OrganisationalEntity {
 
     public void setProviderType(ProviderType providerType) {
         this.providerType = providerType;
+    }
+
+    public Language getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(Language language) {
+        this.language = language;
     }
 }

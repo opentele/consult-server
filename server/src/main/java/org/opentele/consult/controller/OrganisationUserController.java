@@ -3,6 +3,7 @@ package org.opentele.consult.controller;
 import org.opentele.consult.contract.security.OrganisationUserContract;
 import org.opentele.consult.contract.security.OrganisationUserPutPostRequest;
 import org.opentele.consult.contract.security.SearchedUserResponse;
+import org.opentele.consult.domain.Language;
 import org.opentele.consult.domain.security.OrganisationUser;
 import org.opentele.consult.domain.security.ProviderType;
 import org.opentele.consult.domain.security.User;
@@ -75,7 +76,7 @@ public class OrganisationUserController extends BaseController {
                 return new ResponseEntity<>(error, HttpStatus.CONFLICT);
             user = userService.createUser(request.getName(), request.getEmail(), request.getMobile(), bCryptPasswordEncoder.encode(request.getPassword()), userService.getAppUser());
         }
-        organisationUser = organisationUserService.associateExistingUser(user, request.getUserType(), request.getProviderType(), getCurrentOrganisation());
+        organisationUser = organisationUserService.associateExistingUser(user, request.getUserType(), request.getProviderType(), getCurrentOrganisation(), request.getLanguage());
         return new ResponseEntity<>(OrganisationUserContract.from(organisationUser), HttpStatus.OK);
     }
 
@@ -111,6 +112,14 @@ public class OrganisationUserController extends BaseController {
             user = userService.updateProfile(request.getId(), request.getName(), request.getEmail(), request.getMobile(), request.getIdentification(), request.getQualification());
         }
         OrganisationUser organisationUser = organisationUserService.update(user, request.getUserType(), request.getProviderType(), getCurrentOrganisation());
+        return OrganisationUserContract.from(organisationUser);
+    }
+
+    @PreAuthorize("hasRole('User')")
+    @RequestMapping(value = "/api/organisationUser/current/language", method = RequestMethod.PATCH)
+    @Transactional
+    public OrganisationUserContract patchLanguage(@RequestBody OrganisationUserPutPostRequest request, Principal principal) {
+        OrganisationUser organisationUser = userService.updateLanguagePreference(getCurrentUser(principal), getCurrentOrganisation(), request.getLanguage());
         return OrganisationUserContract.from(organisationUser);
     }
 

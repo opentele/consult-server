@@ -1,5 +1,6 @@
 package org.opentele.consult.contract.security;
 
+import org.opentele.consult.domain.Language;
 import org.opentele.consult.domain.security.OrganisationUser;
 import org.opentele.consult.domain.security.ProviderType;
 import org.opentele.consult.domain.security.UserType;
@@ -8,6 +9,7 @@ public class OrganisationUserContract extends UserContract {
     private UserType userType;
     private ProviderType providerType;
     private String organisationName;
+    private Language language;
 
     public UserType getUserType() {
         return userType;
@@ -33,6 +35,14 @@ public class OrganisationUserContract extends UserContract {
         this.providerType = providerType;
     }
 
+    public Language getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(Language language) {
+        this.language = language;
+    }
+
     public static OrganisationUserContract from(OrganisationUser organisationUser) {
         OrganisationUserContract contract = new OrganisationUserContract();
         UserContract.from(organisationUser.getUser(), contract);
@@ -40,6 +50,7 @@ public class OrganisationUserContract extends UserContract {
         contract.setUserType(organisationUser.getUserType());
         contract.setOrganisationName(organisationUser.getOrganisation().getName());
         contract.setProviderType(organisationUser.getProviderType());
+        contract.setLanguage(organisationUser.getLanguage());
         return contract;
     }
 }

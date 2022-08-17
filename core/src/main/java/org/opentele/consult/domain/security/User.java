@@ -1,5 +1,6 @@
 package org.opentele.consult.domain.security;
 
+import org.opentele.consult.domain.Language;
 import org.opentele.consult.domain.Organisation;
 import org.opentele.consult.domain.framework.AbstractAuditableEntity;
 import org.opentele.consult.domain.framework.AbstractEntity;
