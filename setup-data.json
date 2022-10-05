@@ -2,293 +2,289 @@
 	"info": {
 		"_postman_id": "93304eb0-4cb4-40b0-ad48-278cc20b0895",
 		"name": "Consult Data Setup",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "695405"
 	},
 	"item": [
 		{
-			"name": "Data Setup",
-			"item": [
-				{
-					"name": "Register organisation by email",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"organisationName\": \"{{EMAIL_USER_ORGANISATION}}\",\n    \"name\": \"Vivek Singh\",\n    \"email\": \"{{EMAIL_USER}}\",\n    \"password\": \"{{EMAIL_USER_PASSWORD}}\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_API_URL}}/organisation",
-							"host": [
-								"{{BASE_API_URL}}"
-							],
-							"path": [
-								"organisation"
-							]
+			"name": "Register organisation by email",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"organisationName\": \"{{EMAIL_USER_ORGANISATION}}\",\n    \"name\": \"Vivek Singh\",\n    \"email\": \"{{EMAIL_USER}}\",\n    \"password\": \"{{EMAIL_USER_PASSWORD}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
 						}
-					},
-					"response": []
+					}
 				},
-				{
-					"name": "Login by email",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/x-www-form-urlencoded"
-							}
-						],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "email",
-									"value": "{{EMAIL_USER}}",
-									"type": "text"
-								},
-								{
-									"key": "password",
-									"value": "{{EMAIL_USER_PASSWORD}}",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/api/login",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"login"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Register users",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "[\n    {\n        \"name\": \"Yamini Gupta\",\n        \"email\": \"yaminigupta@gmail.com\",\n        \"password\": \"password\"\n    },\n    {\n        \"name\": \"Brajesh Agarwal\",\n        \"email\": \"brajeshagarwal@gmail.com\",\n        \"password\": \"password\"\n    },\n    {\n        \"name\": \"Kuntal Das\",\n        \"email\": \"kuntaldas@gmail.com\",\n        \"password\": \"password\"\n    }\n]",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_API_URL}}/users",
-							"host": [
-								"{{BASE_API_URL}}"
-							],
-							"path": [
-								"users"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Add Users to Organisation",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "[\n    {\n        \"id\": 4,\n        \"providerType\": \"Usher\",\n        \"userType\": \"User\"\n    },\n    {\n        \"id\": 5,\n        \"providerType\": \"Consultant\",\n        \"userType\": \"User\"\n    }\n]",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_API_URL}}/organisationUsers",
-							"host": [
-								"{{BASE_API_URL}}"
-							],
-							"path": [
-								"organisationUsers"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Consultation Room Schedule",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"const x = require('moment')().subtract(1, 'days');",
-									"const date = `[${x.year()},${x.month()+1},${x.date()}]`;",
-									"pm.environment.set('currentdate', date);"
-								],
-								"type": "text/javascript"
-							}
-						}
+				"url": {
+					"raw": "{{BASE_API_URL}}/organisation",
+					"host": [
+						"{{BASE_API_URL}}"
 					],
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"title\": \"TB Clinic\",\n    \"totalSlots\": 10,\n    \"providers\": [3,4],\n    \"recurrenceRule\": \"FREQ=WEEKLY;INTERVAL=1;BYDAY=MO,TU,WE,TH,FR,SA,SU\",\n    \"startTime\": [12,0],\n    \"endTime\": [16,0],\n    \"startDate\": {{currentdate}}\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_API_URL}}/consultationRoomSchedule",
-							"host": [
-								"{{BASE_API_URL}}"
-							],
-							"path": [
-								"consultationRoomSchedule"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create Clients",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "[\n  {\n    \"name\": \"Vivek Gagrani\",\n    \"gender\": \"Male\",\n    \"dateOfBirth\": \"2000-01-03\",\n    \"registrationNumber\": 20021\n  },\n  {\n    \"name\": \"Sid Narayanan\",\n    \"gender\": \"Male\",\n    \"dateOfBirth\": \"2000-10-03\",\n    \"registrationNumber\": 20022\n  },\n  {\n    \"name\": \"Mukul De\",\n    \"gender\": \"Male\",\n    \"dateOfBirth\": \"2002-01-03\",\n    \"registrationNumber\": 20023\n  },\n  {\n    \"name\": \"Himani Saran\",\n    \"gender\": \"Female\",\n    \"dateOfBirth\": \"2010-11-03\",\n    \"registrationNumber\": 20024\n  },\n  {\n    \"name\": \"Savita Persaud\",\n    \"gender\": \"Female\",\n    \"dateOfBirth\": \"1987-01-01\",\n    \"registrationNumber\": 20025\n  },\n  {\n    \"name\": \"Kirti Dixit\",\n    \"gender\": \"Female\",\n    \"dateOfBirth\": \"1967-01-03\",\n    \"registrationNumber\": 20026\n  },\n  {\n    \"name\": \"Tabeed Raja\",\n    \"gender\": \"Male\",\n    \"dateOfBirth\": \"1987-01-03\",\n    \"registrationNumber\": 20027\n  },\n  {\n    \"name\": \"Moti Sangha\",\n    \"gender\": \"Other\",\n    \"dateOfBirth\": \"1967-01-03\",\n    \"registrationNumber\": 20028\n  },\n  {\n    \"name\": \"Riya Bajwa\",\n    \"gender\": \"Female\",\n    \"dateOfBirth\": \"1935-01-03\",\n    \"registrationNumber\": 20029\n  },\n  {\n    \"name\": \"Aditya Pillay\",\n    \"gender\": \"Male\",\n    \"dateOfBirth\": \"1948-01-03\",\n    \"registrationNumber\": 20030\n  }\n]",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_API_URL}}/clients",
-							"host": [
-								"{{BASE_API_URL}}"
-							],
-							"path": [
-								"clients"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create Consultation Session Records",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "[\n  {\n    \"clientId\": 1,\n    \"complaints\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit. In in porta risus. Maecenas nec mattis purus. Duis vel mauris vitae ex vestibulum vestibulum at sed ligula. Nunc eu maximus magna, euismod suscipit turpis. Nulla et leo rutrum, aliquet eros vel, dignissim metus. Suspendisse porta, tortor ut volutpat vestibulum, urna elit convallis nibh, nec imperdiet turpis ante vel lectus. Curabitur blandit, orci at varius aliquam, ante purus suscipit ligula, sed gravida felis neque ut nisi. Sed non sapien mi. Nam at mauris nibh. Ut a rutrum orci, a porttitor erat. Sed consectetur est sit amet lacus ultricies, in scelerisque nisi porttitor.\",\n    \"observations\": \"Suspendisse eu lacus ligula. Morbi et placerat risus, a fermentum tortor. Donec dictum massa nec velit aliquam, quis commodo enim lobortis. Aenean ac pretium erat. Morbi vulputate eros vitae risus placerat, eget aliquet ligula ultrices. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Pellentesque tincidunt lacinia laoreet. Quisque purus augue, feugiat id venenatis vel, placerat sit amet tortor. Vestibulum vel dolor ultrices, volutpat quam vel, scelerisque dolor. Etiam porttitor commodo augue, quis fringilla ipsum ultrices non. Duis ac magna eget lorem aliquet pharetra nec nec lacus. Nam molestie porttitor erat, ultrices egestas metus consequat eget. Quisque posuere, dui congue posuere sollicitudin, nisl velit fermentum sem, nec vulputate magna nulla at ex. Proin turpis elit, dignissim non interdum quis, fermentum id nisl. Cras pretium urna nibh, eu volutpat elit hendrerit non.\\n\\nAliquam eu neque et ante convallis malesuada. Aenean semper nulla non urna pellentesque euismod. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed at ornare urna. Nam ullamcorper lobortis porta. Aenean commodo vestibulum libero, ac pharetra velit pulvinar vitae. Curabitur non mauris at diam viverra scelerisque in vitae lacus. In hac habitasse platea dictumst. Nulla sed pharetra arcu. Phasellus vitae interdum dolor. Pellentesque.\",\n    \"recommendations\": \"Integer tempus sapien et tempus gravida. Nunc id augue magna. Aliquam malesuada dapibus ligula tristique pharetra. Aenean feugiat felis pretium, auctor justo ac, lacinia quam. Phasellus tempus fermentum elit eget suscipit. Sed vitae lacinia elit. Praesent quis nisl elementum, consectetur sapien eget, cursus lectus. Duis posuere est at ligula accumsan.\",\n    \"keyInference\": \"Proin nec nibh ut dui fringilla feugiat. Integer aliquet felis.\"\n  },\n  {\n    \"clientId\": 1,\n    \"complaints\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit. In in porta risus. Maecenas nec mattis purus. Duis vel mauris vitae ex vestibulum vestibulum at sed ligula. Nunc eu maximus magna, euismod suscipit turpis. Nulla et leo rutrum, aliquet eros vel, dignissim metus. Suspendisse porta, tortor ut volutpat vestibulum, urna elit convallis nibh, nec imperdiet turpis ante vel lectus. Curabitur blandit, orci at varius aliquam, ante purus suscipit ligula, sed gravida felis neque ut nisi. Sed non sapien mi. Nam at mauris nibh. Ut a rutrum orci, a porttitor erat. Sed consectetur est sit amet lacus ultricies, in scelerisque nisi porttitor.\",\n    \"observations\": \"Suspendisse eu lacus ligula. Morbi et placerat risus, a fermentum tortor. Donec dictum massa nec velit aliquam, quis commodo enim lobortis. Aenean ac pretium erat. Morbi vulputate eros vitae risus placerat, eget aliquet ligula ultrices. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Pellentesque tincidunt lacinia laoreet. Quisque purus augue, feugiat id venenatis vel, placerat sit amet tortor. Vestibulum vel dolor ultrices, volutpat quam vel, scelerisque dolor. Etiam porttitor commodo augue, quis fringilla ipsum ultrices non. Duis ac magna eget lorem aliquet pharetra nec nec lacus. Nam molestie porttitor erat, ultrices egestas metus consequat eget. Quisque posuere, dui congue posuere sollicitudin, nisl velit fermentum sem, nec vulputate magna nulla at ex. Proin turpis elit, dignissim non interdum quis, fermentum id nisl. Cras pretium urna nibh, eu volutpat elit hendrerit non.\\n\\nAliquam eu neque et ante convallis malesuada. Aenean semper nulla non urna pellentesque euismod. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed at ornare urna. Nam ullamcorper lobortis porta. Aenean commodo vestibulum libero, ac pharetra velit pulvinar vitae. Curabitur non mauris at diam viverra scelerisque in vitae lacus. In hac habitasse platea dictumst. Nulla sed pharetra arcu. Phasellus vitae interdum dolor. Pellentesque.\",\n    \"recommendations\": \"Integer tempus sapien et tempus gravida. Nunc id augue magna. Aliquam malesuada dapibus ligula tristique pharetra. Aenean feugiat felis pretium, auctor justo ac, lacinia quam. Phasellus tempus fermentum elit eget suscipit. Sed vitae lacinia elit. Praesent quis nisl elementum, consectetur sapien eget, cursus lectus. Duis posuere est at ligula accumsan.\",\n    \"keyInference\": \"Proin nec nibh ut dui fringilla feugiat. Integer aliquet felis.\"\n  },\n  {\n    \"clientId\": 2,\n    \"complaints\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit. In in porta risus. Maecenas nec mattis purus. Duis vel mauris vitae ex vestibulum vestibulum at sed ligula. Nunc eu maximus magna, euismod suscipit turpis. Nulla et leo rutrum, aliquet eros vel, dignissim metus. Suspendisse porta, tortor ut volutpat vestibulum, urna elit convallis nibh, nec imperdiet turpis ante vel lectus. Curabitur blandit, orci at varius aliquam, ante purus suscipit ligula, sed gravida felis neque ut nisi. Sed non sapien mi. Nam at mauris nibh. Ut a rutrum orci, a porttitor erat. Sed consectetur est sit amet lacus ultricies, in scelerisque nisi porttitor.\",\n    \"observations\": \"Suspendisse eu lacus ligula. Morbi et placerat risus, a fermentum tortor. Donec dictum massa nec velit aliquam, quis commodo enim lobortis. Aenean ac pretium erat. Morbi vulputate eros vitae risus placerat, eget aliquet ligula ultrices. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Pellentesque tincidunt lacinia laoreet. Quisque purus augue, feugiat id venenatis vel, placerat sit amet tortor. Vestibulum vel dolor ultrices, volutpat quam vel, scelerisque dolor. Etiam porttitor commodo augue, quis fringilla ipsum ultrices non. Duis ac magna eget lorem aliquet pharetra nec nec lacus. Nam molestie porttitor erat, ultrices egestas metus consequat eget. Quisque posuere, dui congue posuere sollicitudin, nisl velit fermentum sem, nec vulputate magna nulla at ex. Proin turpis elit, dignissim non interdum quis, fermentum id nisl. Cras pretium urna nibh, eu volutpat elit hendrerit non.\\n\\nAliquam eu neque et ante convallis malesuada. Aenean semper nulla non urna pellentesque euismod. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed at ornare urna. Nam ullamcorper lobortis porta. Aenean commodo vestibulum libero, ac pharetra velit pulvinar vitae. Curabitur non mauris at diam viverra scelerisque in vitae lacus. In hac habitasse platea dictumst. Nulla sed pharetra arcu. Phasellus vitae interdum dolor. Pellentesque.\",\n    \"recommendations\": \"Integer tempus sapien et tempus gravida. Nunc id augue magna. Aliquam malesuada dapibus ligula tristique pharetra. Aenean feugiat felis pretium, auctor justo ac, lacinia quam. Phasellus tempus fermentum elit eget suscipit. Sed vitae lacinia elit. Praesent quis nisl elementum, consectetur sapien eget, cursus lectus. Duis posuere est at ligula accumsan.\",\n    \"keyInference\": \"Proin nec nibh ut dui fringilla feugiat. Integer aliquet felis.\"\n  },\n  {\n    \"clientId\": 3,\n    \"complaints\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit. In in porta risus. Maecenas nec mattis purus. Duis vel mauris vitae ex vestibulum vestibulum at sed ligula. Nunc eu maximus magna, euismod suscipit turpis. Nulla et leo rutrum, aliquet eros vel, dignissim metus. Suspendisse porta, tortor ut volutpat vestibulum, urna elit convallis nibh, nec imperdiet turpis ante vel lectus. Curabitur blandit, orci at varius aliquam, ante purus suscipit ligula, sed gravida felis neque ut nisi. Sed non sapien mi. Nam at mauris nibh. Ut a rutrum orci, a porttitor erat. Sed consectetur est sit amet lacus ultricies, in scelerisque nisi porttitor.\",\n    \"observations\": \"Suspendisse eu lacus ligula. Morbi et placerat risus, a fermentum tortor. Donec dictum massa nec velit aliquam, quis commodo enim lobortis. Aenean ac pretium erat. Morbi vulputate eros vitae risus placerat, eget aliquet ligula ultrices. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Pellentesque tincidunt lacinia laoreet. Quisque purus augue, feugiat id venenatis vel, placerat sit amet tortor. Vestibulum vel dolor ultrices, volutpat quam vel, scelerisque dolor. Etiam porttitor commodo augue, quis fringilla ipsum ultrices non. Duis ac magna eget lorem aliquet pharetra nec nec lacus. Nam molestie porttitor erat, ultrices egestas metus consequat eget. Quisque posuere, dui congue posuere sollicitudin, nisl velit fermentum sem, nec vulputate magna nulla at ex. Proin turpis elit, dignissim non interdum quis, fermentum id nisl. Cras pretium urna nibh, eu volutpat elit hendrerit non.\\n\\nAliquam eu neque et ante convallis malesuada. Aenean semper nulla non urna pellentesque euismod. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed at ornare urna. Nam ullamcorper lobortis porta. Aenean commodo vestibulum libero, ac pharetra velit pulvinar vitae. Curabitur non mauris at diam viverra scelerisque in vitae lacus. In hac habitasse platea dictumst. Nulla sed pharetra arcu. Phasellus vitae interdum dolor. Pellentesque.\",\n    \"recommendations\": \"Integer tempus sapien et tempus gravida. Nunc id augue magna. Aliquam malesuada dapibus ligula tristique pharetra. Aenean feugiat felis pretium, auctor justo ac, lacinia quam. Phasellus tempus fermentum elit eget suscipit. Sed vitae lacinia elit. Praesent quis nisl elementum, consectetur sapien eget, cursus lectus. Duis posuere est at ligula accumsan.\",\n    \"keyInference\": \"Proin nec nibh ut dui fringilla feugiat. Integer aliquet felis.\"\n  },\n  {\n    \"clientId\": 4,\n    \"complaints\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit. In in porta risus. Maecenas nec mattis purus. Duis vel mauris vitae ex vestibulum vestibulum at sed ligula. Nunc eu maximus magna, euismod suscipit turpis. Nulla et leo rutrum, aliquet eros vel, dignissim metus. Suspendisse porta, tortor ut volutpat vestibulum, urna elit convallis nibh, nec imperdiet turpis ante vel lectus. Curabitur blandit, orci at varius aliquam, ante purus suscipit ligula, sed gravida felis neque ut nisi. Sed non sapien mi. Nam at mauris nibh. Ut a rutrum orci, a porttitor erat. Sed consectetur est sit amet lacus ultricies, in scelerisque nisi porttitor.\",\n    \"observations\": \"Suspendisse eu lacus ligula. Morbi et placerat risus, a fermentum tortor. Donec dictum massa nec velit aliquam, quis commodo enim lobortis. Aenean ac pretium erat. Morbi vulputate eros vitae risus placerat, eget aliquet ligula ultrices. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Pellentesque tincidunt lacinia laoreet. Quisque purus augue, feugiat id venenatis vel, placerat sit amet tortor. Vestibulum vel dolor ultrices, volutpat quam vel, scelerisque dolor. Etiam porttitor commodo augue, quis fringilla ipsum ultrices non. Duis ac magna eget lorem aliquet pharetra nec nec lacus. Nam molestie porttitor erat, ultrices egestas metus consequat eget. Quisque posuere, dui congue posuere sollicitudin, nisl velit fermentum sem, nec vulputate magna nulla at ex. Proin turpis elit, dignissim non interdum quis, fermentum id nisl. Cras pretium urna nibh, eu volutpat elit hendrerit non.\\n\\nAliquam eu neque et ante convallis malesuada. Aenean semper nulla non urna pellentesque euismod. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed at ornare urna. Nam ullamcorper lobortis porta. Aenean commodo vestibulum libero, ac pharetra velit pulvinar vitae. Curabitur non mauris at diam viverra scelerisque in vitae lacus. In hac habitasse platea dictumst. Nulla sed pharetra arcu. Phasellus vitae interdum dolor. Pellentesque.\",\n    \"recommendations\": \"Integer tempus sapien et tempus gravida. Nunc id augue magna. Aliquam malesuada dapibus ligula tristique pharetra. Aenean feugiat felis pretium, auctor justo ac, lacinia quam. Phasellus tempus fermentum elit eget suscipit. Sed vitae lacinia elit. Praesent quis nisl elementum, consectetur sapien eget, cursus lectus. Duis posuere est at ligula accumsan.\",\n    \"keyInference\": \"Proin nec nibh ut dui fringilla feugiat. Integer aliquet felis.\"\n  },\n  {\n    \"clientId\": 4,\n    \"complaints\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit. In in porta risus. Maecenas nec mattis purus. Duis vel mauris vitae ex vestibulum vestibulum at sed ligula. Nunc eu maximus magna, euismod suscipit turpis. Nulla et leo rutrum, aliquet eros vel, dignissim metus. Suspendisse porta, tortor ut volutpat vestibulum, urna elit convallis nibh, nec imperdiet turpis ante vel lectus. Curabitur blandit, orci at varius aliquam, ante purus suscipit ligula, sed gravida felis neque ut nisi. Sed non sapien mi. Nam at mauris nibh. Ut a rutrum orci, a porttitor erat. Sed consectetur est sit amet lacus ultricies, in scelerisque nisi porttitor.\",\n    \"observations\": \"Suspendisse eu lacus ligula. Morbi et placerat risus, a fermentum tortor. Donec dictum massa nec velit aliquam, quis commodo enim lobortis. Aenean ac pretium erat. Morbi vulputate eros vitae risus placerat, eget aliquet ligula ultrices. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Pellentesque tincidunt lacinia laoreet. Quisque purus augue, feugiat id venenatis vel, placerat sit amet tortor. Vestibulum vel dolor ultrices, volutpat quam vel, scelerisque dolor. Etiam porttitor commodo augue, quis fringilla ipsum ultrices non. Duis ac magna eget lorem aliquet pharetra nec nec lacus. Nam molestie porttitor erat, ultrices egestas metus consequat eget. Quisque posuere, dui congue posuere sollicitudin, nisl velit fermentum sem, nec vulputate magna nulla at ex. Proin turpis elit, dignissim non interdum quis, fermentum id nisl. Cras pretium urna nibh, eu volutpat elit hendrerit non.\\n\\nAliquam eu neque et ante convallis malesuada. Aenean semper nulla non urna pellentesque euismod. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed at ornare urna. Nam ullamcorper lobortis porta. Aenean commodo vestibulum libero, ac pharetra velit pulvinar vitae. Curabitur non mauris at diam viverra scelerisque in vitae lacus. In hac habitasse platea dictumst. Nulla sed pharetra arcu. Phasellus vitae interdum dolor. Pellentesque.\",\n    \"recommendations\": \"Integer tempus sapien et tempus gravida. Nunc id augue magna. Aliquam malesuada dapibus ligula tristique pharetra. Aenean feugiat felis pretium, auctor justo ac, lacinia quam. Phasellus tempus fermentum elit eget suscipit. Sed vitae lacinia elit. Praesent quis nisl elementum, consectetur sapien eget, cursus lectus. Duis posuere est at ligula accumsan.\",\n    \"keyInference\": \"Proin nec nibh ut dui fringilla feugiat. Integer aliquet felis.\"\n  },\n  {\n    \"clientId\": 4,\n    \"complaints\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit. In in porta risus. Maecenas nec mattis purus. Duis vel mauris vitae ex vestibulum vestibulum at sed ligula. Nunc eu maximus magna, euismod suscipit turpis. Nulla et leo rutrum, aliquet eros vel, dignissim metus. Suspendisse porta, tortor ut volutpat vestibulum, urna elit convallis nibh, nec imperdiet turpis ante vel lectus. Curabitur blandit, orci at varius aliquam, ante purus suscipit ligula, sed gravida felis neque ut nisi. Sed non sapien mi. Nam at mauris nibh. Ut a rutrum orci, a porttitor erat. Sed consectetur est sit amet lacus ultricies, in scelerisque nisi porttitor.\",\n    \"observations\": \"Suspendisse eu lacus ligula. Morbi et placerat risus, a fermentum tortor. Donec dictum massa nec velit aliquam, quis commodo enim lobortis. Aenean ac pretium erat. Morbi vulputate eros vitae risus placerat, eget aliquet ligula ultrices. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Pellentesque tincidunt lacinia laoreet. Quisque purus augue, feugiat id venenatis vel, placerat sit amet tortor. Vestibulum vel dolor ultrices, volutpat quam vel, scelerisque dolor. Etiam porttitor commodo augue, quis fringilla ipsum ultrices non. Duis ac magna eget lorem aliquet pharetra nec nec lacus. Nam molestie porttitor erat, ultrices egestas metus consequat eget. Quisque posuere, dui congue posuere sollicitudin, nisl velit fermentum sem, nec vulputate magna nulla at ex. Proin turpis elit, dignissim non interdum quis, fermentum id nisl. Cras pretium urna nibh, eu volutpat elit hendrerit non.\\n\\nAliquam eu neque et ante convallis malesuada. Aenean semper nulla non urna pellentesque euismod. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed at ornare urna. Nam ullamcorper lobortis porta. Aenean commodo vestibulum libero, ac pharetra velit pulvinar vitae. Curabitur non mauris at diam viverra scelerisque in vitae lacus. In hac habitasse platea dictumst. Nulla sed pharetra arcu. Phasellus vitae interdum dolor. Pellentesque.\",\n    \"recommendations\": \"Integer tempus sapien et tempus gravida. Nunc id augue magna. Aliquam malesuada dapibus ligula tristique pharetra. Aenean feugiat felis pretium, auctor justo ac, lacinia quam. Phasellus tempus fermentum elit eget suscipit. Sed vitae lacinia elit. Praesent quis nisl elementum, consectetur sapien eget, cursus lectus. Duis posuere est at ligula accumsan.\",\n    \"keyInference\": \"Proin nec nibh ut dui fringilla feugiat. Integer aliquet felis.\"\n  },\n  {\n    \"clientId\": 5,\n    \"complaints\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit. In in porta risus. Maecenas nec mattis purus. Duis vel mauris vitae ex vestibulum vestibulum at sed ligula. Nunc eu maximus magna, euismod suscipit turpis. Nulla et leo rutrum, aliquet eros vel, dignissim metus. Suspendisse porta, tortor ut volutpat vestibulum, urna elit convallis nibh, nec imperdiet turpis ante vel lectus. Curabitur blandit, orci at varius aliquam, ante purus suscipit ligula, sed gravida felis neque ut nisi. Sed non sapien mi. Nam at mauris nibh. Ut a rutrum orci, a porttitor erat. Sed consectetur est sit amet lacus ultricies, in scelerisque nisi porttitor.\",\n    \"observations\": \"Suspendisse eu lacus ligula. Morbi et placerat risus, a fermentum tortor. Donec dictum massa nec velit aliquam, quis commodo enim lobortis. Aenean ac pretium erat. Morbi vulputate eros vitae risus placerat, eget aliquet ligula ultrices. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Pellentesque tincidunt lacinia laoreet. Quisque purus augue, feugiat id venenatis vel, placerat sit amet tortor. Vestibulum vel dolor ultrices, volutpat quam vel, scelerisque dolor. Etiam porttitor commodo augue, quis fringilla ipsum ultrices non. Duis ac magna eget lorem aliquet pharetra nec nec lacus. Nam molestie porttitor erat, ultrices egestas metus consequat eget. Quisque posuere, dui congue posuere sollicitudin, nisl velit fermentum sem, nec vulputate magna nulla at ex. Proin turpis elit, dignissim non interdum quis, fermentum id nisl. Cras pretium urna nibh, eu volutpat elit hendrerit non.\\n\\nAliquam eu neque et ante convallis malesuada. Aenean semper nulla non urna pellentesque euismod. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed at ornare urna. Nam ullamcorper lobortis porta. Aenean commodo vestibulum libero, ac pharetra velit pulvinar vitae. Curabitur non mauris at diam viverra scelerisque in vitae lacus. In hac habitasse platea dictumst. Nulla sed pharetra arcu. Phasellus vitae interdum dolor. Pellentesque.\",\n    \"recommendations\": \"Integer tempus sapien et tempus gravida. Nunc id augue magna. Aliquam malesuada dapibus ligula tristique pharetra. Aenean feugiat felis pretium, auctor justo ac, lacinia quam. Phasellus tempus fermentum elit eget suscipit. Sed vitae lacinia elit. Praesent quis nisl elementum, consectetur sapien eget, cursus lectus. Duis posuere est at ligula accumsan.\",\n    \"keyInference\": \"Proin nec nibh ut dui fringilla feugiat. Integer aliquet felis.\"\n  },\n  {\n    \"clientId\": 6,\n    \"complaints\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit. In in porta risus. Maecenas nec mattis purus. Duis vel mauris vitae ex vestibulum vestibulum at sed ligula. Nunc eu maximus magna, euismod suscipit turpis. Nulla et leo rutrum, aliquet eros vel, dignissim metus. Suspendisse porta, tortor ut volutpat vestibulum, urna elit convallis nibh, nec imperdiet turpis ante vel lectus. Curabitur blandit, orci at varius aliquam, ante purus suscipit ligula, sed gravida felis neque ut nisi. Sed non sapien mi. Nam at mauris nibh. Ut a rutrum orci, a porttitor erat. Sed consectetur est sit amet lacus ultricies, in scelerisque nisi porttitor.\",\n    \"observations\": \"Suspendisse eu lacus ligula. Morbi et placerat risus, a fermentum tortor. Donec dictum massa nec velit aliquam, quis commodo enim lobortis. Aenean ac pretium erat. Morbi vulputate eros vitae risus placerat, eget aliquet ligula ultrices. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Pellentesque tincidunt lacinia laoreet. Quisque purus augue, feugiat id venenatis vel, placerat sit amet tortor. Vestibulum vel dolor ultrices, volutpat quam vel, scelerisque dolor. Etiam porttitor commodo augue, quis fringilla ipsum ultrices non. Duis ac magna eget lorem aliquet pharetra nec nec lacus. Nam molestie porttitor erat, ultrices egestas metus consequat eget. Quisque posuere, dui congue posuere sollicitudin, nisl velit fermentum sem, nec vulputate magna nulla at ex. Proin turpis elit, dignissim non interdum quis, fermentum id nisl. Cras pretium urna nibh, eu volutpat elit hendrerit non.\\n\\nAliquam eu neque et ante convallis malesuada. Aenean semper nulla non urna pellentesque euismod. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed at ornare urna. Nam ullamcorper lobortis porta. Aenean commodo vestibulum libero, ac pharetra velit pulvinar vitae. Curabitur non mauris at diam viverra scelerisque in vitae lacus. In hac habitasse platea dictumst. Nulla sed pharetra arcu. Phasellus vitae interdum dolor. Pellentesque.\",\n    \"recommendations\": \"Integer tempus sapien et tempus gravida. Nunc id augue magna. Aliquam malesuada dapibus ligula tristique pharetra. Aenean feugiat felis pretium, auctor justo ac, lacinia quam. Phasellus tempus fermentum elit eget suscipit. Sed vitae lacinia elit. Praesent quis nisl elementum, consectetur sapien eget, cursus lectus. Duis posuere est at ligula accumsan.\",\n    \"keyInference\": \"Proin nec nibh ut dui fringilla feugiat. Integer aliquet felis.\"\n  },\n  {\n    \"clientId\": 7,\n    \"complaints\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit. In in porta risus. Maecenas nec mattis purus. Duis vel mauris vitae ex vestibulum vestibulum at sed ligula. Nunc eu maximus magna, euismod suscipit turpis. Nulla et leo rutrum, aliquet eros vel, dignissim metus. Suspendisse porta, tortor ut volutpat vestibulum, urna elit convallis nibh, nec imperdiet turpis ante vel lectus. Curabitur blandit, orci at varius aliquam, ante purus suscipit ligula, sed gravida felis neque ut nisi. Sed non sapien mi. Nam at mauris nibh. Ut a rutrum orci, a porttitor erat. Sed consectetur est sit amet lacus ultricies, in scelerisque nisi porttitor.\",\n    \"observations\": \"Suspendisse eu lacus ligula. Morbi et placerat risus, a fermentum tortor. Donec dictum massa nec velit aliquam, quis commodo enim lobortis. Aenean ac pretium erat. Morbi vulputate eros vitae risus placerat, eget aliquet ligula ultrices. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Pellentesque tincidunt lacinia laoreet. Quisque purus augue, feugiat id venenatis vel, placerat sit amet tortor. Vestibulum vel dolor ultrices, volutpat quam vel, scelerisque dolor. Etiam porttitor commodo augue, quis fringilla ipsum ultrices non. Duis ac magna eget lorem aliquet pharetra nec nec lacus. Nam molestie porttitor erat, ultrices egestas metus consequat eget. Quisque posuere, dui congue posuere sollicitudin, nisl velit fermentum sem, nec vulputate magna nulla at ex. Proin turpis elit, dignissim non interdum quis, fermentum id nisl. Cras pretium urna nibh, eu volutpat elit hendrerit non.\\n\\nAliquam eu neque et ante convallis malesuada. Aenean semper nulla non urna pellentesque euismod. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed at ornare urna. Nam ullamcorper lobortis porta. Aenean commodo vestibulum libero, ac pharetra velit pulvinar vitae. Curabitur non mauris at diam viverra scelerisque in vitae lacus. In hac habitasse platea dictumst. Nulla sed pharetra arcu. Phasellus vitae interdum dolor. Pellentesque.\",\n    \"recommendations\": \"Integer tempus sapien et tempus gravida. Nunc id augue magna. Aliquam malesuada dapibus ligula tristique pharetra. Aenean feugiat felis pretium, auctor justo ac, lacinia quam. Phasellus tempus fermentum elit eget suscipit. Sed vitae lacinia elit. Praesent quis nisl elementum, consectetur sapien eget, cursus lectus. Duis posuere est at ligula accumsan.\",\n    \"keyInference\": \"Proin nec nibh ut dui fringilla feugiat. Integer aliquet felis.\"\n  },\n  {\n    \"clientId\": 8,\n    \"complaints\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit. In in porta risus. Maecenas nec mattis purus. Duis vel mauris vitae ex vestibulum vestibulum at sed ligula. Nunc eu maximus magna, euismod suscipit turpis. Nulla et leo rutrum, aliquet eros vel, dignissim metus. Suspendisse porta, tortor ut volutpat vestibulum, urna elit convallis nibh, nec imperdiet turpis ante vel lectus. Curabitur blandit, orci at varius aliquam, ante purus suscipit ligula, sed gravida felis neque ut nisi. Sed non sapien mi. Nam at mauris nibh. Ut a rutrum orci, a porttitor erat. Sed consectetur est sit amet lacus ultricies, in scelerisque nisi porttitor.\",\n    \"observations\": \"Suspendisse eu lacus ligula. Morbi et placerat risus, a fermentum tortor. Donec dictum massa nec velit aliquam, quis commodo enim lobortis. Aenean ac pretium erat. Morbi vulputate eros vitae risus placerat, eget aliquet ligula ultrices. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Pellentesque tincidunt lacinia laoreet. Quisque purus augue, feugiat id venenatis vel, placerat sit amet tortor. Vestibulum vel dolor ultrices, volutpat quam vel, scelerisque dolor. Etiam porttitor commodo augue, quis fringilla ipsum ultrices non. Duis ac magna eget lorem aliquet pharetra nec nec lacus. Nam molestie porttitor erat, ultrices egestas metus consequat eget. Quisque posuere, dui congue posuere sollicitudin, nisl velit fermentum sem, nec vulputate magna nulla at ex. Proin turpis elit, dignissim non interdum quis, fermentum id nisl. Cras pretium urna nibh, eu volutpat elit hendrerit non.\\n\\nAliquam eu neque et ante convallis malesuada. Aenean semper nulla non urna pellentesque euismod. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed at ornare urna. Nam ullamcorper lobortis porta. Aenean commodo vestibulum libero, ac pharetra velit pulvinar vitae. Curabitur non mauris at diam viverra scelerisque in vitae lacus. In hac habitasse platea dictumst. Nulla sed pharetra arcu. Phasellus vitae interdum dolor. Pellentesque.\",\n    \"recommendations\": \"Integer tempus sapien et tempus gravida. Nunc id augue magna. Aliquam malesuada dapibus ligula tristique pharetra. Aenean feugiat felis pretium, auctor justo ac, lacinia quam. Phasellus tempus fermentum elit eget suscipit. Sed vitae lacinia elit. Praesent quis nisl elementum, consectetur sapien eget, cursus lectus. Duis posuere est at ligula accumsan.\",\n    \"keyInference\": \"Proin nec nibh ut dui fringilla feugiat. Integer aliquet felis.\"\n  },\n  {\n    \"clientId\": 9,\n    \"complaints\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit. In in porta risus. Maecenas nec mattis purus. Duis vel mauris vitae ex vestibulum vestibulum at sed ligula. Nunc eu maximus magna, euismod suscipit turpis. Nulla et leo rutrum, aliquet eros vel, dignissim metus. Suspendisse porta, tortor ut volutpat vestibulum, urna elit convallis nibh, nec imperdiet turpis ante vel lectus. Curabitur blandit, orci at varius aliquam, ante purus suscipit ligula, sed gravida felis neque ut nisi. Sed non sapien mi. Nam at mauris nibh. Ut a rutrum orci, a porttitor erat. Sed consectetur est sit amet lacus ultricies, in scelerisque nisi porttitor.\",\n    \"observations\": \"Suspendisse eu lacus ligula. Morbi et placerat risus, a fermentum tortor. Donec dictum massa nec velit aliquam, quis commodo enim lobortis. Aenean ac pretium erat. Morbi vulputate eros vitae risus placerat, eget aliquet ligula ultrices. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Pellentesque tincidunt lacinia laoreet. Quisque purus augue, feugiat id venenatis vel, placerat sit amet tortor. Vestibulum vel dolor ultrices, volutpat quam vel, scelerisque dolor. Etiam porttitor commodo augue, quis fringilla ipsum ultrices non. Duis ac magna eget lorem aliquet pharetra nec nec lacus. Nam molestie porttitor erat, ultrices egestas metus consequat eget. Quisque posuere, dui congue posuere sollicitudin, nisl velit fermentum sem, nec vulputate magna nulla at ex. Proin turpis elit, dignissim non interdum quis, fermentum id nisl. Cras pretium urna nibh, eu volutpat elit hendrerit non.\\n\\nAliquam eu neque et ante convallis malesuada. Aenean semper nulla non urna pellentesque euismod. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed at ornare urna. Nam ullamcorper lobortis porta. Aenean commodo vestibulum libero, ac pharetra velit pulvinar vitae. Curabitur non mauris at diam viverra scelerisque in vitae lacus. In hac habitasse platea dictumst. Nulla sed pharetra arcu. Phasellus vitae interdum dolor. Pellentesque.\",\n    \"recommendations\": \"Integer tempus sapien et tempus gravida. Nunc id augue magna. Aliquam malesuada dapibus ligula tristique pharetra. Aenean feugiat felis pretium, auctor justo ac, lacinia quam. Phasellus tempus fermentum elit eget suscipit. Sed vitae lacinia elit. Praesent quis nisl elementum, consectetur sapien eget, cursus lectus. Duis posuere est at ligula accumsan.\",\n    \"keyInference\": \"Proin nec nibh ut dui fringilla feugiat. Integer aliquet felis.\"\n  },\n  {\n    \"clientId\": 10,\n    \"complaints\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit. In in porta risus. Maecenas nec mattis purus. Duis vel mauris vitae ex vestibulum vestibulum at sed ligula. Nunc eu maximus magna, euismod suscipit turpis. Nulla et leo rutrum, aliquet eros vel, dignissim metus. Suspendisse porta, tortor ut volutpat vestibulum, urna elit convallis nibh, nec imperdiet turpis ante vel lectus. Curabitur blandit, orci at varius aliquam, ante purus suscipit ligula, sed gravida felis neque ut nisi. Sed non sapien mi. Nam at mauris nibh. Ut a rutrum orci, a porttitor erat. Sed consectetur est sit amet lacus ultricies, in scelerisque nisi porttitor.\",\n    \"observations\": \"Suspendisse eu lacus ligula. Morbi et placerat risus, a fermentum tortor. Donec dictum massa nec velit aliquam, quis commodo enim lobortis. Aenean ac pretium erat. Morbi vulputate eros vitae risus placerat, eget aliquet ligula ultrices. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Pellentesque tincidunt lacinia laoreet. Quisque purus augue, feugiat id venenatis vel, placerat sit amet tortor. Vestibulum vel dolor ultrices, volutpat quam vel, scelerisque dolor. Etiam porttitor commodo augue, quis fringilla ipsum ultrices non. Duis ac magna eget lorem aliquet pharetra nec nec lacus. Nam molestie porttitor erat, ultrices egestas metus consequat eget. Quisque posuere, dui congue posuere sollicitudin, nisl velit fermentum sem, nec vulputate magna nulla at ex. Proin turpis elit, dignissim non interdum quis, fermentum id nisl. Cras pretium urna nibh, eu volutpat elit hendrerit non.\\n\\nAliquam eu neque et ante convallis malesuada. Aenean semper nulla non urna pellentesque euismod. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed at ornare urna. Nam ullamcorper lobortis porta. Aenean commodo vestibulum libero, ac pharetra velit pulvinar vitae. Curabitur non mauris at diam viverra scelerisque in vitae lacus. In hac habitasse platea dictumst. Nulla sed pharetra arcu. Phasellus vitae interdum dolor. Pellentesque.\",\n    \"recommendations\": \"Integer tempus sapien et tempus gravida. Nunc id augue magna. Aliquam malesuada dapibus ligula tristique pharetra. Aenean feugiat felis pretium, auctor justo ac, lacinia quam. Phasellus tempus fermentum elit eget suscipit. Sed vitae lacinia elit. Praesent quis nisl elementum, consectetur sapien eget, cursus lectus. Duis posuere est at ligula accumsan.\",\n    \"keyInference\": \"Proin nec nibh ut dui fringilla feugiat. Integer aliquet felis.\"\n  },\n  {\n    \"clientId\": 10,\n    \"complaints\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit. In in porta risus. Maecenas nec mattis purus. Duis vel mauris vitae ex vestibulum vestibulum at sed ligula. Nunc eu maximus magna, euismod suscipit turpis. Nulla et leo rutrum, aliquet eros vel, dignissim metus. Suspendisse porta, tortor ut volutpat vestibulum, urna elit convallis nibh, nec imperdiet turpis ante vel lectus. Curabitur blandit, orci at varius aliquam, ante purus suscipit ligula, sed gravida felis neque ut nisi. Sed non sapien mi. Nam at mauris nibh. Ut a rutrum orci, a porttitor erat. Sed consectetur est sit amet lacus ultricies, in scelerisque nisi porttitor.\",\n    \"observations\": \"Suspendisse eu lacus ligula. Morbi et placerat risus, a fermentum tortor. Donec dictum massa nec velit aliquam, quis commodo enim lobortis. Aenean ac pretium erat. Morbi vulputate eros vitae risus placerat, eget aliquet ligula ultrices. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Pellentesque tincidunt lacinia laoreet. Quisque purus augue, feugiat id venenatis vel, placerat sit amet tortor. Vestibulum vel dolor ultrices, volutpat quam vel, scelerisque dolor. Etiam porttitor commodo augue, quis fringilla ipsum ultrices non. Duis ac magna eget lorem aliquet pharetra nec nec lacus. Nam molestie porttitor erat, ultrices egestas metus consequat eget. Quisque posuere, dui congue posuere sollicitudin, nisl velit fermentum sem, nec vulputate magna nulla at ex. Proin turpis elit, dignissim non interdum quis, fermentum id nisl. Cras pretium urna nibh, eu volutpat elit hendrerit non.\\n\\nAliquam eu neque et ante convallis malesuada. Aenean semper nulla non urna pellentesque euismod. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed at ornare urna. Nam ullamcorper lobortis porta. Aenean commodo vestibulum libero, ac pharetra velit pulvinar vitae. Curabitur non mauris at diam viverra scelerisque in vitae lacus. In hac habitasse platea dictumst. Nulla sed pharetra arcu. Phasellus vitae interdum dolor. Pellentesque.\",\n    \"recommendations\": \"Integer tempus sapien et tempus gravida. Nunc id augue magna. Aliquam malesuada dapibus ligula tristique pharetra. Aenean feugiat felis pretium, auctor justo ac, lacinia quam. Phasellus tempus fermentum elit eget suscipit. Sed vitae lacinia elit. Praesent quis nisl elementum, consectetur sapien eget, cursus lectus. Duis posuere est at ligula accumsan.\",\n    \"keyInference\": \"Proin nec nibh ut dui fringilla feugiat. Integer aliquet felis.\"\n  }\n]",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_API_URL}}/consultationSessionRecords",
-							"host": [
-								"{{BASE_API_URL}}"
-							],
-							"path": [
-								"consultationSessionRecords"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Super Admin Login",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/x-www-form-urlencoded"
-							}
-						],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "email",
-									"value": "superadmin@opentele.org",
-									"type": "text"
-								},
-								{
-									"key": "password",
-									"value": "{{SUPER_ADMIN_PASSWORD}}",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/api/login",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"login"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Schedule Rooms",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_API_URL}}/test/scheduleRooms?numberOfDays=5",
-							"host": [
-								"{{BASE_API_URL}}"
-							],
-							"path": [
-								"test",
-								"scheduleRooms"
-							],
-							"query": [
-								{
-									"key": "numberOfDays",
-									"value": "5"
-								}
-							]
-						}
-					},
-					"response": []
+					"path": [
+						"organisation"
+					]
 				}
-			]
+			},
+			"response": []
+		},
+		{
+			"name": "Login by email",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "email",
+							"value": "{{EMAIL_USER}}",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "{{EMAIL_USER_PASSWORD}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/api/login",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register users",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n    {\n        \"name\": \"Yamini Dubey\",\n        \"email\": \"yaminid@example.com\",\n        \"password\": \"password\"\n    },\n    {\n        \"name\": \"Akshay Damodaran\",\n        \"email\": \"pratapm@example.com\",\n        \"password\": \"password\"\n    },\n    {\n        \"name\": \"Ishmohit Chopra\",\n        \"email\": \"ishmohitc@example.com\",\n        \"password\": \"password\"\n    },\n    {\n        \"name\": \"Nassim Shalem\",\n        \"email\": \"nassims@example.com\",\n        \"password\": \"password\"\n    },\n    {\n        \"name\": \"Chandra Jahan\",\n        \"email\": \"chandraj@example.com\",\n        \"password\": \"password\"\n    },\n    {\n        \"name\": \"Michael Harry\",\n        \"email\": \"michaelh@example.com\",\n        \"password\": \"password\"\n    },\n    {\n        \"name\": \"Balaji Hariharan\",\n        \"email\": \"balajih@example.com\",\n        \"password\": \"password\"\n    },\n    {\n        \"name\": \"Samir Vohra\",\n        \"email\": \"samirv@example.com\",\n        \"password\": \"password\"\n    },\n    {\n        \"name\": \"Vijay Shreya\",\n        \"email\": \"vijays@example.com\",\n        \"password\": \"password\"\n    },\n    {\n        \"name\": \"P Harinath\",\n        \"email\": \"ph@example.com\",\n        \"password\": \"password\"\n    }\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_API_URL}}/users",
+					"host": [
+						"{{BASE_API_URL}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Users to Organisation",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n    {\n        \"id\": 4,\n        \"providerType\": \"Usher\",\n        \"userType\": \"User\"\n    },\n    {\n        \"id\": 5,\n        \"providerType\": \"Consultant\",\n        \"userType\": \"User\"\n    },\n        {\n        \"id\": 5,\n        \"providerType\": \"Usher\",\n        \"userType\": \"User\"\n    },\n    {\n        \"id\": 6,\n        \"providerType\": \"Consultant\",\n        \"userType\": \"User\"\n    },\n    {\n        \"id\": 7,\n        \"providerType\": \"Usher\",\n        \"userType\": \"User\"\n    },\n    {\n        \"id\": 8,\n        \"providerType\": \"Consultant\",\n        \"userType\": \"User\"\n    },\n        {\n        \"id\": 9,\n        \"providerType\": \"Usher\",\n        \"userType\": \"User\"\n    },\n    {\n        \"id\": 10,\n        \"providerType\": \"Usher\",\n        \"userType\": \"User\"\n    }\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_API_URL}}/organisationUsers",
+					"host": [
+						"{{BASE_API_URL}}"
+					],
+					"path": [
+						"organisationUsers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Consultation Room Schedule",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const x = require('moment')().subtract(1, 'days');",
+							"const date = `[${x.year()},${x.month()+1},${x.date()}]`;",
+							"pm.collectionVariables.set('currentdate', date);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n    {\n        \"title\": \"TB Clinic\",\n        \"totalSlots\": 10,\n        \"providers\": [3,4],\n        \"recurrenceRule\": \"FREQ=WEEKLY;INTERVAL=1;BYDAY=MO,TU,WE,TH,FR,SA,SU\",\n        \"startTime\": [11,0],\n        \"endTime\": [16,0],\n        \"startDate\": {{currentdate}}\n    },\n    {\n        \"title\": \"Mental Health Consultations\",\n        \"totalSlots\": 20,\n        \"providers\": [4,5,6,7],\n        \"recurrenceRule\": \"FREQ=WEEKLY;INTERVAL=1;BYDAY=MO,FR,SA,SU\",\n        \"startTime\": [12,0],\n        \"endTime\": [17,0],\n        \"startDate\": {{currentdate}}\n    },\n    {\n        \"title\": \"General Consultations\",\n        \"totalSlots\": 20,\n        \"providers\": [3,7,9,10],\n        \"recurrenceRule\": \"FREQ=WEEKLY;INTERVAL=1;BYDAY=MO,FR\",\n        \"startTime\": [12,0],\n        \"endTime\": [19,0],\n        \"startDate\": {{currentdate}}\n    }\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_API_URL}}/consultationRoomSchedules",
+					"host": [
+						"{{BASE_API_URL}}"
+					],
+					"path": [
+						"consultationRoomSchedules"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Clients",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n  {\n    \"name\": \"Vivek Gagrani\",\n    \"gender\": \"Male\",\n    \"dateOfBirth\": \"2000-01-03\",\n    \"registrationNumber\": 20021\n  },\n  {\n    \"name\": \"Sid Narayanan\",\n    \"gender\": \"Male\",\n    \"dateOfBirth\": \"2000-10-03\",\n    \"registrationNumber\": 20022\n  },\n  {\n    \"name\": \"Mukul De\",\n    \"gender\": \"Male\",\n    \"dateOfBirth\": \"2002-01-03\",\n    \"registrationNumber\": 20023\n  },\n  {\n    \"name\": \"Himani Saran\",\n    \"gender\": \"Female\",\n    \"dateOfBirth\": \"2010-11-03\",\n    \"registrationNumber\": 20024\n  },\n  {\n    \"name\": \"Savita Persaud\",\n    \"gender\": \"Female\",\n    \"dateOfBirth\": \"1987-01-01\",\n    \"registrationNumber\": 20025\n  },\n  {\n    \"name\": \"Kirti Dixit\",\n    \"gender\": \"Female\",\n    \"dateOfBirth\": \"1967-01-03\",\n    \"registrationNumber\": 20026\n  },\n  {\n    \"name\": \"Tabeed Raja\",\n    \"gender\": \"Male\",\n    \"dateOfBirth\": \"1987-01-03\",\n    \"registrationNumber\": 20027\n  },\n  {\n    \"name\": \"Moti Sangha\",\n    \"gender\": \"Other\",\n    \"dateOfBirth\": \"1967-01-03\",\n    \"registrationNumber\": 20028\n  },\n  {\n    \"name\": \"Riya Bajwa\",\n    \"gender\": \"Female\",\n    \"dateOfBirth\": \"1935-01-03\",\n    \"registrationNumber\": 20029\n  },\n  {\n    \"name\": \"Aditya Pillay\",\n    \"gender\": \"Male\",\n    \"dateOfBirth\": \"1948-01-03\",\n    \"registrationNumber\": 20030\n  }\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_API_URL}}/clients",
+					"host": [
+						"{{BASE_API_URL}}"
+					],
+					"path": [
+						"clients"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Consultation Session Records",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n  {\n    \"clientId\": 1,\n    \"complaints\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit. In in porta risus. Maecenas nec mattis purus. Duis vel mauris vitae ex vestibulum vestibulum at sed ligula. Nunc eu maximus magna, euismod suscipit turpis. Nulla et leo rutrum, aliquet eros vel, dignissim metus. Suspendisse porta, tortor ut volutpat vestibulum, urna elit convallis nibh, nec imperdiet turpis ante vel lectus. Curabitur blandit, orci at varius aliquam, ante purus suscipit ligula, sed gravida felis neque ut nisi. Sed non sapien mi. Nam at mauris nibh. Ut a rutrum orci, a porttitor erat. Sed consectetur est sit amet lacus ultricies, in scelerisque nisi porttitor.\",\n    \"observations\": \"Suspendisse eu lacus ligula. Morbi et placerat risus, a fermentum tortor. Donec dictum massa nec velit aliquam, quis commodo enim lobortis. Aenean ac pretium erat. Morbi vulputate eros vitae risus placerat, eget aliquet ligula ultrices. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Pellentesque tincidunt lacinia laoreet. Quisque purus augue, feugiat id venenatis vel, placerat sit amet tortor. Vestibulum vel dolor ultrices, volutpat quam vel, scelerisque dolor. Etiam porttitor commodo augue, quis fringilla ipsum ultrices non. Duis ac magna eget lorem aliquet pharetra nec nec lacus. Nam molestie porttitor erat, ultrices egestas metus consequat eget. Quisque posuere, dui congue posuere sollicitudin, nisl velit fermentum sem, nec vulputate magna nulla at ex. Proin turpis elit, dignissim non interdum quis, fermentum id nisl. Cras pretium urna nibh, eu volutpat elit hendrerit non.\\n\\nAliquam eu neque et ante convallis malesuada. Aenean semper nulla non urna pellentesque euismod. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed at ornare urna. Nam ullamcorper lobortis porta. Aenean commodo vestibulum libero, ac pharetra velit pulvinar vitae. Curabitur non mauris at diam viverra scelerisque in vitae lacus. In hac habitasse platea dictumst. Nulla sed pharetra arcu. Phasellus vitae interdum dolor. Pellentesque.\",\n    \"recommendations\": \"Integer tempus sapien et tempus gravida. Nunc id augue magna. Aliquam malesuada dapibus ligula tristique pharetra. Aenean feugiat felis pretium, auctor justo ac, lacinia quam. Phasellus tempus fermentum elit eget suscipit. Sed vitae lacinia elit. Praesent quis nisl elementum, consectetur sapien eget, cursus lectus. Duis posuere est at ligula accumsan.\",\n    \"keyInference\": \"Proin nec nibh ut dui fringilla feugiat. Integer aliquet felis.\"\n  },\n  {\n    \"clientId\": 1,\n    \"complaints\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit. In in porta risus. Maecenas nec mattis purus. Duis vel mauris vitae ex vestibulum vestibulum at sed ligula. Nunc eu maximus magna, euismod suscipit turpis. Nulla et leo rutrum, aliquet eros vel, dignissim metus. Suspendisse porta, tortor ut volutpat vestibulum, urna elit convallis nibh, nec imperdiet turpis ante vel lectus. Curabitur blandit, orci at varius aliquam, ante purus suscipit ligula, sed gravida felis neque ut nisi. Sed non sapien mi. Nam at mauris nibh. Ut a rutrum orci, a porttitor erat. Sed consectetur est sit amet lacus ultricies, in scelerisque nisi porttitor.\",\n    \"observations\": \"Suspendisse eu lacus ligula. Morbi et placerat risus, a fermentum tortor. Donec dictum massa nec velit aliquam, quis commodo enim lobortis. Aenean ac pretium erat. Morbi vulputate eros vitae risus placerat, eget aliquet ligula ultrices. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Pellentesque tincidunt lacinia laoreet. Quisque purus augue, feugiat id venenatis vel, placerat sit amet tortor. Vestibulum vel dolor ultrices, volutpat quam vel, scelerisque dolor. Etiam porttitor commodo augue, quis fringilla ipsum ultrices non. Duis ac magna eget lorem aliquet pharetra nec nec lacus. Nam molestie porttitor erat, ultrices egestas metus consequat eget. Quisque posuere, dui congue posuere sollicitudin, nisl velit fermentum sem, nec vulputate magna nulla at ex. Proin turpis elit, dignissim non interdum quis, fermentum id nisl. Cras pretium urna nibh, eu volutpat elit hendrerit non.\\n\\nAliquam eu neque et ante convallis malesuada. Aenean semper nulla non urna pellentesque euismod. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed at ornare urna. Nam ullamcorper lobortis porta. Aenean commodo vestibulum libero, ac pharetra velit pulvinar vitae. Curabitur non mauris at diam viverra scelerisque in vitae lacus. In hac habitasse platea dictumst. Nulla sed pharetra arcu. Phasellus vitae interdum dolor. Pellentesque.\",\n    \"recommendations\": \"Integer tempus sapien et tempus gravida. Nunc id augue magna. Aliquam malesuada dapibus ligula tristique pharetra. Aenean feugiat felis pretium, auctor justo ac, lacinia quam. Phasellus tempus fermentum elit eget suscipit. Sed vitae lacinia elit. Praesent quis nisl elementum, consectetur sapien eget, cursus lectus. Duis posuere est at ligula accumsan.\",\n    \"keyInference\": \"Proin nec nibh ut dui fringilla feugiat. Integer aliquet felis.\"\n  },\n  {\n    \"clientId\": 2,\n    \"complaints\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit. In in porta risus. Maecenas nec mattis purus. Duis vel mauris vitae ex vestibulum vestibulum at sed ligula. Nunc eu maximus magna, euismod suscipit turpis. Nulla et leo rutrum, aliquet eros vel, dignissim metus. Suspendisse porta, tortor ut volutpat vestibulum, urna elit convallis nibh, nec imperdiet turpis ante vel lectus. Curabitur blandit, orci at varius aliquam, ante purus suscipit ligula, sed gravida felis neque ut nisi. Sed non sapien mi. Nam at mauris nibh. Ut a rutrum orci, a porttitor erat. Sed consectetur est sit amet lacus ultricies, in scelerisque nisi porttitor.\",\n    \"observations\": \"Suspendisse eu lacus ligula. Morbi et placerat risus, a fermentum tortor. Donec dictum massa nec velit aliquam, quis commodo enim lobortis. Aenean ac pretium erat. Morbi vulputate eros vitae risus placerat, eget aliquet ligula ultrices. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Pellentesque tincidunt lacinia laoreet. Quisque purus augue, feugiat id venenatis vel, placerat sit amet tortor. Vestibulum vel dolor ultrices, volutpat quam vel, scelerisque dolor. Etiam porttitor commodo augue, quis fringilla ipsum ultrices non. Duis ac magna eget lorem aliquet pharetra nec nec lacus. Nam molestie porttitor erat, ultrices egestas metus consequat eget. Quisque posuere, dui congue posuere sollicitudin, nisl velit fermentum sem, nec vulputate magna nulla at ex. Proin turpis elit, dignissim non interdum quis, fermentum id nisl. Cras pretium urna nibh, eu volutpat elit hendrerit non.\\n\\nAliquam eu neque et ante convallis malesuada. Aenean semper nulla non urna pellentesque euismod. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed at ornare urna. Nam ullamcorper lobortis porta. Aenean commodo vestibulum libero, ac pharetra velit pulvinar vitae. Curabitur non mauris at diam viverra scelerisque in vitae lacus. In hac habitasse platea dictumst. Nulla sed pharetra arcu. Phasellus vitae interdum dolor. Pellentesque.\",\n    \"recommendations\": \"Integer tempus sapien et tempus gravida. Nunc id augue magna. Aliquam malesuada dapibus ligula tristique pharetra. Aenean feugiat felis pretium, auctor justo ac, lacinia quam. Phasellus tempus fermentum elit eget suscipit. Sed vitae lacinia elit. Praesent quis nisl elementum, consectetur sapien eget, cursus lectus. Duis posuere est at ligula accumsan.\",\n    \"keyInference\": \"Proin nec nibh ut dui fringilla feugiat. Integer aliquet felis.\"\n  },\n  {\n    \"clientId\": 3,\n    \"complaints\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit. In in porta risus. Maecenas nec mattis purus. Duis vel mauris vitae ex vestibulum vestibulum at sed ligula. Nunc eu maximus magna, euismod suscipit turpis. Nulla et leo rutrum, aliquet eros vel, dignissim metus. Suspendisse porta, tortor ut volutpat vestibulum, urna elit convallis nibh, nec imperdiet turpis ante vel lectus. Curabitur blandit, orci at varius aliquam, ante purus suscipit ligula, sed gravida felis neque ut nisi. Sed non sapien mi. Nam at mauris nibh. Ut a rutrum orci, a porttitor erat. Sed consectetur est sit amet lacus ultricies, in scelerisque nisi porttitor.\",\n    \"observations\": \"Suspendisse eu lacus ligula. Morbi et placerat risus, a fermentum tortor. Donec dictum massa nec velit aliquam, quis commodo enim lobortis. Aenean ac pretium erat. Morbi vulputate eros vitae risus placerat, eget aliquet ligula ultrices. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Pellentesque tincidunt lacinia laoreet. Quisque purus augue, feugiat id venenatis vel, placerat sit amet tortor. Vestibulum vel dolor ultrices, volutpat quam vel, scelerisque dolor. Etiam porttitor commodo augue, quis fringilla ipsum ultrices non. Duis ac magna eget lorem aliquet pharetra nec nec lacus. Nam molestie porttitor erat, ultrices egestas metus consequat eget. Quisque posuere, dui congue posuere sollicitudin, nisl velit fermentum sem, nec vulputate magna nulla at ex. Proin turpis elit, dignissim non interdum quis, fermentum id nisl. Cras pretium urna nibh, eu volutpat elit hendrerit non.\\n\\nAliquam eu neque et ante convallis malesuada. Aenean semper nulla non urna pellentesque euismod. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed at ornare urna. Nam ullamcorper lobortis porta. Aenean commodo vestibulum libero, ac pharetra velit pulvinar vitae. Curabitur non mauris at diam viverra scelerisque in vitae lacus. In hac habitasse platea dictumst. Nulla sed pharetra arcu. Phasellus vitae interdum dolor. Pellentesque.\",\n    \"recommendations\": \"Integer tempus sapien et tempus gravida. Nunc id augue magna. Aliquam malesuada dapibus ligula tristique pharetra. Aenean feugiat felis pretium, auctor justo ac, lacinia quam. Phasellus tempus fermentum elit eget suscipit. Sed vitae lacinia elit. Praesent quis nisl elementum, consectetur sapien eget, cursus lectus. Duis posuere est at ligula accumsan.\",\n    \"keyInference\": \"Proin nec nibh ut dui fringilla feugiat. Integer aliquet felis.\"\n  },\n  {\n    \"clientId\": 4,\n    \"complaints\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit. In in porta risus. Maecenas nec mattis purus. Duis vel mauris vitae ex vestibulum vestibulum at sed ligula. Nunc eu maximus magna, euismod suscipit turpis. Nulla et leo rutrum, aliquet eros vel, dignissim metus. Suspendisse porta, tortor ut volutpat vestibulum, urna elit convallis nibh, nec imperdiet turpis ante vel lectus. Curabitur blandit, orci at varius aliquam, ante purus suscipit ligula, sed gravida felis neque ut nisi. Sed non sapien mi. Nam at mauris nibh. Ut a rutrum orci, a porttitor erat. Sed consectetur est sit amet lacus ultricies, in scelerisque nisi porttitor.\",\n    \"observations\": \"Suspendisse eu lacus ligula. Morbi et placerat risus, a fermentum tortor. Donec dictum massa nec velit aliquam, quis commodo enim lobortis. Aenean ac pretium erat. Morbi vulputate eros vitae risus placerat, eget aliquet ligula ultrices. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Pellentesque tincidunt lacinia laoreet. Quisque purus augue, feugiat id venenatis vel, placerat sit amet tortor. Vestibulum vel dolor ultrices, volutpat quam vel, scelerisque dolor. Etiam porttitor commodo augue, quis fringilla ipsum ultrices non. Duis ac magna eget lorem aliquet pharetra nec nec lacus. Nam molestie porttitor erat, ultrices egestas metus consequat eget. Quisque posuere, dui congue posuere sollicitudin, nisl velit fermentum sem, nec vulputate magna nulla at ex. Proin turpis elit, dignissim non interdum quis, fermentum id nisl. Cras pretium urna nibh, eu volutpat elit hendrerit non.\\n\\nAliquam eu neque et ante convallis malesuada. Aenean semper nulla non urna pellentesque euismod. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed at ornare urna. Nam ullamcorper lobortis porta. Aenean commodo vestibulum libero, ac pharetra velit pulvinar vitae. Curabitur non mauris at diam viverra scelerisque in vitae lacus. In hac habitasse platea dictumst. Nulla sed pharetra arcu. Phasellus vitae interdum dolor. Pellentesque.\",\n    \"recommendations\": \"Integer tempus sapien et tempus gravida. Nunc id augue magna. Aliquam malesuada dapibus ligula tristique pharetra. Aenean feugiat felis pretium, auctor justo ac, lacinia quam. Phasellus tempus fermentum elit eget suscipit. Sed vitae lacinia elit. Praesent quis nisl elementum, consectetur sapien eget, cursus lectus. Duis posuere est at ligula accumsan.\",\n    \"keyInference\": \"Proin nec nibh ut dui fringilla feugiat. Integer aliquet felis.\"\n  },\n  {\n    \"clientId\": 4,\n    \"complaints\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit. In in porta risus. Maecenas nec mattis purus. Duis vel mauris vitae ex vestibulum vestibulum at sed ligula. Nunc eu maximus magna, euismod suscipit turpis. Nulla et leo rutrum, aliquet eros vel, dignissim metus. Suspendisse porta, tortor ut volutpat vestibulum, urna elit convallis nibh, nec imperdiet turpis ante vel lectus. Curabitur blandit, orci at varius aliquam, ante purus suscipit ligula, sed gravida felis neque ut nisi. Sed non sapien mi. Nam at mauris nibh. Ut a rutrum orci, a porttitor erat. Sed consectetur est sit amet lacus ultricies, in scelerisque nisi porttitor.\",\n    \"observations\": \"Suspendisse eu lacus ligula. Morbi et placerat risus, a fermentum tortor. Donec dictum massa nec velit aliquam, quis commodo enim lobortis. Aenean ac pretium erat. Morbi vulputate eros vitae risus placerat, eget aliquet ligula ultrices. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Pellentesque tincidunt lacinia laoreet. Quisque purus augue, feugiat id venenatis vel, placerat sit amet tortor. Vestibulum vel dolor ultrices, volutpat quam vel, scelerisque dolor. Etiam porttitor commodo augue, quis fringilla ipsum ultrices non. Duis ac magna eget lorem aliquet pharetra nec nec lacus. Nam molestie porttitor erat, ultrices egestas metus consequat eget. Quisque posuere, dui congue posuere sollicitudin, nisl velit fermentum sem, nec vulputate magna nulla at ex. Proin turpis elit, dignissim non interdum quis, fermentum id nisl. Cras pretium urna nibh, eu volutpat elit hendrerit non.\\n\\nAliquam eu neque et ante convallis malesuada. Aenean semper nulla non urna pellentesque euismod. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed at ornare urna. Nam ullamcorper lobortis porta. Aenean commodo vestibulum libero, ac pharetra velit pulvinar vitae. Curabitur non mauris at diam viverra scelerisque in vitae lacus. In hac habitasse platea dictumst. Nulla sed pharetra arcu. Phasellus vitae interdum dolor. Pellentesque.\",\n    \"recommendations\": \"Integer tempus sapien et tempus gravida. Nunc id augue magna. Aliquam malesuada dapibus ligula tristique pharetra. Aenean feugiat felis pretium, auctor justo ac, lacinia quam. Phasellus tempus fermentum elit eget suscipit. Sed vitae lacinia elit. Praesent quis nisl elementum, consectetur sapien eget, cursus lectus. Duis posuere est at ligula accumsan.\",\n    \"keyInference\": \"Proin nec nibh ut dui fringilla feugiat. Integer aliquet felis.\"\n  },\n  {\n    \"clientId\": 4,\n    \"complaints\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit. In in porta risus. Maecenas nec mattis purus. Duis vel mauris vitae ex vestibulum vestibulum at sed ligula. Nunc eu maximus magna, euismod suscipit turpis. Nulla et leo rutrum, aliquet eros vel, dignissim metus. Suspendisse porta, tortor ut volutpat vestibulum, urna elit convallis nibh, nec imperdiet turpis ante vel lectus. Curabitur blandit, orci at varius aliquam, ante purus suscipit ligula, sed gravida felis neque ut nisi. Sed non sapien mi. Nam at mauris nibh. Ut a rutrum orci, a porttitor erat. Sed consectetur est sit amet lacus ultricies, in scelerisque nisi porttitor.\",\n    \"observations\": \"Suspendisse eu lacus ligula. Morbi et placerat risus, a fermentum tortor. Donec dictum massa nec velit aliquam, quis commodo enim lobortis. Aenean ac pretium erat. Morbi vulputate eros vitae risus placerat, eget aliquet ligula ultrices. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Pellentesque tincidunt lacinia laoreet. Quisque purus augue, feugiat id venenatis vel, placerat sit amet tortor. Vestibulum vel dolor ultrices, volutpat quam vel, scelerisque dolor. Etiam porttitor commodo augue, quis fringilla ipsum ultrices non. Duis ac magna eget lorem aliquet pharetra nec nec lacus. Nam molestie porttitor erat, ultrices egestas metus consequat eget. Quisque posuere, dui congue posuere sollicitudin, nisl velit fermentum sem, nec vulputate magna nulla at ex. Proin turpis elit, dignissim non interdum quis, fermentum id nisl. Cras pretium urna nibh, eu volutpat elit hendrerit non.\\n\\nAliquam eu neque et ante convallis malesuada. Aenean semper nulla non urna pellentesque euismod. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed at ornare urna. Nam ullamcorper lobortis porta. Aenean commodo vestibulum libero, ac pharetra velit pulvinar vitae. Curabitur non mauris at diam viverra scelerisque in vitae lacus. In hac habitasse platea dictumst. Nulla sed pharetra arcu. Phasellus vitae interdum dolor. Pellentesque.\",\n    \"recommendations\": \"Integer tempus sapien et tempus gravida. Nunc id augue magna. Aliquam malesuada dapibus ligula tristique pharetra. Aenean feugiat felis pretium, auctor justo ac, lacinia quam. Phasellus tempus fermentum elit eget suscipit. Sed vitae lacinia elit. Praesent quis nisl elementum, consectetur sapien eget, cursus lectus. Duis posuere est at ligula accumsan.\",\n    \"keyInference\": \"Proin nec nibh ut dui fringilla feugiat. Integer aliquet felis.\"\n  },\n  {\n    \"clientId\": 5,\n    \"complaints\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit. In in porta risus. Maecenas nec mattis purus. Duis vel mauris vitae ex vestibulum vestibulum at sed ligula. Nunc eu maximus magna, euismod suscipit turpis. Nulla et leo rutrum, aliquet eros vel, dignissim metus. Suspendisse porta, tortor ut volutpat vestibulum, urna elit convallis nibh, nec imperdiet turpis ante vel lectus. Curabitur blandit, orci at varius aliquam, ante purus suscipit ligula, sed gravida felis neque ut nisi. Sed non sapien mi. Nam at mauris nibh. Ut a rutrum orci, a porttitor erat. Sed consectetur est sit amet lacus ultricies, in scelerisque nisi porttitor.\",\n    \"observations\": \"Suspendisse eu lacus ligula. Morbi et placerat risus, a fermentum tortor. Donec dictum massa nec velit aliquam, quis commodo enim lobortis. Aenean ac pretium erat. Morbi vulputate eros vitae risus placerat, eget aliquet ligula ultrices. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Pellentesque tincidunt lacinia laoreet. Quisque purus augue, feugiat id venenatis vel, placerat sit amet tortor. Vestibulum vel dolor ultrices, volutpat quam vel, scelerisque dolor. Etiam porttitor commodo augue, quis fringilla ipsum ultrices non. Duis ac magna eget lorem aliquet pharetra nec nec lacus. Nam molestie porttitor erat, ultrices egestas metus consequat eget. Quisque posuere, dui congue posuere sollicitudin, nisl velit fermentum sem, nec vulputate magna nulla at ex. Proin turpis elit, dignissim non interdum quis, fermentum id nisl. Cras pretium urna nibh, eu volutpat elit hendrerit non.\\n\\nAliquam eu neque et ante convallis malesuada. Aenean semper nulla non urna pellentesque euismod. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed at ornare urna. Nam ullamcorper lobortis porta. Aenean commodo vestibulum libero, ac pharetra velit pulvinar vitae. Curabitur non mauris at diam viverra scelerisque in vitae lacus. In hac habitasse platea dictumst. Nulla sed pharetra arcu. Phasellus vitae interdum dolor. Pellentesque.\",\n    \"recommendations\": \"Integer tempus sapien et tempus gravida. Nunc id augue magna. Aliquam malesuada dapibus ligula tristique pharetra. Aenean feugiat felis pretium, auctor justo ac, lacinia quam. Phasellus tempus fermentum elit eget suscipit. Sed vitae lacinia elit. Praesent quis nisl elementum, consectetur sapien eget, cursus lectus. Duis posuere est at ligula accumsan.\",\n    \"keyInference\": \"Proin nec nibh ut dui fringilla feugiat. Integer aliquet felis.\"\n  },\n  {\n    \"clientId\": 6,\n    \"complaints\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit. In in porta risus. Maecenas nec mattis purus. Duis vel mauris vitae ex vestibulum vestibulum at sed ligula. Nunc eu maximus magna, euismod suscipit turpis. Nulla et leo rutrum, aliquet eros vel, dignissim metus. Suspendisse porta, tortor ut volutpat vestibulum, urna elit convallis nibh, nec imperdiet turpis ante vel lectus. Curabitur blandit, orci at varius aliquam, ante purus suscipit ligula, sed gravida felis neque ut nisi. Sed non sapien mi. Nam at mauris nibh. Ut a rutrum orci, a porttitor erat. Sed consectetur est sit amet lacus ultricies, in scelerisque nisi porttitor.\",\n    \"observations\": \"Suspendisse eu lacus ligula. Morbi et placerat risus, a fermentum tortor. Donec dictum massa nec velit aliquam, quis commodo enim lobortis. Aenean ac pretium erat. Morbi vulputate eros vitae risus placerat, eget aliquet ligula ultrices. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Pellentesque tincidunt lacinia laoreet. Quisque purus augue, feugiat id venenatis vel, placerat sit amet tortor. Vestibulum vel dolor ultrices, volutpat quam vel, scelerisque dolor. Etiam porttitor commodo augue, quis fringilla ipsum ultrices non. Duis ac magna eget lorem aliquet pharetra nec nec lacus. Nam molestie porttitor erat, ultrices egestas metus consequat eget. Quisque posuere, dui congue posuere sollicitudin, nisl velit fermentum sem, nec vulputate magna nulla at ex. Proin turpis elit, dignissim non interdum quis, fermentum id nisl. Cras pretium urna nibh, eu volutpat elit hendrerit non.\\n\\nAliquam eu neque et ante convallis malesuada. Aenean semper nulla non urna pellentesque euismod. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed at ornare urna. Nam ullamcorper lobortis porta. Aenean commodo vestibulum libero, ac pharetra velit pulvinar vitae. Curabitur non mauris at diam viverra scelerisque in vitae lacus. In hac habitasse platea dictumst. Nulla sed pharetra arcu. Phasellus vitae interdum dolor. Pellentesque.\",\n    \"recommendations\": \"Integer tempus sapien et tempus gravida. Nunc id augue magna. Aliquam malesuada dapibus ligula tristique pharetra. Aenean feugiat felis pretium, auctor justo ac, lacinia quam. Phasellus tempus fermentum elit eget suscipit. Sed vitae lacinia elit. Praesent quis nisl elementum, consectetur sapien eget, cursus lectus. Duis posuere est at ligula accumsan.\",\n    \"keyInference\": \"Proin nec nibh ut dui fringilla feugiat. Integer aliquet felis.\"\n  },\n  {\n    \"clientId\": 7,\n    \"complaints\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit. In in porta risus. Maecenas nec mattis purus. Duis vel mauris vitae ex vestibulum vestibulum at sed ligula. Nunc eu maximus magna, euismod suscipit turpis. Nulla et leo rutrum, aliquet eros vel, dignissim metus. Suspendisse porta, tortor ut volutpat vestibulum, urna elit convallis nibh, nec imperdiet turpis ante vel lectus. Curabitur blandit, orci at varius aliquam, ante purus suscipit ligula, sed gravida felis neque ut nisi. Sed non sapien mi. Nam at mauris nibh. Ut a rutrum orci, a porttitor erat. Sed consectetur est sit amet lacus ultricies, in scelerisque nisi porttitor.\",\n    \"observations\": \"Suspendisse eu lacus ligula. Morbi et placerat risus, a fermentum tortor. Donec dictum massa nec velit aliquam, quis commodo enim lobortis. Aenean ac pretium erat. Morbi vulputate eros vitae risus placerat, eget aliquet ligula ultrices. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Pellentesque tincidunt lacinia laoreet. Quisque purus augue, feugiat id venenatis vel, placerat sit amet tortor. Vestibulum vel dolor ultrices, volutpat quam vel, scelerisque dolor. Etiam porttitor commodo augue, quis fringilla ipsum ultrices non. Duis ac magna eget lorem aliquet pharetra nec nec lacus. Nam molestie porttitor erat, ultrices egestas metus consequat eget. Quisque posuere, dui congue posuere sollicitudin, nisl velit fermentum sem, nec vulputate magna nulla at ex. Proin turpis elit, dignissim non interdum quis, fermentum id nisl. Cras pretium urna nibh, eu volutpat elit hendrerit non.\\n\\nAliquam eu neque et ante convallis malesuada. Aenean semper nulla non urna pellentesque euismod. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed at ornare urna. Nam ullamcorper lobortis porta. Aenean commodo vestibulum libero, ac pharetra velit pulvinar vitae. Curabitur non mauris at diam viverra scelerisque in vitae lacus. In hac habitasse platea dictumst. Nulla sed pharetra arcu. Phasellus vitae interdum dolor. Pellentesque.\",\n    \"recommendations\": \"Integer tempus sapien et tempus gravida. Nunc id augue magna. Aliquam malesuada dapibus ligula tristique pharetra. Aenean feugiat felis pretium, auctor justo ac, lacinia quam. Phasellus tempus fermentum elit eget suscipit. Sed vitae lacinia elit. Praesent quis nisl elementum, consectetur sapien eget, cursus lectus. Duis posuere est at ligula accumsan.\",\n    \"keyInference\": \"Proin nec nibh ut dui fringilla feugiat. Integer aliquet felis.\"\n  },\n  {\n    \"clientId\": 8,\n    \"complaints\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit. In in porta risus. Maecenas nec mattis purus. Duis vel mauris vitae ex vestibulum vestibulum at sed ligula. Nunc eu maximus magna, euismod suscipit turpis. Nulla et leo rutrum, aliquet eros vel, dignissim metus. Suspendisse porta, tortor ut volutpat vestibulum, urna elit convallis nibh, nec imperdiet turpis ante vel lectus. Curabitur blandit, orci at varius aliquam, ante purus suscipit ligula, sed gravida felis neque ut nisi. Sed non sapien mi. Nam at mauris nibh. Ut a rutrum orci, a porttitor erat. Sed consectetur est sit amet lacus ultricies, in scelerisque nisi porttitor.\",\n    \"observations\": \"Suspendisse eu lacus ligula. Morbi et placerat risus, a fermentum tortor. Donec dictum massa nec velit aliquam, quis commodo enim lobortis. Aenean ac pretium erat. Morbi vulputate eros vitae risus placerat, eget aliquet ligula ultrices. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Pellentesque tincidunt lacinia laoreet. Quisque purus augue, feugiat id venenatis vel, placerat sit amet tortor. Vestibulum vel dolor ultrices, volutpat quam vel, scelerisque dolor. Etiam porttitor commodo augue, quis fringilla ipsum ultrices non. Duis ac magna eget lorem aliquet pharetra nec nec lacus. Nam molestie porttitor erat, ultrices egestas metus consequat eget. Quisque posuere, dui congue posuere sollicitudin, nisl velit fermentum sem, nec vulputate magna nulla at ex. Proin turpis elit, dignissim non interdum quis, fermentum id nisl. Cras pretium urna nibh, eu volutpat elit hendrerit non.\\n\\nAliquam eu neque et ante convallis malesuada. Aenean semper nulla non urna pellentesque euismod. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed at ornare urna. Nam ullamcorper lobortis porta. Aenean commodo vestibulum libero, ac pharetra velit pulvinar vitae. Curabitur non mauris at diam viverra scelerisque in vitae lacus. In hac habitasse platea dictumst. Nulla sed pharetra arcu. Phasellus vitae interdum dolor. Pellentesque.\",\n    \"recommendations\": \"Integer tempus sapien et tempus gravida. Nunc id augue magna. Aliquam malesuada dapibus ligula tristique pharetra. Aenean feugiat felis pretium, auctor justo ac, lacinia quam. Phasellus tempus fermentum elit eget suscipit. Sed vitae lacinia elit. Praesent quis nisl elementum, consectetur sapien eget, cursus lectus. Duis posuere est at ligula accumsan.\",\n    \"keyInference\": \"Proin nec nibh ut dui fringilla feugiat. Integer aliquet felis.\"\n  },\n  {\n    \"clientId\": 9,\n    \"complaints\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit. In in porta risus. Maecenas nec mattis purus. Duis vel mauris vitae ex vestibulum vestibulum at sed ligula. Nunc eu maximus magna, euismod suscipit turpis. Nulla et leo rutrum, aliquet eros vel, dignissim metus. Suspendisse porta, tortor ut volutpat vestibulum, urna elit convallis nibh, nec imperdiet turpis ante vel lectus. Curabitur blandit, orci at varius aliquam, ante purus suscipit ligula, sed gravida felis neque ut nisi. Sed non sapien mi. Nam at mauris nibh. Ut a rutrum orci, a porttitor erat. Sed consectetur est sit amet lacus ultricies, in scelerisque nisi porttitor.\",\n    \"observations\": \"Suspendisse eu lacus ligula. Morbi et placerat risus, a fermentum tortor. Donec dictum massa nec velit aliquam, quis commodo enim lobortis. Aenean ac pretium erat. Morbi vulputate eros vitae risus placerat, eget aliquet ligula ultrices. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Pellentesque tincidunt lacinia laoreet. Quisque purus augue, feugiat id venenatis vel, placerat sit amet tortor. Vestibulum vel dolor ultrices, volutpat quam vel, scelerisque dolor. Etiam porttitor commodo augue, quis fringilla ipsum ultrices non. Duis ac magna eget lorem aliquet pharetra nec nec lacus. Nam molestie porttitor erat, ultrices egestas metus consequat eget. Quisque posuere, dui congue posuere sollicitudin, nisl velit fermentum sem, nec vulputate magna nulla at ex. Proin turpis elit, dignissim non interdum quis, fermentum id nisl. Cras pretium urna nibh, eu volutpat elit hendrerit non.\\n\\nAliquam eu neque et ante convallis malesuada. Aenean semper nulla non urna pellentesque euismod. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed at ornare urna. Nam ullamcorper lobortis porta. Aenean commodo vestibulum libero, ac pharetra velit pulvinar vitae. Curabitur non mauris at diam viverra scelerisque in vitae lacus. In hac habitasse platea dictumst. Nulla sed pharetra arcu. Phasellus vitae interdum dolor. Pellentesque.\",\n    \"recommendations\": \"Integer tempus sapien et tempus gravida. Nunc id augue magna. Aliquam malesuada dapibus ligula tristique pharetra. Aenean feugiat felis pretium, auctor justo ac, lacinia quam. Phasellus tempus fermentum elit eget suscipit. Sed vitae lacinia elit. Praesent quis nisl elementum, consectetur sapien eget, cursus lectus. Duis posuere est at ligula accumsan.\",\n    \"keyInference\": \"Proin nec nibh ut dui fringilla feugiat. Integer aliquet felis.\"\n  },\n  {\n    \"clientId\": 10,\n    \"complaints\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit. In in porta risus. Maecenas nec mattis purus. Duis vel mauris vitae ex vestibulum vestibulum at sed ligula. Nunc eu maximus magna, euismod suscipit turpis. Nulla et leo rutrum, aliquet eros vel, dignissim metus. Suspendisse porta, tortor ut volutpat vestibulum, urna elit convallis nibh, nec imperdiet turpis ante vel lectus. Curabitur blandit, orci at varius aliquam, ante purus suscipit ligula, sed gravida felis neque ut nisi. Sed non sapien mi. Nam at mauris nibh. Ut a rutrum orci, a porttitor erat. Sed consectetur est sit amet lacus ultricies, in scelerisque nisi porttitor.\",\n    \"observations\": \"Suspendisse eu lacus ligula. Morbi et placerat risus, a fermentum tortor. Donec dictum massa nec velit aliquam, quis commodo enim lobortis. Aenean ac pretium erat. Morbi vulputate eros vitae risus placerat, eget aliquet ligula ultrices. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Pellentesque tincidunt lacinia laoreet. Quisque purus augue, feugiat id venenatis vel, placerat sit amet tortor. Vestibulum vel dolor ultrices, volutpat quam vel, scelerisque dolor. Etiam porttitor commodo augue, quis fringilla ipsum ultrices non. Duis ac magna eget lorem aliquet pharetra nec nec lacus. Nam molestie porttitor erat, ultrices egestas metus consequat eget. Quisque posuere, dui congue posuere sollicitudin, nisl velit fermentum sem, nec vulputate magna nulla at ex. Proin turpis elit, dignissim non interdum quis, fermentum id nisl. Cras pretium urna nibh, eu volutpat elit hendrerit non.\\n\\nAliquam eu neque et ante convallis malesuada. Aenean semper nulla non urna pellentesque euismod. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed at ornare urna. Nam ullamcorper lobortis porta. Aenean commodo vestibulum libero, ac pharetra velit pulvinar vitae. Curabitur non mauris at diam viverra scelerisque in vitae lacus. In hac habitasse platea dictumst. Nulla sed pharetra arcu. Phasellus vitae interdum dolor. Pellentesque.\",\n    \"recommendations\": \"Integer tempus sapien et tempus gravida. Nunc id augue magna. Aliquam malesuada dapibus ligula tristique pharetra. Aenean feugiat felis pretium, auctor justo ac, lacinia quam. Phasellus tempus fermentum elit eget suscipit. Sed vitae lacinia elit. Praesent quis nisl elementum, consectetur sapien eget, cursus lectus. Duis posuere est at ligula accumsan.\",\n    \"keyInference\": \"Proin nec nibh ut dui fringilla feugiat. Integer aliquet felis.\"\n  },\n  {\n    \"clientId\": 10,\n    \"complaints\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit. In in porta risus. Maecenas nec mattis purus. Duis vel mauris vitae ex vestibulum vestibulum at sed ligula. Nunc eu maximus magna, euismod suscipit turpis. Nulla et leo rutrum, aliquet eros vel, dignissim metus. Suspendisse porta, tortor ut volutpat vestibulum, urna elit convallis nibh, nec imperdiet turpis ante vel lectus. Curabitur blandit, orci at varius aliquam, ante purus suscipit ligula, sed gravida felis neque ut nisi. Sed non sapien mi. Nam at mauris nibh. Ut a rutrum orci, a porttitor erat. Sed consectetur est sit amet lacus ultricies, in scelerisque nisi porttitor.\",\n    \"observations\": \"Suspendisse eu lacus ligula. Morbi et placerat risus, a fermentum tortor. Donec dictum massa nec velit aliquam, quis commodo enim lobortis. Aenean ac pretium erat. Morbi vulputate eros vitae risus placerat, eget aliquet ligula ultrices. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Pellentesque tincidunt lacinia laoreet. Quisque purus augue, feugiat id venenatis vel, placerat sit amet tortor. Vestibulum vel dolor ultrices, volutpat quam vel, scelerisque dolor. Etiam porttitor commodo augue, quis fringilla ipsum ultrices non. Duis ac magna eget lorem aliquet pharetra nec nec lacus. Nam molestie porttitor erat, ultrices egestas metus consequat eget. Quisque posuere, dui congue posuere sollicitudin, nisl velit fermentum sem, nec vulputate magna nulla at ex. Proin turpis elit, dignissim non interdum quis, fermentum id nisl. Cras pretium urna nibh, eu volutpat elit hendrerit non.\\n\\nAliquam eu neque et ante convallis malesuada. Aenean semper nulla non urna pellentesque euismod. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed at ornare urna. Nam ullamcorper lobortis porta. Aenean commodo vestibulum libero, ac pharetra velit pulvinar vitae. Curabitur non mauris at diam viverra scelerisque in vitae lacus. In hac habitasse platea dictumst. Nulla sed pharetra arcu. Phasellus vitae interdum dolor. Pellentesque.\",\n    \"recommendations\": \"Integer tempus sapien et tempus gravida. Nunc id augue magna. Aliquam malesuada dapibus ligula tristique pharetra. Aenean feugiat felis pretium, auctor justo ac, lacinia quam. Phasellus tempus fermentum elit eget suscipit. Sed vitae lacinia elit. Praesent quis nisl elementum, consectetur sapien eget, cursus lectus. Duis posuere est at ligula accumsan.\",\n    \"keyInference\": \"Proin nec nibh ut dui fringilla feugiat. Integer aliquet felis.\"\n  }\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_API_URL}}/consultationSessionRecords",
+					"host": [
+						"{{BASE_API_URL}}"
+					],
+					"path": [
+						"consultationSessionRecords"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Super Admin Login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "email",
+							"value": "superadmin@opentele.org",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "{{SUPER_ADMIN_PASSWORD}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/api/login",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Schedule Rooms",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_API_URL}}/test/scheduleRooms?numberOfDays=5",
+					"host": [
+						"{{BASE_API_URL}}"
+					],
+					"path": [
+						"test",
+						"scheduleRooms"
+					],
+					"query": [
+						{
+							"key": "numberOfDays",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
