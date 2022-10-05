@@ -38,7 +38,7 @@ public interface ClientRepository extends AbstractRepository<Client> {
         return searchClients("%" + s + "%", organisation.getId());
     }
 
-    @Query(value = "SELECT c.name, c.registration_number as registrationNumber, c.gender, c.date_of_birth as dateOfBirth, a.queue_number as queueNumber FROM client c " +
+    @Query(value = "SELECT c.id, c.name, c.registration_number as registrationNumber, c.gender, c.date_of_birth as dateOfBirth, a.queue_number as queueNumber FROM client c " +
             "join appointment a on c.id = a.client_id " +
             "where a.consultation_room_id = :consultationRoomId" +
             " order by c.name",

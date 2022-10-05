@@ -112,6 +112,7 @@ public class ConsultationRoomController extends BaseController {
     public List<ConsultationRoomClientResponse> getClients(@RequestParam(name = "consultationRoomId") int consultationRoomId) {
         return clientRepository.getClients(consultationRoomId).stream().map(projection -> {
             ConsultationRoomClientResponse response = new ConsultationRoomClientResponse();
+            response.setId(projection.getId());
             response.setGender(projection.getGender());
             response.setQueueNumber(projection.getQueueNumber());
             response.setAge(Period.between(LocalDate.now(), projection.getDateOfBirth()));
