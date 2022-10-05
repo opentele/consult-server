@@ -7,7 +7,7 @@ import org.opentele.consult.domain.consultationRoom.Appointment;
 public class AppointmentDetailResponse extends AppointmentContract {
     private String clientName;
     private Gender gender;
-    private String usherName;
+    private String moderatorName;
 
     public String getClientName() {
         return clientName;
@@ -25,12 +25,12 @@ public class AppointmentDetailResponse extends AppointmentContract {
         this.gender = gender;
     }
 
-    public String getUsherName() {
-        return usherName;
+    public String getModeratorName() {
+        return moderatorName;
     }
 
-    public void setUsherName(String usherName) {
-        this.usherName = usherName;
+    public void setModeratorName(String moderatorName) {
+        this.moderatorName = moderatorName;
     }
 
     public static AppointmentDetailResponse fromEntity(Appointment appointment) {
@@ -39,7 +39,7 @@ public class AppointmentDetailResponse extends AppointmentContract {
         Client client = appointment.getClient();
         appointmentDetailResponse.setClientName(client.getName());
         appointmentDetailResponse.setGender(client.getGender());
-        appointmentDetailResponse.setUsherName(appointment.getAppointmentProvider().getName());
+        appointmentDetailResponse.setModeratorName(appointment.getAppointmentProvider().getName());
         return appointmentDetailResponse;
     }
 }

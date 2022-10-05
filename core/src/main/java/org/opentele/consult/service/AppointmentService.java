@@ -24,7 +24,7 @@ public class AppointmentService {
     public Appointment getNextToken(User user, Organisation organisation, ConsultationRoom consultationRoom, Appointment appointment) {
         ProviderType providerType = user.getProviderType(organisation);
         Appointment nextToken;
-        if (providerType.equals(ProviderType.Usher))
+        if (providerType.equals(ProviderType.Moderator))
             nextToken = appointmentRepository.getNextToken(consultationRoom, appointment.getQueueNumber(), user);
         else
             nextToken = appointmentRepository.getNextToken(consultationRoom, appointment.getQueueNumber());
@@ -39,7 +39,7 @@ public class AppointmentService {
     public Appointment getPreviousToken(User user, Organisation organisation, ConsultationRoom consultationRoom, Appointment appointment) {
         Appointment previousToken;
         ProviderType providerType = user.getProviderType(organisation);
-        if (providerType.equals(ProviderType.Usher))
+        if (providerType.equals(ProviderType.Moderator))
             previousToken = appointmentRepository.getPreviousToken(consultationRoom, appointment.getQueueNumber(), user);
         else
             previousToken = appointmentRepository.getPreviousToken(consultationRoom, appointment.getQueueNumber());
