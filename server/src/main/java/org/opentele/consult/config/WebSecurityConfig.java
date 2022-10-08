@@ -68,7 +68,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry expressionInterceptUrlRegistry = http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/", "/app/*", "/api/message", "/api/login", "/api/test/*").permitAll()
+                .antMatchers(HttpMethod.GET, "/", "/static/**", "/api/message", "/api/login", "/api/test/*").permitAll()
                 .antMatchers(HttpMethod.PUT, "/api/organisation").permitAll();
 
         handleLogin(expressionInterceptUrlRegistry);
@@ -103,7 +103,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) {
-        web.ignoring().antMatchers("/static/**", "/app/**");
+        web.ignoring().antMatchers("/static/**");
     }
 
     @Bean

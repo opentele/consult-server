@@ -54,7 +54,6 @@ public class ServerApplication implements WebMvcConfigurer, CommandLineRunner {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/static/**").addResourceLocations(String.format("file:///%s/", new File("static").getAbsolutePath()));
-        registry.addResourceHandler("/app/**").addResourceLocations(String.format("file:///%s/", new File("app").getAbsolutePath()));
     }
 
     @Override
