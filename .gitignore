@@ -10,3 +10,4 @@ superadmin.sql
 postman-env.json
 SESSIONS.ser
 /app/
+/server/src/main/resources/keystore/consult.p12

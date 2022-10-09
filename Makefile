@@ -15,6 +15,8 @@ TEST_DB=consult_test
 ADMIN_USER=consult
 postgres_user := $(shell id -un)
 
+include makefiles/ssl.mk
+
 define _build_db
 	-psql -h localhost -U $(SU) -d postgres -c "create user $(ADMIN_USER) with password 'password' createrole";
 	-psql -h localhost -U $(SU) -d postgres -c 'create database $1 with owner $(ADMIN_USER)';
