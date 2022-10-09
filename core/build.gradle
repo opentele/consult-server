@@ -7,7 +7,7 @@ plugins {
 
 group = 'org.opentele.consult'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '15'
+sourceCompatibility = '17'
 
 bootJar {
     enabled = false
@@ -53,7 +53,7 @@ dependencies {
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-    compile "org.dmfs:lib-recur:0.12.2"
+    implementation "org.dmfs:lib-recur:0.12.2"
 }
 
 test {
