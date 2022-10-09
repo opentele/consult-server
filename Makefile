@@ -117,3 +117,7 @@ recreate-db-and-schema: generate-schema recreate-db
 
 clean-session:
 	rm SESSIONS.ser
+
+# Deployment
+deploy-to-prod: build-server
+	scp server/build/libs/server-0.0.1-SNAPSHOT.jar consult-server:/root/consult/

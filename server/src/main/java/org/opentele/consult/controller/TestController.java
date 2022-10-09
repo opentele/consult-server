@@ -46,9 +46,14 @@ public class TestController {
         this.consultationRoomService = consultationRoomService;
     }
 
-    @RequestMapping(value = "/api/test/foo")
-    public String hello(HttpSession httpSession) {
-        return "Hello";
+    @RequestMapping(value = "/api/test/open/ping")
+    public String ping(HttpSession httpSession) {
+        return "pong";
+    }
+
+    @GetMapping("/api/test/open/passwordHash")
+    public String getPasswordHash(@RequestParam("password") String password) {
+        return bCryptPasswordEncoder.encode(password);
     }
 
     @RequestMapping(value = "/api/test/security/orgAdminRole")
@@ -70,12 +75,8 @@ public class TestController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/api/test/passwordHash")
-    public String getPasswordHash(@RequestParam("password") String password) {
-        return bCryptPasswordEncoder.encode(password);
-    }
-
     @GetMapping("/api/test/resetPasswordTemplate")
+    @PreAuthorize("hasAnyRole('Admin')")
     public String processResetPasswordTemplate(@RequestParam("url") String url) {
         Context resetPasswordContext = templateContextFactory.createResetPasswordContext(url);
         return fileUtil.processTemplate("resetPassword", resetPasswordContext);
@@ -91,5 +92,11 @@ public class TestController {
     @PreAuthorize("hasAnyRole('Admin')")
     public int scheduleRooms(@RequestParam("numberOfDays") int numberOfDays) {
         return consultationRoomService.schedule(numberOfDays);
+    }
+
+    @RequestMapping(value = "/api/test/causeError", method = {RequestMethod.GET, RequestMethod.POST})
+    @PreAuthorize("hasAnyRole('User')")
+    public void causeError() {
+        throw new RuntimeException("Throwing error to check whether Bugsnag records it");
     }
 }
