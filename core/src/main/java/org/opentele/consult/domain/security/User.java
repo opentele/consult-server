@@ -1,10 +1,7 @@
 package org.opentele.consult.domain.security;
 
-import org.opentele.consult.domain.Language;
 import org.opentele.consult.domain.Organisation;
-import org.opentele.consult.domain.framework.AbstractAuditableEntity;
 import org.opentele.consult.domain.framework.AbstractEntity;
-import org.springframework.data.annotation.*;
 import org.springframework.data.annotation.Transient;
 import org.springframework.util.StringUtils;
 
@@ -17,7 +14,7 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 public class User extends AbstractEntity implements Serializable {
-    public static final String AppUserName = "server@opentele.org";
+    public static final String AppUserName = "server@example.com";
 
     @Column(name = "email")
     private String email;

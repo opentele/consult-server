@@ -34,8 +34,6 @@ endef
 
 
 ######## DATABASE LOCAL
-# hashed password when password is password = $2a$10$RipvsoEJg4PtXOExTjg7Eu2WzHH1SBntIkuR.bzmZeU2TrbQoFtMW
-# kept here for emergency purposes as we are not developing the entire login functionality
 rebuild-db: drop-db build-db
 
 build-db:
@@ -96,7 +94,7 @@ create-super-admin:
 	cat superadmin.sql | psql -Uconsult consult
 
 data-setup:
-	newman run setup-data.json -e postman-env.json
+	newman run setup-data.json -e postman-env.json --insecure
 #######
 
 

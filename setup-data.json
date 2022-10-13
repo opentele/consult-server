@@ -77,7 +77,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "[\n    {\n        \"name\": \"Yamini Dubey\",\n        \"email\": \"yaminid@example.com\",\n        \"password\": \"password\"\n    },\n    {\n        \"name\": \"Akshay Damodaran\",\n        \"email\": \"pratapm@example.com\",\n        \"password\": \"password\"\n    },\n    {\n        \"name\": \"Ishmohit Chopra\",\n        \"email\": \"ishmohitc@example.com\",\n        \"password\": \"password\"\n    },\n    {\n        \"name\": \"Nassim Shalem\",\n        \"email\": \"nassims@example.com\",\n        \"password\": \"password\"\n    },\n    {\n        \"name\": \"Chandra Jahan\",\n        \"email\": \"chandraj@example.com\",\n        \"password\": \"password\"\n    },\n    {\n        \"name\": \"Michael Harry\",\n        \"email\": \"michaelh@example.com\",\n        \"password\": \"password\"\n    },\n    {\n        \"name\": \"Balaji Hariharan\",\n        \"email\": \"balajih@example.com\",\n        \"password\": \"password\"\n    },\n    {\n        \"name\": \"Samir Vohra\",\n        \"email\": \"samirv@example.com\",\n        \"password\": \"password\"\n    },\n    {\n        \"name\": \"Vijay Shreya\",\n        \"email\": \"vijays@example.com\",\n        \"password\": \"password\"\n    },\n    {\n        \"name\": \"P Harinath\",\n        \"email\": \"ph@example.com\",\n        \"password\": \"password\"\n    }\n]",
+					"raw": "[\n    {\n        \"name\": \"Yamini Dubey\",\n        \"email\": \"yaminid@example.com\",\n        \"password\": \"password\"\n    },\n    {\n        \"name\": \"Akshay Damodaran\",\n        \"email\": \"akshayd@example.com\",\n        \"password\": \"password\"\n    },\n    {\n        \"name\": \"Ishmohit Chopra\",\n        \"email\": \"ishmohitc@example.com\",\n        \"password\": \"password\"\n    },\n    {\n        \"name\": \"Nassim Shalem\",\n        \"email\": \"nassims@example.com\",\n        \"password\": \"password\"\n    },\n    {\n        \"name\": \"Chandra Jahan\",\n        \"email\": \"chandraj@example.com\",\n        \"password\": \"password\"\n    },\n    {\n        \"name\": \"Michael Harry\",\n        \"email\": \"michaelh@example.com\",\n        \"password\": \"password\"\n    },\n    {\n        \"name\": \"Balaji Hariharan\",\n        \"email\": \"balajih@example.com\",\n        \"password\": \"password\"\n    },\n    {\n        \"name\": \"Samir Vohra\",\n        \"email\": \"samirv@example.com\",\n        \"password\": \"password\"\n    },\n    {\n        \"name\": \"Vijay Shreya\",\n        \"email\": \"vijays@example.com\",\n        \"password\": \"password\"\n    },\n    {\n        \"name\": \"P Harinath\",\n        \"email\": \"ph@example.com\",\n        \"password\": \"password\"\n    }\n]",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -228,7 +228,7 @@
 					"urlencoded": [
 						{
 							"key": "email",
-							"value": "superadmin@opentele.org",
+							"value": "Super_Admin@example.com",
 							"type": "text"
 						},
 						{
@@ -285,6 +285,53 @@
 				}
 			},
 			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "EMAIL_USER_PASSWORD",
+			"value": "foo",
+			"type": "string"
+		},
+		{
+			"key": "EMAIL_USER",
+			"value": "petmongrels@gmail.com",
+			"type": "string"
+		},
+		{
+			"key": "MOBILE_USER",
+			"value": "9845232929",
+			"type": "string"
+		},
+		{
+			"key": "MOBILE_USER_PASSWORD",
+			"value": "foo",
+			"type": "string"
+		},
+		{
+			"key": "EMAIL_USER_ORGANISATION",
+			"value": "Samanvay Technologies",
+			"type": "string"
 		}
 	]
 }
