@@ -129,4 +129,4 @@ deploy-scripts-to-prod:
 	scp superadmin.sql consult-server:/root/server
 
 deploy-to-prod: build-server deploy-scripts-to-prod
-	scp server/build/libs/server-0.0.1-SNAPSHOT.jar consult-server:/root/consult/
+	scp server/build/libs/server-0.0.1-SNAPSHOT.jar consult-server:/root/server
