@@ -123,10 +123,13 @@ recreate-db-and-schema: generate-schema recreate-db
 clean-session:
 	rm SESSIONS.ser
 
+# Production deployment
+prod_scp_dest := consult-server:/root/server
 deploy-scripts-to-prod:
-	scp Makefile consult-server:/root/server
-	scp -r makefiles consult-server:/root/server/makefiles
-	scp superadmin.sql consult-server:/root/server
+	scp Makefile $(prod_scp_dest)
+	scp -r makefiles $(prod_scp_dest)/makefiles
+	scp superadmin.sql $(prod_scp_dest)
+	scp start-prod-server.sh $(prod_scp_dest)
 
 deploy-to-prod: build-server deploy-scripts-to-prod
-	scp server/build/libs/server-0.0.1-SNAPSHOT.jar consult-server:/root/server
+	scp server/build/libs/server-0.0.1-SNAPSHOT.jar $(prod_scp_dest)
