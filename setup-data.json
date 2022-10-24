@@ -8,6 +8,19 @@
 	"item": [
 		{
 			"name": "Register organisation by email",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"response should be okay\", function () {",
+							"    pm.response.to.not.be.error;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "PUT",
 				"header": [],
@@ -34,6 +47,19 @@
 		},
 		{
 			"name": "Login by email",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"response should be okay\", function () {",
+							"    pm.response.to.not.be.error;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [
@@ -72,6 +98,19 @@
 		},
 		{
 			"name": "Register users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"response should be okay\", function () {",
+							"    pm.response.to.not.be.error;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "PUT",
 				"header": [],
@@ -98,6 +137,19 @@
 		},
 		{
 			"name": "Add Users to Organisation",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"response should be okay\", function () {",
+							"    pm.response.to.not.be.error;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "PUT",
 				"header": [],
@@ -135,6 +187,17 @@
 						],
 						"type": "text/javascript"
 					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"response should be okay\", function () {",
+							"    pm.response.to.not.be.error;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
 				}
 			],
 			"request": {
@@ -163,6 +226,19 @@
 		},
 		{
 			"name": "Create Clients",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"response should be okay\", function () {",
+							"    pm.response.to.not.be.error;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "PUT",
 				"header": [],
@@ -189,6 +265,19 @@
 		},
 		{
 			"name": "Create Consultation Session Records",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"response should be okay\", function () {",
+							"    pm.response.to.not.be.error;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "PUT",
 				"header": [],
@@ -215,6 +304,19 @@
 		},
 		{
 			"name": "Super Admin Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"response should be okay\", function () {",
+							"    pm.response.to.not.be.error;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [
@@ -259,6 +361,17 @@
 					"script": {
 						"exec": [
 							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"response should be okay\", function () {",
+							"    pm.response.to.not.be.error;",
+							"});"
 						],
 						"type": "text/javascript"
 					}
@@ -332,6 +445,10 @@
 			"key": "EMAIL_USER_ORGANISATION",
 			"value": "Samanvay Technologies",
 			"type": "string"
+		},
+		{
+			"key": "currentdate",
+			"value": ""
 		}
 	]
 }
