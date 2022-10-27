@@ -82,7 +82,7 @@ run-server-only:
 run-server: build-db build-server run-server-only
 
 run-server-without-background: build-server
-	java -jar --enable-preview server/build/libs/server-0.0.1-SNAPSHOT.jar --consult.scheduled.room.cron="0 0 6 6 9 ? 2035"
+	SCHEDULE_ROOM_CRON="0 0 0 30 2 *" java -jar --enable-preview server/build/libs/server-0.0.1-SNAPSHOT.jar
 
 test-schema-generation: generate-schema rebuild-db migrate-db
 
@@ -98,10 +98,10 @@ open-test-results-server:
 	open server/build/reports/tests/test/index.html
 
 set-super-admin-password:
-	cat superadmin.sql | PGPASSWORD=password psql -U consult -h localhost consult
+	cat func-automation/superadmin.sql | PGPASSWORD=password psql -U consult -h localhost consult
 
 data-setup:
-	newman run setup-data.json -e postman-env.json --insecure
+	newman run func-automation/setup-data.json -e func-automation/postman-env.json --insecure
 #######
 
 
@@ -128,7 +128,7 @@ prod_scp_dest := consult-server:/root/server
 deploy-scripts-to-prod:
 	scp Makefile $(prod_scp_dest)
 	scp -r makefiles $(prod_scp_dest)
-	scp superadmin.sql $(prod_scp_dest)
+	scp func-automation/superadmin.sql $(prod_scp_dest)/func-automation/
 	scp start-prod-server.sh $(prod_scp_dest)
 
 deploy-to-prod: build-server deploy-scripts-to-prod

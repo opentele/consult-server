@@ -14,4 +14,7 @@ public interface AbstractRepository<T> extends CrudRepository<T, Integer> {
     default T findEntity(int id, Organisation organisation) {
         return findByIdAndOrganisation(id, organisation);
     }
+    default T findEntityInternal(int id) {
+        return findById(id).get();
+    }
 }

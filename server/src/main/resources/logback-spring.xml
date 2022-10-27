@@ -31,10 +31,4 @@
         <appender-ref ref="RollingFile"/>
         <appender-ref ref="Console"/>
     </root>
-
-    <!-- Kept for reference -->
-    <logger name="org.opentele.consult" level="info">
-        <appender-ref ref="RollingFile"/>
-        <appender-ref ref="Console"/>
-    </logger>
 </configuration>

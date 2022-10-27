@@ -5,6 +5,7 @@ import org.dmfs.rfc5545.recur.InvalidRecurrenceRuleException;
 import org.dmfs.rfc5545.recur.RecurrenceRule;
 import org.dmfs.rfc5545.recur.RecurrenceRuleIterator;
 import org.opentele.consult.domain.framework.OrganisationalEntity;
+import org.opentele.consult.domain.security.User;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -32,7 +33,7 @@ public class ConsultationRoomSchedule extends OrganisationalEntity {
     @Column(nullable = false)
     private String recurrenceRule;
 
-    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, mappedBy = "consultationRoomSchedule")
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, mappedBy = "consultationRoomSchedule")
     private Set<ConsultationRoomScheduleUser> providers = new HashSet<>();
 
     @Column(columnDefinition = "int4 check (total_slots > 0)")
@@ -136,7 +137,7 @@ public class ConsultationRoomSchedule extends OrganisationalEntity {
         this.totalSlots = totalSlots;
     }
 
-    public ConsultationRoom createRoomFor(LocalDate date) {
+    public ConsultationRoom createRoomFor(LocalDate date, User user) {
         ConsultationRoom consultationRoom = new ConsultationRoom();
         consultationRoom.setConsultationRoomSchedule(this);
         consultationRoom.setScheduledOn(date);
@@ -151,6 +152,8 @@ public class ConsultationRoomSchedule extends OrganisationalEntity {
         consultationRoom.setTitle(this.title);
         consultationRoom.setTotalSlots(this.totalSlots);
         consultationRoom.setOrganisation(this.getOrganisation());
+//        consultationRoom.setCreatedBy(user);
+//        consultationRoom.setLastModifiedBy(user);
         return consultationRoom;
     }
 

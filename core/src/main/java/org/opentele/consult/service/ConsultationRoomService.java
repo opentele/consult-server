@@ -4,52 +4,57 @@ import org.opentele.consult.domain.Organisation;
 import org.opentele.consult.domain.consultationRoom.Appointment;
 import org.opentele.consult.domain.consultationRoom.ConsultationRoom;
 import org.opentele.consult.domain.consultationRoom.ConsultationRoomSchedule;
+import org.opentele.consult.domain.framework.AbstractEntity;
 import org.opentele.consult.domain.security.User;
 import org.opentele.consult.domain.teleconference.TeleConference;
 import org.opentele.consult.repository.ConsultationRoomRepository;
 import org.opentele.consult.repository.ConsultationRoomScheduleRepository;
+import org.opentele.consult.repository.UserRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ConsultationRoomService {
     private final ConsultationRoomScheduleRepository consultationRoomScheduleRepository;
     private final ConsultationRoomRepository consultationRoomRepository;
     private final AppointmentService appointmentService;
+    private final UserRepository userRepository;
 
-    public ConsultationRoomService(ConsultationRoomScheduleRepository consultationRoomScheduleRepository, ConsultationRoomRepository consultationRoomRepository, AppointmentService appointmentService) {
+    public ConsultationRoomService(ConsultationRoomScheduleRepository consultationRoomScheduleRepository, ConsultationRoomRepository consultationRoomRepository, AppointmentService appointmentService, UserRepository userRepository) {
         this.consultationRoomScheduleRepository = consultationRoomScheduleRepository;
         this.consultationRoomRepository = consultationRoomRepository;
         this.appointmentService = appointmentService;
+        this.userRepository = userRepository;
     }
 
     public int schedule(int numberOfDays) {
         int roomsCreated = 0;
-        List<ConsultationRoomSchedule> schedules = consultationRoomScheduleRepository.findAllBy();
-        for (ConsultationRoomSchedule consultationRoomSchedule : schedules) {
-            LocalDate localDate = LocalDate.now().minusDays(1);
-            for (int i = 0; i < numberOfDays; i++) {
-                if (create(localDate, consultationRoomSchedule)) roomsCreated++;
-                localDate = localDate.plusDays(1);
-            }
+        List<Integer> scheduleIds = consultationRoomScheduleRepository.findAllBy().stream().map(AbstractEntity::getId).collect(Collectors.toList());
+        for (int consultationRoomScheduleId : scheduleIds) {
+            roomsCreated += create(consultationRoomScheduleId, numberOfDays);
         }
         return roomsCreated;
     }
 
-    @Transactional
-    protected boolean create(LocalDate date, ConsultationRoomSchedule consultationRoomSchedule) {
-        List<LocalDate> nextConsultationDates = consultationRoomSchedule.getNextConsultationDates(date, date);
-        if (nextConsultationDates.size() == 1 && !consultationRoomRepository.existsByConsultationRoomScheduleAndScheduledOn(consultationRoomSchedule, date)) {
-            ConsultationRoom consultationRoom = consultationRoomSchedule.createRoomFor(date);
-            consultationRoomRepository.save(consultationRoom);
-            return true;
-        } else if (nextConsultationDates.size() > 1) {
-            throw new RuntimeException("Issue in getting next consultation dates");
+    protected int create(int consultationRoomScheduleId, int numberOfDays) {
+        LocalDate date = LocalDate.now().minusDays(1);
+        int roomsCreated = 0;
+        ConsultationRoomSchedule consultationRoomSchedule = consultationRoomScheduleRepository.findEntityInternal(consultationRoomScheduleId);
+        for (int i = 0; i < numberOfDays; i++) {
+            List<LocalDate> nextConsultationDates = consultationRoomSchedule.getNextConsultationDates(date, date);
+            if (nextConsultationDates.size() == 1 && !consultationRoomRepository.existsByConsultationRoomScheduleAndScheduledOn(consultationRoomSchedule, date)) {
+                ConsultationRoom consultationRoom = consultationRoomSchedule.createRoomFor(date, userRepository.getUserForAudit("Super_Admin@example.com"));
+                consultationRoomRepository.save(consultationRoom);
+                roomsCreated++;
+            } else if (nextConsultationDates.size() > 1) {
+                throw new RuntimeException("Issue in getting next consultation dates");
+            }
+            date = date.plusDays(1);
         }
-        return false;
+        return roomsCreated;
     }
 
     public ConsultationRoom.ConsultationRoomCurrentUserSummary getCurrentSummaryFor(User user, ConsultationRoom consultationRoom) {
