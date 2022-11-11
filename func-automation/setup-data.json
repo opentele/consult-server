@@ -422,23 +422,8 @@
 	],
 	"variable": [
 		{
-			"key": "EMAIL_USER_PASSWORD",
-			"value": "foo",
-			"type": "string"
-		},
-		{
 			"key": "EMAIL_USER",
 			"value": "petmongrels@gmail.com",
-			"type": "string"
-		},
-		{
-			"key": "MOBILE_USER",
-			"value": "9845232929",
-			"type": "string"
-		},
-		{
-			"key": "MOBILE_USER_PASSWORD",
-			"value": "foo",
 			"type": "string"
 		},
 		{

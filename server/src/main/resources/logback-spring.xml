@@ -26,9 +26,13 @@
         </rollingPolicy>
     </appender>
 
-    <!-- LOG everything at INFO level -->
     <root level="info">
         <appender-ref ref="RollingFile"/>
         <appender-ref ref="Console"/>
     </root>
+
+    <logger name="logging.level.org.springframework.security" level="info">
+        <appender-ref ref="RollingFile"/>
+        <appender-ref ref="Console"/>
+    </logger>
 </configuration>

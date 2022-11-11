@@ -47,7 +47,7 @@ public class TestController {
     }
 
     @RequestMapping(value = "/api/test/open/ping")
-    public String ping(HttpSession httpSession) {
+    public String ping() {
         return "pong";
     }
 

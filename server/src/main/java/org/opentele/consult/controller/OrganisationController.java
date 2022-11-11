@@ -46,7 +46,7 @@ public class OrganisationController extends BaseController {
 
         User user = userService.createUser(request.getName(), request.getEmail(), request.getMobile(), bCryptPasswordEncoder.encode(request.getPassword()), userService.getAppUser());
         Organisation organisation = organisationService.createOrg(request.getOrganisationName(), user);
-        ouService.associateExistingUser(user, UserType.OrgAdmin, ProviderType.None, organisation, request.getLanguage());
+        ouService.associateExistingUser(user, UserType.OrgAdmin, ProviderType.Consultant, organisation, request.getLanguage());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

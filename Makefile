@@ -100,8 +100,11 @@ open-test-results-server:
 set-super-admin-password:
 	cat func-automation/superadmin.sql | PGPASSWORD=password psql -U consult -h localhost consult
 
+get-super-admin-password:
+	curl http://localhost:6054/api/test/open/passwordHash?password=$(CONSULT_SUPER_ADMIN_PASSWORD)
+
 data-setup:
-	newman run func-automation/setup-data.json -e func-automation/postman-env.json --insecure
+	newman run --env-var "EMAIL_USER_PASSWORD=$(CONSULT_DEMO_ORG_ADMIN_PASSWORD)" --env-var "SUPER_ADMIN_PASSWORD=$(CONSULT_SUPER_ADMIN_PASSWORD)" func-automation/setup-data.json -e func-automation/postman-env.json --insecure
 #######
 
 
