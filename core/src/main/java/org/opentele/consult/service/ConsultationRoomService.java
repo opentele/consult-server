@@ -1,12 +1,14 @@
 package org.opentele.consult.service;
 
 import org.opentele.consult.domain.Organisation;
+import org.opentele.consult.domain.client.Client;
 import org.opentele.consult.domain.consultationRoom.Appointment;
 import org.opentele.consult.domain.consultationRoom.ConsultationRoom;
 import org.opentele.consult.domain.consultationRoom.ConsultationRoomSchedule;
 import org.opentele.consult.domain.framework.AbstractEntity;
 import org.opentele.consult.domain.security.User;
 import org.opentele.consult.domain.teleconference.TeleConference;
+import org.opentele.consult.repository.ClientRepository;
 import org.opentele.consult.repository.ConsultationRoomRepository;
 import org.opentele.consult.repository.ConsultationRoomScheduleRepository;
 import org.opentele.consult.repository.UserRepository;
@@ -22,12 +24,14 @@ public class ConsultationRoomService {
     private final ConsultationRoomRepository consultationRoomRepository;
     private final AppointmentService appointmentService;
     private final UserRepository userRepository;
+    private final ClientRepository clientRepository;
 
-    public ConsultationRoomService(ConsultationRoomScheduleRepository consultationRoomScheduleRepository, ConsultationRoomRepository consultationRoomRepository, AppointmentService appointmentService, UserRepository userRepository) {
+    public ConsultationRoomService(ConsultationRoomScheduleRepository consultationRoomScheduleRepository, ConsultationRoomRepository consultationRoomRepository, AppointmentService appointmentService, UserRepository userRepository, ClientRepository clientRepository) {
         this.consultationRoomScheduleRepository = consultationRoomScheduleRepository;
         this.consultationRoomRepository = consultationRoomRepository;
         this.appointmentService = appointmentService;
         this.userRepository = userRepository;
+        this.clientRepository = clientRepository;
     }
 
     public int schedule(int numberOfDays) {
@@ -130,5 +134,14 @@ public class ConsultationRoomService {
         consultationRoom.getCurrentAppointment().setCurrent(false);
         appointment.setCurrent(true);
         consultationRoomRepository.save(consultationRoom);
+    }
+
+    public Appointment removeAppointment(int consultationRoomId, int clientId, Organisation organisation) {
+        ConsultationRoom consultationRoom = consultationRoomRepository.findEntity(consultationRoomId, organisation);
+        Client client = clientRepository.findEntity(clientId, organisation);
+        Appointment removedAppointment = consultationRoom.removeAppointFor(client);
+        appointmentService.delete(removedAppointment);
+        consultationRoomRepository.save(consultationRoom);
+        return removedAppointment;
     }
 }

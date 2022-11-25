@@ -4,12 +4,8 @@ import org.opentele.consult.contract.client.ClientSearchResponse;
 import org.opentele.consult.contract.client.ClientSearchResults;
 import org.opentele.consult.contract.client.ConsultationRoomClientResponse;
 import org.opentele.consult.contract.consultationRoom.*;
-import org.opentele.consult.contract.framework.BaseEntityContract;
 import org.opentele.consult.controller.BaseController;
-import org.opentele.consult.domain.consultationRoom.ConsultationRoom;
-import org.opentele.consult.domain.consultationRoom.ConsultationRoomScheduleUser;
-import org.opentele.consult.domain.consultationRoom.ConsultationRoomUser;
-import org.opentele.consult.domain.consultationRoom.ConsultationRooms;
+import org.opentele.consult.domain.consultationRoom.*;
 import org.opentele.consult.framework.UserSession;
 import org.opentele.consult.mapper.consultationRoom.ConsultationRoomMapper;
 import org.opentele.consult.repository.ClientRepository;
@@ -140,6 +136,13 @@ public class ConsultationRoomController extends BaseController {
     public ConsultationRoomConferenceResponse getConsultationRoomTeleConference(@PathVariable("consultationRoomId") int id, Principal principal) {
         ConsultationRoom consultationRoom = consultationRoomRepository.findEntity(id, getCurrentOrganisation());
         return consultationRoomMapper.mapForConference(consultationRoom, getCurrentUser(principal));
+    }
+
+    @DeleteMapping("/api/consultationRoom/appointment")
+    public Integer removeAppointment(@RequestParam("consultationRoomId") int consultationRoomId,
+                                     @RequestParam("clientId") int clientId, Principal principal) {
+        Appointment appointment = consultationRoomService.removeAppointment(consultationRoomId, clientId, getCurrentOrganisation());
+        return appointment.getId();
     }
 
     @PostMapping("/api/consultationRoom/appointment/next")

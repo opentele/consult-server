@@ -1,5 +1,6 @@
 package org.opentele.consult.domain.consultationRoom;
 
+import org.opentele.consult.domain.client.Client;
 import org.opentele.consult.domain.framework.OrganisationalEntity;
 import org.opentele.consult.domain.security.User;
 import org.opentele.consult.domain.teleconference.TeleConference;
@@ -170,6 +171,14 @@ public class ConsultationRoom  extends OrganisationalEntity {
 
     public Object getProviderIds() {
         return null;
+    }
+
+    public Appointment removeAppointFor(Client client) {
+        Appointment appointment = this.appointments.stream().filter(ap -> ap.getClient().equals(client)).findFirst().orElse(null);
+        if (appointment != null) {
+            this.appointments.remove(appointment);
+        }
+        return appointment;
     }
 
     public static class ConsultationRoomCurrentUserSummary {

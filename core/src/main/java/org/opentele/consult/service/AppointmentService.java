@@ -45,4 +45,8 @@ public class AppointmentService {
             previousToken = appointmentRepository.getPreviousToken(consultationRoom, appointment.getQueueNumber());
         return previousToken;
     }
+
+    public void delete(Appointment appointment) {
+        appointmentRepository.delete(appointment);
+    }
 }
