@@ -16,6 +16,7 @@ public class ClientContract extends BaseClientContract {
     private LocalDateTime updatedOn;
     private LocalDate dateOfBirth;
     private List<ConsultationSessionRecordContract> consultationSessionRecords = new ArrayList<>();
+    private String otherDetails;
 
     public static ClientContract fromWithChildren(Client client) {
         ClientContract contract = from(client);
@@ -30,6 +31,7 @@ public class ClientContract extends BaseClientContract {
         contract.setName(client.getName());
         contract.setRegistrationNumber(client.getRegistrationNumber());
         contract.setAge(client.getAge());
+        contract.setOtherDetails(client.getOtherDetails());
         contract.setCreatedBy(client.getCreatedBy().getName());
         contract.setLastModifiedBy(client.getLastModifiedBy().getName());
         contract.setCreatedOn(DateTimeUtil.fromDate(client.getCreatedDate()));
@@ -87,5 +89,13 @@ public class ClientContract extends BaseClientContract {
 
     public void setUpdatedOn(LocalDateTime updatedOn) {
         this.updatedOn = updatedOn;
+    }
+
+    public String getOtherDetails() {
+        return otherDetails;
+    }
+
+    public void setOtherDetails(String otherDetails) {
+        this.otherDetails = otherDetails;
     }
 }

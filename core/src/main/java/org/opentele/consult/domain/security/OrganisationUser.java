@@ -6,7 +6,7 @@ import org.opentele.consult.domain.framework.OrganisationalEntity;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "organisation_user")
+@Table(name = "organisation_user", uniqueConstraints = {@UniqueConstraint(columnNames = {"organisation_id", "user_id"})})
 public class OrganisationUser extends OrganisationalEntity {
     @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", columnDefinition = "integer not null")

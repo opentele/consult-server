@@ -1,6 +1,5 @@
 package org.opentele.consult.domain.client;
 
-import org.opentele.consult.domain.consultationRoom.ConsultationRoomUser;
 import org.opentele.consult.domain.framework.OrganisationalEntity;
 
 import javax.persistence.*;
@@ -24,6 +23,9 @@ public class Client extends OrganisationalEntity {
 
     @Column(columnDefinition = "varchar(100)")
     private String registrationNumber;
+
+    @Column(columnDefinition = "varchar(1000)")
+    private String otherDetails;
 
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, mappedBy = "client")
     private Set<ConsultationSessionRecord> consultationSessionRecords = new HashSet<>();
@@ -75,5 +77,13 @@ public class Client extends OrganisationalEntity {
     public void addConsultationSessionRecord(ConsultationSessionRecord entity) {
         consultationSessionRecords.add(entity);
         entity.setClient(this);
+    }
+
+    public String getOtherDetails() {
+        return otherDetails;
+    }
+
+    public void setOtherDetails(String otherDetails) {
+        this.otherDetails = otherDetails;
     }
 }
