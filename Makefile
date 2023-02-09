@@ -131,7 +131,7 @@ prod_scp_dest := consult-server:/root/server
 deploy-scripts-to-prod:
 	scp Makefile $(prod_scp_dest)
 	scp -r makefiles $(prod_scp_dest)
-	scp func-automation/superadmin.sql $(prod_scp_dest)/func-automation/
+	scp func-automation/superadmin.sql $(prod_scp_dest)/func-automation
 	scp start-prod-server.sh $(prod_scp_dest)
 
 deploy-to-prod: build-server deploy-scripts-to-prod
