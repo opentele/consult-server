@@ -104,7 +104,7 @@ get-super-admin-password:
 	curl http://localhost:6054/api/test/open/passwordHash?password=$(CONSULT_SUPER_ADMIN_PASSWORD)
 
 data-setup:
-	newman run --env-var "EMAIL_USER_PASSWORD=$(CONSULT_DEMO_ORG_ADMIN_PASSWORD)" --env-var "SUPER_ADMIN_PASSWORD=$(CONSULT_SUPER_ADMIN_PASSWORD)" func-automation/setup-data.json -e func-automation/postman-env.json --insecure
+	newman run func-automation/setup-data.json -e func-automation/postman-env.json --insecure
 #######
 
 
@@ -131,7 +131,7 @@ prod_scp_dest := consult-server:/root/server
 deploy-scripts-to-prod:
 	scp Makefile $(prod_scp_dest)
 	scp -r makefiles $(prod_scp_dest)
-	scp func-automation/superadmin.sql $(prod_scp_dest)/func-automation
+	scp func-automation/superadmin.sql $(prod_scp_dest)/func-automation/superadmin.sql
 	scp start-prod-server.sh $(prod_scp_dest)
 
 deploy-to-prod: build-server deploy-scripts-to-prod
