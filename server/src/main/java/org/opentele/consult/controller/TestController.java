@@ -52,7 +52,7 @@ public class TestController {
     }
 
     @GetMapping("/api/test/open/passwordHash")
-    public String getPasswordHash(@RequestParam("password") String password) {
+    public String getPasswordHash(@RequestBody String password) {
         return bCryptPasswordEncoder.encode(password);
     }
 
