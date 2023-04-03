@@ -10,7 +10,7 @@ import java.security.Principal;
 
 public abstract class BaseController {
     protected final UserService userService;
-    private UserSession userSession;
+    private final UserSession userSession;
 
     public BaseController(UserService userService, UserSession userSession) {
         this.userService = userService;
@@ -18,7 +18,7 @@ public abstract class BaseController {
     }
 
     protected Organisation getCurrentOrganisation() {
-        int currentOrganisationId = userSession.getCurrentOrganisationId();
+        long currentOrganisationId = userSession.getCurrentOrganisationId();
         if (currentOrganisationId == 0) return null;
         return userService.getOrganisation(currentOrganisationId);
     }
@@ -35,7 +35,7 @@ public abstract class BaseController {
         TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
     }
 
-    protected void setCurrentOrganisationId(Integer organisationId) {
+    protected void setCurrentOrganisationId(Long organisationId) {
         userSession.setCurrentOrganisationId(organisationId);
     }
 }

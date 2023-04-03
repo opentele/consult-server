@@ -1,6 +1,6 @@
 package org.opentele.consult.domain.framework;
 
-import org.opentele.consult.domain.client.ConsultationSessionRecord;
+import org.opentele.consult.domain.client.ConsultationRecord;
 
 import javax.persistence.*;
 
@@ -15,9 +15,9 @@ public class ConsultationSessionRecordFile extends OrganisationalEntity {
     @Column
     private String mimeType;
 
-    @ManyToOne(targetEntity = ConsultationSessionRecord.class, fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = ConsultationRecord.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "consultation_session_record_id", columnDefinition = "integer not null")
-    private ConsultationSessionRecord consultationSessionRecord;
+    private ConsultationRecord consultationSessionRecord;
 
     public String getFileName() {
         return fileName;
@@ -27,11 +27,11 @@ public class ConsultationSessionRecordFile extends OrganisationalEntity {
         this.fileName = fileName;
     }
 
-    public ConsultationSessionRecord getConsultationSessionRecord() {
+    public ConsultationRecord getConsultationSessionRecord() {
         return consultationSessionRecord;
     }
 
-    public void setConsultationSessionRecord(ConsultationSessionRecord consultationSessionRecord) {
+    public void setConsultationSessionRecord(ConsultationRecord consultationSessionRecord) {
         this.consultationSessionRecord = consultationSessionRecord;
     }
 

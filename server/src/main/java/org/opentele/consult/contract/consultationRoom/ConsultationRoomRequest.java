@@ -10,7 +10,7 @@ import java.util.List;
 public class ConsultationRoomRequest extends BaseEntityContract {
     private String title;
     private int totalSlots;
-    private List<Integer> providers = new ArrayList<>();
+    private List<Long> providers = new ArrayList<>();
     private LocalTime scheduledStartTime;
     private LocalTime scheduledEndTime;
     private LocalDate scheduledOn;
@@ -31,11 +31,11 @@ public class ConsultationRoomRequest extends BaseEntityContract {
         this.totalSlots = totalSlots;
     }
 
-    public List<Integer> getProviders() {
+    public List<Long> getProviders() {
         return providers;
     }
 
-    public void setProviders(List<Integer> providers) {
+    public void setProviders(List<Long> providers) {
         this.providers = providers;
     }
 

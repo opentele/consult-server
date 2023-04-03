@@ -291,12 +291,12 @@
 					}
 				},
 				"url": {
-					"raw": "{{BASE_API_URL}}/consultationSessionRecords",
+					"raw": "{{BASE_API_URL}}/consultationRecords",
 					"host": [
 						"{{BASE_API_URL}}"
 					],
 					"path": [
-						"consultationSessionRecords"
+						"consultationRecords"
 					]
 				}
 			},

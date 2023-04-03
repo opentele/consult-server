@@ -7,14 +7,14 @@ public class ConsultationSessionRecordContract extends BaseEntityContract {
     private String observations;
     private String keyInference;
     private String recommendations;
-    private int clientId;
-    private int consultationRoomId;
+    private long clientId;
+    private long consultationRoomId;
 
-    public int getClientId() {
+    public long getClientId() {
         return clientId;
     }
 
-    public void setClientId(int clientId) {
+    public void setClientId(long clientId) {
         this.clientId = clientId;
     }
 
@@ -50,11 +50,11 @@ public class ConsultationSessionRecordContract extends BaseEntityContract {
         this.recommendations = recommendations;
     }
 
-    public int getConsultationRoomId() {
+    public long getConsultationRoomId() {
         return consultationRoomId;
     }
 
-    public void setConsultationRoomId(int consultationRoomId) {
+    public void setConsultationRoomId(long consultationRoomId) {
         this.consultationRoomId = consultationRoomId;
     }
 }

@@ -165,7 +165,7 @@ public class ConsultationRoom  extends OrganisationalEntity {
         return currentAppointment.getQueueNumber();
     }
 
-    public Appointment getAppointment(int id) {
+    public Appointment getAppointment(long id) {
         return this.appointments.stream().filter(appointment -> appointment.getId().equals(id)).findFirst().orElse(null);
     }
 

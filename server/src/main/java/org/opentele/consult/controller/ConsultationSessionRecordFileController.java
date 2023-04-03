@@ -1,7 +1,7 @@
 package org.opentele.consult.controller;
 
 import org.opentele.consult.config.ApplicationConfig;
-import org.opentele.consult.domain.client.ConsultationSessionRecord;
+import org.opentele.consult.domain.client.ConsultationRecord;
 import org.opentele.consult.domain.framework.ConsultationSessionRecordFile;
 import org.opentele.consult.framework.FileUtil;
 import org.opentele.consult.framework.UserSession;
@@ -19,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collection;
 
 @RestController
 @PreAuthorize("hasRole('User')")
@@ -54,15 +53,15 @@ public class ConsultationSessionRecordFileController extends BaseController {
 
     @DeleteMapping("/api/consultationSessionRecordFile/{id}")
     @Transactional
-    public void deleteFile(@PathVariable("id") Integer id) {
-        ConsultationSessionRecord consultationSessionRecord = consultationSessionRecordRepository.findByFilesId(id);
+    public void deleteFile(@PathVariable("id") Long id) {
+        ConsultationRecord consultationSessionRecord = consultationSessionRecordRepository.findByFilesId(id);
         ConsultationSessionRecordFile consultationSessionRecordFile = consultationSessionRecord.removeFile(id);
         fileUtil.delete(applicationConfig.getAttachmentsLocation(), consultationSessionRecordFile.getFileName());
         consultationSessionRecordRepository.save(consultationSessionRecord);
     }
 
     @RequestMapping(value = "/api/consultationSessionRecordFile/{id}/contents", method = RequestMethod.GET)
-    public void getFile(@PathVariable("id") Integer id, HttpServletResponse response) {
+    public void getFile(@PathVariable("id") Long id, HttpServletResponse response) {
         try {
             ConsultationSessionRecordFile consultationSessionRecordFile = consultationSessionRecordFileRepository.findEntity(id, getCurrentOrganisation());
             String fileName = consultationSessionRecordFile.getFileName();

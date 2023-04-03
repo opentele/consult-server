@@ -1,9 +1,6 @@
 package org.opentele.consult.contract.client;
 
 import org.opentele.consult.domain.client.Client;
-import org.opentele.consult.domain.client.Gender;
-
-import java.time.Period;
 
 public class ClientSearchResponse extends BaseClientContract {
     private int numberOfSessions;
@@ -15,7 +12,7 @@ public class ClientSearchResponse extends BaseClientContract {
         clientSearchResponse.setName(client.getName());
         clientSearchResponse.setAge(client.getAge());
         clientSearchResponse.setGender(client.getGender());
-        clientSearchResponse.setNumberOfSessions(client.getConsultationSessionRecords().size());
+        clientSearchResponse.setNumberOfSessions(client.getConsultationRecords().size());
         return clientSearchResponse;
     }
 

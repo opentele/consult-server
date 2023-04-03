@@ -5,8 +5,8 @@ import org.opentele.consult.domain.consultationRoom.Appointment;
 
 public class AppointmentContract extends BaseEntityContract {
     private int queueNumber;
-    private int consultationRoomId;
-    private int clientId;
+    private long consultationRoomId;
+    private long clientId;
     private boolean isCurrent;
 
     public int getQueueNumber() {
@@ -17,19 +17,19 @@ public class AppointmentContract extends BaseEntityContract {
         this.queueNumber = queueNumber;
     }
 
-    public int getConsultationRoomId() {
+    public long getConsultationRoomId() {
         return consultationRoomId;
     }
 
-    public void setConsultationRoomId(int consultationRoomId) {
+    public void setConsultationRoomId(long consultationRoomId) {
         this.consultationRoomId = consultationRoomId;
     }
 
-    public int getClientId() {
+    public long getClientId() {
         return clientId;
     }
 
-    public void setClientId(int clientId) {
+    public void setClientId(long clientId) {
         this.clientId = clientId;
     }
 

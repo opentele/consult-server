@@ -8,9 +8,9 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Table(name = "consultation_session_record")
+@Table(name = "consultation_record")
 @Entity
-public class ConsultationSessionRecord extends OrganisationalEntity {
+public class ConsultationRecord extends OrganisationalEntity {
     @Column(columnDefinition = "varchar(10000) not null")
     private String complaints;
 
@@ -97,7 +97,7 @@ public class ConsultationSessionRecord extends OrganisationalEntity {
         return consultationSessionRecordFile;
     }
 
-    public ConsultationSessionRecordFile removeFile(Integer fileId) {
+    public ConsultationSessionRecordFile removeFile(Long fileId) {
         ConsultationSessionRecordFile consultationSessionRecordFile = files.stream().filter(x -> x.getId().equals(fileId)).findAny().orElse(null);
         files.remove(consultationSessionRecordFile);
         return consultationSessionRecordFile;

@@ -46,7 +46,7 @@ public class OrganisationUserController extends BaseController {
 
     @RequestMapping(value = "/api/organisationUser/{id}", method = {RequestMethod.GET})
     @PreAuthorize("hasRole('User')")
-    public OrganisationUserContract getOrganisationUser(@PathVariable("id") int id) {
+    public OrganisationUserContract getOrganisationUser(@PathVariable("id") long id) {
         OrganisationUser organisationUser = userService.getOrganisationUser(id, getCurrentOrganisation());
         return OrganisationUserContract.from(organisationUser);
     }

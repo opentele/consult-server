@@ -8,8 +8,8 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
-public interface UserRepository extends CrudRepository<User, Integer> {
-    default User findUser(int id) {
+public interface UserRepository extends CrudRepository<User, Long> {
+    default User findUser(long id) {
         return findById(id).get();
     }
 

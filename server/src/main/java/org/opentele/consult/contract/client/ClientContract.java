@@ -40,7 +40,7 @@ public class ClientContract extends BaseClientContract {
     }
 
     public static void mapChildren(Client client, ClientContract contract) {
-        contract.setConsultationSessionRecords(client.getConsultationSessionRecords().stream().map(ConsultationSessionRecordResponse::from).collect(Collectors.toList()));
+        contract.setConsultationSessionRecords(client.getConsultationRecords().stream().map(ConsultationSessionRecordResponse::from).collect(Collectors.toList()));
     }
 
     public String getCreatedBy() {

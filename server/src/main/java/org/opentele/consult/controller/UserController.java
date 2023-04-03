@@ -66,7 +66,7 @@ public class UserController extends BaseController {
 
     @RequestMapping(value = "/api/user/organisation", method = {RequestMethod.POST})
     @PreAuthorize("hasRole('User')")
-    public ResponseEntity<String> setOrganisation(@RequestParam(name = "organisationId") int organisationId, Principal principal) {
+    public ResponseEntity<String> setOrganisation(@RequestParam(name = "organisationId") long organisationId, Principal principal) {
         String userId = principal.getName();
         UserType userType = userService.getUserType(userId, organisationId);
         if (userType.equals(UserType.OrgAdmin))

@@ -8,13 +8,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 @NoRepositoryBean
-public interface AbstractRepository<T> extends CrudRepository<T, Integer> {
-    T findByIdAndOrganisation(int id, Organisation organisation);
+public interface AbstractRepository<T> extends CrudRepository<T, Long> {
+    T findByIdAndOrganisation(long id, Organisation organisation);
     T findByUuidAndOrganisation(UUID uuid, Organisation organisation);
-    default T findEntity(int id, Organisation organisation) {
+    default T findEntity(long id, Organisation organisation) {
         return findByIdAndOrganisation(id, organisation);
     }
-    default T findEntityInternal(int id) {
+    default T findEntityInternal(long id) {
         return findById(id).get();
     }
 }

@@ -3,12 +3,12 @@ package org.opentele.consult.contract.framework;
 import org.opentele.consult.domain.framework.AbstractEntity;
 
 public class BaseEntityContract {
-    private int id;
+    private long id;
 
     public BaseEntityContract() {
     }
 
-    public BaseEntityContract(int id) {
+    public BaseEntityContract(long id) {
         this.id = id;
     }
 
@@ -16,11 +16,11 @@ public class BaseEntityContract {
         this.id = abstractEntity.getId();
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 }

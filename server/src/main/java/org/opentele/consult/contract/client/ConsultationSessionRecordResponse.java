@@ -1,6 +1,6 @@
 package org.opentele.consult.contract.client;
 
-import org.opentele.consult.domain.client.ConsultationSessionRecord;
+import org.opentele.consult.domain.client.ConsultationRecord;
 import org.opentele.consult.util.DateTimeUtil;
 
 import java.time.LocalDateTime;
@@ -11,7 +11,7 @@ public class ConsultationSessionRecordResponse extends ConsultationSessionRecord
     private String createdBy;
     private String lastModifiedBy;
 
-    public static ConsultationSessionRecordResponse from(ConsultationSessionRecord entity) {
+    public static ConsultationSessionRecordResponse from(ConsultationRecord entity) {
         ConsultationSessionRecordResponse contract = new ConsultationSessionRecordResponse();
         contract.setId(entity.getId());
         contract.setComplaints(entity.getComplaints());

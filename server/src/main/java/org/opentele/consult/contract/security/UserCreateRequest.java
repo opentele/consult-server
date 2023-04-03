@@ -8,7 +8,7 @@ public class UserCreateRequest {
     private String phone;
     private String password;
     private UserType userType;
-    private int organisationId;
+    private long organisationId;
 
     public String getName() {
         return name;
@@ -42,11 +42,11 @@ public class UserCreateRequest {
         this.password = password;
     }
 
-    public int getOrganisationId() {
+    public long getOrganisationId() {
         return organisationId;
     }
 
-    public void setOrganisationId(int organisationId) {
+    public void setOrganisationId(long organisationId) {
         this.organisationId = organisationId;
     }
 

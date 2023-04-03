@@ -34,7 +34,7 @@ public class Role extends AbstractAuditableEntity {
     }
 
     // Used by the web app
-    public List<Integer> getPrivilegeIds() {
+    public List<Long> getPrivilegeIds() {
         return this.getPrivileges().stream().map(AbstractAuditableEntity::getId).collect(Collectors.toList());
     }
 

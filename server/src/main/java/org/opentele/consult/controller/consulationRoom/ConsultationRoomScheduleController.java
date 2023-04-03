@@ -41,7 +41,7 @@ public class ConsultationRoomScheduleController extends BaseController  {
     }
 
     @GetMapping(value = "/api/consultationRoomSchedule/{id}")
-    public ConsultationRoomScheduleResponse get(@PathVariable("id") int id) {
+    public ConsultationRoomScheduleResponse get(@PathVariable("id") long id) {
         ConsultationRoomSchedule entity = consultationRoomScheduleRepository.findEntity(id, getCurrentOrganisation());
         return ConsultationRoomScheduleMapper.map(entity);
     }
@@ -52,11 +52,11 @@ public class ConsultationRoomScheduleController extends BaseController  {
     }
 
     @RequestMapping(value = "/api/consultationRoomSchedule", method = {RequestMethod.PUT, RequestMethod.POST})
-    public ResponseEntity<Integer> putPost(@RequestBody ConsultationRoomScheduleRequest request) {
+    public ResponseEntity<Long> putPost(@RequestBody ConsultationRoomScheduleRequest request) {
         var schedule = Repository.findByIdOrCreate(request.getId(), getCurrentOrganisation(), consultationRoomScheduleRepository, new ConsultationRoomSchedule());
         ConsultationRoomScheduleMapper.map(request, getCurrentOrganisation(), schedule);
 
-        List<Integer> existingProviderIds = schedule.getProviders().stream().map(x -> x.getUser().getId()).collect(Collectors.toList());
+        List<Long> existingProviderIds = schedule.getProviders().stream().map(x -> x.getUser().getId()).collect(Collectors.toList());
         Repository.mergeChildren(request.getProviders(), existingProviderIds,
                 x -> schedule.removeUser((ConsultationRoomScheduleUser)x),
                 x -> schedule.addUser((ConsultationRoomScheduleUser)x),

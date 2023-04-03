@@ -1,7 +1,7 @@
 package org.opentele.consult.contract.security;
 
 public class SearchedUserResponse {
-    private int userId;
+    private long userId;
     private String name;
     private boolean alreadyPartOfOrganisation;
     private boolean found;
@@ -30,11 +30,11 @@ public class SearchedUserResponse {
         this.found = found;
     }
 
-    public int getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 }

@@ -28,7 +28,10 @@ public class Client extends OrganisationalEntity {
     private String otherDetails;
 
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, mappedBy = "client")
-    private Set<ConsultationSessionRecord> consultationSessionRecords = new HashSet<>();
+    private Set<ConsultationRecord> consultationRecords = new HashSet<>();
+
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, mappedBy = "client")
+    private Set<ConsultationFormRecord> consultationFormRecords = new HashSet<>();
 
     public String getName() {
         return name;
@@ -66,16 +69,21 @@ public class Client extends OrganisationalEntity {
         return Period.between(LocalDate.now(), this.getDateOfBirth());
     }
 
-    public Set<ConsultationSessionRecord> getConsultationSessionRecords() {
-        return consultationSessionRecords;
+    public Set<ConsultationRecord> getConsultationRecords() {
+        return consultationRecords;
     }
 
-    public void setConsultationSessionRecords(Set<ConsultationSessionRecord> consultationSessionRecords) {
-        this.consultationSessionRecords = consultationSessionRecords;
+    public void setConsultationRecords(Set<ConsultationRecord> consultationRecords) {
+        this.consultationRecords = consultationRecords;
     }
 
-    public void addConsultationSessionRecord(ConsultationSessionRecord entity) {
-        consultationSessionRecords.add(entity);
+    public void addConsultationRecord(ConsultationRecord entity) {
+        consultationRecords.add(entity);
+        entity.setClient(this);
+    }
+
+    public void addConsultationFormRecord(ConsultationFormRecord entity) {
+        consultationFormRecords.add(entity);
         entity.setClient(this);
     }
 

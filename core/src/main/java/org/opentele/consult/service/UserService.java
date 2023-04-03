@@ -45,7 +45,7 @@ public class UserService {
         return null;
     }
 
-    public OrganisationUser getOrganisationUser(int userId, Organisation currentOrganisation) {
+    public OrganisationUser getOrganisationUser(long userId, Organisation currentOrganisation) {
         User user = this.getUser(userId);
         return organisationUserRepository.findByUserAndOrganisation(user, currentOrganisation);
     }
@@ -124,7 +124,7 @@ public class UserService {
         organisationRepository.delete(organisationRepository.findByName(orgName));
     }
 
-    public User getUser(int userId) {
+    public User getUser(long userId) {
         return userRepository.findById(userId).orElse(null);
     }
 
@@ -133,7 +133,7 @@ public class UserService {
         return getUser(name, name);
     }
 
-    public UserType getUserType(String userId, int organisationId) {
+    public UserType getUserType(String userId, long organisationId) {
         User user = this.getUser(userId);
         OrganisationUser organisationUser = organisationUserRepository.findByUserAndOrganisationId(user, organisationId);
         if (organisationUser == null)
@@ -147,7 +147,7 @@ public class UserService {
         return organisationUserRepository.findAllByOrganisationOrderByUserName(organisation);
     }
 
-    public Organisation getOrganisation(int organisationId) {
+    public Organisation getOrganisation(long organisationId) {
         return organisationRepository.findEntity(organisationId);
     }
 
@@ -178,13 +178,13 @@ public class UserService {
         user.setMobile(mobile);
     }
 
-    public User updateProfile(int id, String name, String email, String mobile, String hashedPassword, String identification, String qualification) {
+    public User updateProfile(long id, String name, String email, String mobile, String hashedPassword, String identification, String qualification) {
         User user = this.updateProfile(id, name, email, mobile, identification, qualification);
         user.setPassword(hashedPassword);
         return this.save(user, user);
     }
 
-    public User updateProfile(int id, String name, String email, String mobile, String identification, String qualification) {
+    public User updateProfile(long id, String name, String email, String mobile, String identification, String qualification) {
         User user = userRepository.findUser(id);
         this.setBasicUserFields(name, email, mobile, user);
         user.setIdentification(identification);

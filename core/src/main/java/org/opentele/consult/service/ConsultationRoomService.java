@@ -36,14 +36,14 @@ public class ConsultationRoomService {
 
     public int schedule(int numberOfDays) {
         int roomsCreated = 0;
-        List<Integer> scheduleIds = consultationRoomScheduleRepository.findAllBy().stream().map(AbstractEntity::getId).collect(Collectors.toList());
-        for (int consultationRoomScheduleId : scheduleIds) {
+        List<Long> scheduleIds = consultationRoomScheduleRepository.findAllBy().stream().map(AbstractEntity::getId).collect(Collectors.toList());
+        for (long consultationRoomScheduleId : scheduleIds) {
             roomsCreated += create(consultationRoomScheduleId, numberOfDays);
         }
         return roomsCreated;
     }
 
-    protected int create(int consultationRoomScheduleId, int numberOfDays) {
+    protected int create(long consultationRoomScheduleId, int numberOfDays) {
         LocalDate date = LocalDate.now().minusDays(1);
         int roomsCreated = 0;
         ConsultationRoomSchedule consultationRoomSchedule = consultationRoomScheduleRepository.findEntityInternal(consultationRoomScheduleId);
@@ -67,7 +67,7 @@ public class ConsultationRoomService {
         return summary;
     }
 
-    public TeleConference setup(int consultationRoomId, Organisation organisation) {
+    public TeleConference setup(long consultationRoomId, Organisation organisation) {
         ConsultationRoom consultationRoom = consultationRoomRepository.findEntity(consultationRoomId, organisation);
         TeleConference activeTeleConference = consultationRoom.getActiveTeleConference();
         if (activeTeleConference != null) return activeTeleConference;
@@ -82,7 +82,7 @@ public class ConsultationRoomService {
         return teleConference;
     }
 
-    public void moveToNextToken(int consultationRoomId, User user, Organisation organisation) {
+    public void moveToNextToken(long consultationRoomId, User user, Organisation organisation) {
         ConsultationRoom consultationRoom = consultationRoomRepository.findEntity(consultationRoomId, organisation);
         Appointment currentAppointment = consultationRoom.getCurrentAppointment();
 
@@ -93,7 +93,7 @@ public class ConsultationRoomService {
         consultationRoomRepository.save(consultationRoom);
     }
 
-    public void moveToPreviousToken(int consultationRoomId, User user, Organisation organisation) {
+    public void moveToPreviousToken(long consultationRoomId, User user, Organisation organisation) {
         ConsultationRoom consultationRoom = consultationRoomRepository.findEntity(consultationRoomId, organisation);
         Appointment currentAppointment = consultationRoom.getCurrentAppointment();
 
@@ -104,7 +104,7 @@ public class ConsultationRoomService {
         consultationRoomRepository.save(consultationRoom);
     }
 
-    public void appointmentMoveDown(int consultationRoomId, int tokenId, User user, Organisation organisation) {
+    public void appointmentMoveDown(long consultationRoomId, int tokenId, User user, Organisation organisation) {
         ConsultationRoom consultationRoom = consultationRoomRepository.findEntity(consultationRoomId, organisation);
         Appointment appointment = consultationRoom.getAppointment(tokenId);
         int queueNumber = appointment.getQueueNumber();
@@ -116,7 +116,7 @@ public class ConsultationRoomService {
         consultationRoomRepository.save(consultationRoom);
     }
 
-    public void appointmentMoveUp(int consultationRoomId, int appointmentId, User user, Organisation organisation) {
+    public void appointmentMoveUp(long consultationRoomId, int appointmentId, User user, Organisation organisation) {
         ConsultationRoom consultationRoom = consultationRoomRepository.findEntity(consultationRoomId, organisation);
         Appointment appointment = consultationRoom.getAppointment(appointmentId);
         int queueNumber = appointment.getQueueNumber();
@@ -128,7 +128,7 @@ public class ConsultationRoomService {
         consultationRoomRepository.save(consultationRoom);
     }
 
-    public void setCurrentAppointment(int consultationRoomId, int appointmentId, Organisation organisation) {
+    public void setCurrentAppointment(long consultationRoomId, int appointmentId, Organisation organisation) {
         ConsultationRoom consultationRoom = consultationRoomRepository.findEntity(consultationRoomId, organisation);
         Appointment appointment = consultationRoom.getAppointment(appointmentId);
         consultationRoom.getCurrentAppointment().setCurrent(false);
@@ -136,7 +136,7 @@ public class ConsultationRoomService {
         consultationRoomRepository.save(consultationRoom);
     }
 
-    public Appointment removeAppointment(int consultationRoomId, int clientId, Organisation organisation) {
+    public Appointment removeAppointment(long consultationRoomId, long clientId, Organisation organisation) {
         ConsultationRoom consultationRoom = consultationRoomRepository.findEntity(consultationRoomId, organisation);
         Client client = clientRepository.findEntity(clientId, organisation);
         Appointment removedAppointment = consultationRoom.removeAppointFor(client);

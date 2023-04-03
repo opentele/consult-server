@@ -5,7 +5,7 @@ import org.opentele.consult.domain.client.Gender;
 import java.time.Period;
 
 public class ConsultationRoomClientResponse {
-    private int id;
+    private long id;
     private String name;
     private String registrationNumber;
     private int queueNumber;
@@ -52,11 +52,11 @@ public class ConsultationRoomClientResponse {
         this.age = age;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 }

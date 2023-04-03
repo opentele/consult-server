@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ConsultationRoomUserRepository extends AbstractRepository<ConsultationRoomUser> {
     ConsultationRoomUser findByConsultationRoomAndUserIdAndOrganisation(
-            ConsultationRoom consultationRoom, int userId, Organisation organisation);
+            ConsultationRoom consultationRoom, Long userId, Organisation organisation);
 }

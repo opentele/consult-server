@@ -70,18 +70,17 @@ public class ConsultationRoomController extends BaseController {
     }
 
     private List<ConsultationRoomDetailResponse> getConsultationRooms(LocalDate startDate, LocalDate endDate, Principal principal) {
-        Map<LocalDate, List<ConsultationRoomDetailResponse>> map = new HashMap<>();
         ConsultationRooms consultationRooms = consultationRoomRepository.findAllBetween(startDate, endDate, getCurrentOrganisation());
         return consultationRooms.stream().map(consultationRoom -> consultationRoomMapper.map(consultationRoom, getCurrentUser(principal))).collect(Collectors.toList());
     }
 
     @GetMapping(value = "/api/consultationRoom/{id}")
-    public ConsultationRoomContract get(@PathVariable("id") int id) {
+    public ConsultationRoomContract get(@PathVariable("id") long id) {
         return consultationRoomMapper.map(consultationRoomRepository.findEntity(id, getCurrentOrganisation()));
     }
 
     @RequestMapping(value = "/api/consultationRoom", method = {RequestMethod.PUT, RequestMethod.POST})
-    public ResponseEntity<Integer> putPost(@RequestBody ConsultationRoomRequest request, Principal principal) {
+    public ResponseEntity<Long> putPost(@RequestBody ConsultationRoomRequest request) {
         ConsultationRoom consultationRoom = Repository.findByIdOrCreate(request.getId(), getCurrentOrganisation(), consultationRoomRepository, new ConsultationRoom());
         consultationRoom.setOrganisation(getCurrentOrganisation());
         consultationRoom.setTitle(request.getTitle());
@@ -89,7 +88,7 @@ public class ConsultationRoomController extends BaseController {
         consultationRoom.setScheduledOn(request.getScheduledOn());
         consultationRoom.setScheduledStartTime(request.getScheduledStartTime());
         consultationRoom.setScheduledEndTime(request.getScheduledEndTime());
-        List<Integer> existingProviderIds = consultationRoom.getProviders().stream().map(x -> x.getUser().getId()).collect(Collectors.toList());
+        List<Long> existingProviderIds = consultationRoom.getProviders().stream().map(x -> x.getUser().getId()).collect(Collectors.toList());
         Repository.mergeChildren(request.getProviders(), existingProviderIds,
                 x -> consultationRoom.removeProvider((ConsultationRoomUser) x),
                 x -> consultationRoom.addProvider((ConsultationRoomUser) x),
@@ -105,7 +104,7 @@ public class ConsultationRoomController extends BaseController {
     }
 
     @GetMapping(value = "/api/consultationRoom/client")
-    public List<ConsultationRoomClientResponse> getClients(@RequestParam(name = "consultationRoomId") int consultationRoomId) {
+    public List<ConsultationRoomClientResponse> getClients(@RequestParam(name = "consultationRoomId") long consultationRoomId) {
         return clientRepository.getClients(consultationRoomId).stream().map(projection -> {
             ConsultationRoomClientResponse response = new ConsultationRoomClientResponse();
             response.setId(projection.getId());
@@ -120,50 +119,50 @@ public class ConsultationRoomController extends BaseController {
 
     @GetMapping("/api/consultationRoom/client/search")
     public ClientSearchResults searchResults(@RequestParam("q") String q,
-                                             @RequestParam("consultationRoomId") int consultationRoomId) {
+                                             @RequestParam("consultationRoomId") long consultationRoomId) {
         int count = clientRepository.countClientsMatching(q, getCurrentOrganisation(), consultationRoomId);
         List<ClientSearchResponse> clientSearchResponses = clientRepository.getClientsMatching(q, getCurrentOrganisation(), consultationRoomId).stream().map(ClientSearchResponse::from).collect(Collectors.toList());
         return new ClientSearchResults(count, clientSearchResponses);
     }
 
     @RequestMapping(value = "/api/consultationRoom/teleConference", method = {RequestMethod.POST, RequestMethod.PUT})
-    public int saveTeleConference(@RequestBody int consultationRoomId) {
+    public long saveTeleConference(@RequestBody long consultationRoomId) {
         consultationRoomService.setup(consultationRoomId, getCurrentOrganisation());
         return consultationRoomId;
     }
 
     @GetMapping("/api/consultationRoom/teleConference/{consultationRoomId}")
-    public ConsultationRoomConferenceResponse getConsultationRoomTeleConference(@PathVariable("consultationRoomId") int id, Principal principal) {
+    public ConsultationRoomConferenceResponse getConsultationRoomTeleConference(@PathVariable("consultationRoomId") long id, Principal principal) {
         ConsultationRoom consultationRoom = consultationRoomRepository.findEntity(id, getCurrentOrganisation());
         return consultationRoomMapper.mapForConference(consultationRoom, getCurrentUser(principal));
     }
 
     @DeleteMapping("/api/consultationRoom/appointment")
-    public Integer removeAppointment(@RequestParam("consultationRoomId") int consultationRoomId,
-                                     @RequestParam("clientId") int clientId, Principal principal) {
+    public Long removeAppointment(@RequestParam("consultationRoomId") long consultationRoomId,
+                                  @RequestParam("clientId") long clientId) {
         Appointment appointment = consultationRoomService.removeAppointment(consultationRoomId, clientId, getCurrentOrganisation());
         return appointment.getId();
     }
 
     @PostMapping("/api/consultationRoom/appointment/next")
-    public void moveToNextAppointment(@RequestParam("consultationRoomId") int consultationRoomId, Principal principal) {
+    public void moveToNextAppointment(@RequestParam("consultationRoomId") long consultationRoomId, Principal principal) {
         consultationRoomService.moveToNextToken(consultationRoomId, getCurrentUser(principal), getCurrentOrganisation());
     }
 
     @PostMapping("/api/consultationRoom/appointment/previous")
-    public void moveToPreviousAppointment(@RequestParam("consultationRoomId") int consultationRoomId, Principal principal) {
+    public void moveToPreviousAppointment(@RequestParam("consultationRoomId") long consultationRoomId, Principal principal) {
         consultationRoomService.moveToPreviousToken(consultationRoomId, getCurrentUser(principal), getCurrentOrganisation());
     }
 
     @PostMapping("/api/consultationRoom/appointment/moveDown")
-    public boolean appointmentMoveDown(@RequestParam("consultationRoomId") int consultationRoomId,
+    public boolean appointmentMoveDown(@RequestParam("consultationRoomId") long consultationRoomId,
                                          @RequestParam("appointmentId") int tokenId, Principal principal) {
         consultationRoomService.appointmentMoveDown(consultationRoomId, tokenId, getCurrentUser(principal), getCurrentOrganisation());
         return true;
     }
 
     @PostMapping("/api/consultationRoom/appointment/moveUp")
-    public boolean appointmentMoveUp(@RequestParam("consultationRoomId") int consultationRoomId,
+    public boolean appointmentMoveUp(@RequestParam("consultationRoomId") long consultationRoomId,
                                          @RequestParam("appointmentId") int tokenId, Principal principal) {
         consultationRoomService.appointmentMoveUp(consultationRoomId, tokenId, getCurrentUser(principal), getCurrentOrganisation());
         return true;
@@ -171,7 +170,7 @@ public class ConsultationRoomController extends BaseController {
 
     @PostMapping("/api/consultationRoom/appointment/setCurrent")
     @Transactional
-    public boolean setCurrentAppointment(@RequestParam("consultationRoomId") int consultationRoomId,
+    public boolean setCurrentAppointment(@RequestParam("consultationRoomId") long consultationRoomId,
                                          @RequestParam("appointmentId") int appointmentId) {
         consultationRoomService.setCurrentAppointment(consultationRoomId, appointmentId, getCurrentOrganisation());
         return true;

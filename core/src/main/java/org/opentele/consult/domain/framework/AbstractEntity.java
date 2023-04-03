@@ -13,7 +13,7 @@ public abstract class AbstractEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
-    private Integer id;
+    private Long id;
 
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
@@ -23,7 +23,7 @@ public abstract class AbstractEntity {
     @Column(name = "inactive", columnDefinition = "boolean default false", nullable = false)
     private boolean inactive;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
@@ -53,7 +53,7 @@ public abstract class AbstractEntity {
         return this.id != null && (this.id.equals(rhs.getId()));
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

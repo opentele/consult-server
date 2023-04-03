@@ -16,20 +16,20 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class Repository {
-    public static <T> Set<T> findByIds(List<Integer> ids, Organisation organisation, AbstractRepository<T> abstractRepository) {
+    public static <T> Set<T> findByIds(List<Long> ids, Organisation organisation, AbstractRepository<T> abstractRepository) {
         return ids.stream().map(id -> Repository.findById(id, organisation, abstractRepository)).collect(Collectors.toSet());
     }
 
-    public static <T> T findById(Integer id, Organisation organisation, AbstractRepository<T> crudRepository) {
+    public static <T> T findById(Long id, Organisation organisation, AbstractRepository<T> crudRepository) {
         return (id == null || id == 0) ? null : (T) crudRepository.findEntity(id, organisation);
     }
 
-    public static <T> T findByUuidOrId(UUID uuid, Integer id, Organisation organisation, AbstractRepository<T> abstractRepository) {
+    public static <T> T findByUuidOrId(UUID uuid, Long id, Organisation organisation, AbstractRepository<T> abstractRepository) {
         // Simplifying based IntelliJ's suggestion could lead to recursive loop
         return Repository.findByUuidOrId(uuid == null ? null : uuid.toString(), id, organisation, abstractRepository);
     }
 
-    public static <T> T findByUuidOrId(String uuid, Integer id, Organisation organisation, AbstractRepository<T> abstractRepository) {
+    public static <T> T findByUuidOrId(String uuid, Long id, Organisation organisation, AbstractRepository<T> abstractRepository) {
         if (uuid == null) {
             return findById(id, organisation, abstractRepository);
         } else {
@@ -37,7 +37,7 @@ public class Repository {
         }
     }
 
-    public static <T extends AbstractAuditableEntity> T findByIdOrCreate(Integer id, Organisation organisation, AbstractRepository<T> repository, T newEntity) {
+    public static <T extends AbstractAuditableEntity> T findByIdOrCreate(Long id, Organisation organisation, AbstractRepository<T> repository, T newEntity) {
         if (id == null || id == 0) {
             return newEntity;
         }
@@ -64,19 +64,19 @@ public class Repository {
         return entity;
     }
 
-    public static <T extends AbstractEntity> void mergeChildren(List<Integer> proposedChildrenIds, List<Integer> existingChildrenIds, Consumer<AbstractEntity> removeChild, Consumer<AbstractEntity> addChild, Function<Integer, AbstractEntity> findEntity, Function<Integer, AbstractEntity> createEntity) {
-        Set<Integer> proposedChildrenIdSet = new HashSet<>(proposedChildrenIds);
-        HashSet<Integer> toRemoveChildrenIds = new HashSet<>(existingChildrenIds);
+    public static <T extends AbstractEntity> void mergeChildren(List<Long> proposedChildrenIds, List<Long> existingChildrenIds, Consumer<AbstractEntity> removeChild, Consumer<AbstractEntity> addChild, Function<Long, AbstractEntity> findEntity, Function<Long, AbstractEntity> createEntity) {
+        Set<Long> proposedChildrenIdSet = new HashSet<>(proposedChildrenIds);
+        HashSet<Long> toRemoveChildrenIds = new HashSet<>(existingChildrenIds);
         toRemoveChildrenIds.removeAll(proposedChildrenIdSet);
         proposedChildrenIdSet.removeAll(existingChildrenIds);
         toRemoveChildrenIds.forEach(existingChildId -> removeChild.accept(findEntity.apply(existingChildId)));
 
-        for (Integer proposedChildId : proposedChildrenIdSet) {
+        for (Long proposedChildId : proposedChildrenIdSet) {
             addChild.accept(createEntity.apply(proposedChildId));
         }
     }
 
-    public static <T extends AbstractAuditableEntity> T delete(Integer id, Organisation organisation, AbstractRepository<T> repository) {
+    public static <T extends AbstractAuditableEntity> T delete(Long id, Organisation organisation, AbstractRepository<T> repository) {
         T t = repository.findEntity(id, organisation);
         repository.delete(t);
         return t;
