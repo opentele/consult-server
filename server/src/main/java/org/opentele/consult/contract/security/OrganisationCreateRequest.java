@@ -2,6 +2,7 @@ package org.opentele.consult.contract.security;
 
 public class OrganisationCreateRequest {
     private String name;
+    private String formIoProjectId;
 
     public String getName() {
         return name;
@@ -9,5 +10,13 @@ public class OrganisationCreateRequest {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getFormIoProjectId() {
+        return formIoProjectId;
+    }
+
+    public void setFormIoProjectId(String formIoProjectId) {
+        this.formIoProjectId = formIoProjectId;
     }
 }

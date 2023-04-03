@@ -31,10 +31,6 @@ public abstract class BaseController {
         return userService.getUser(userId);
     }
 
-    protected void rollback() {
-        TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-    }
-
     protected void setCurrentOrganisationId(Long organisationId) {
         userSession.setCurrentOrganisationId(organisationId);
     }

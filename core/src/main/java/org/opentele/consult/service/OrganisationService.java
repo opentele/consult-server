@@ -15,9 +15,10 @@ public class OrganisationService {
         this.organisationRepository = organisationRepository;
     }
 
-    public Organisation createOrg(String organisationName, User user) {
+    public Organisation createOrg(String organisationName, User user, String formIoProjectId) {
         Organisation organisation = new Organisation();
         organisation.setName(organisationName);
+        organisation.setFormIoProjectId(formIoProjectId);
         organisation.setCreatedBy(user);
         organisation.setLastModifiedBy(user);
         return organisationRepository.save(organisation);

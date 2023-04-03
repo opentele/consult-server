@@ -22,14 +22,14 @@ import java.io.InputStream;
 
 @RestController
 @PreAuthorize("hasRole('User')")
-public class ConsultationSessionRecordFileController extends BaseController {
+public class ConsultationRecordFileController extends BaseController {
     private final FileUtil fileUtil;
     private final ApplicationConfig applicationConfig;
     private final ConsultationSessionRecordRepository consultationSessionRecordRepository;
     private final ConsultationSessionRecordFileRepository consultationSessionRecordFileRepository;
 
     @Autowired
-    public ConsultationSessionRecordFileController(UserService userService, UserSession userSession, FileUtil fileUtil, ApplicationConfig applicationConfig, ConsultationSessionRecordRepository consultationSessionRecordRepository, ConsultationSessionRecordFileRepository consultationSessionRecordFileRepository) {
+    public ConsultationRecordFileController(UserService userService, UserSession userSession, FileUtil fileUtil, ApplicationConfig applicationConfig, ConsultationSessionRecordRepository consultationSessionRecordRepository, ConsultationSessionRecordFileRepository consultationSessionRecordFileRepository) {
         super(userService, userSession);
         this.fileUtil = fileUtil;
         this.applicationConfig = applicationConfig;

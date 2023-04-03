@@ -125,7 +125,7 @@ public class OrganisationUserController extends BaseController {
 
     @GetMapping("/api/user")
     @PreAuthorize("hasRole('OrgAdmin')")
-    public SearchedUserResponse getUser(@RequestParam(value = "userName", required = true) String userName) {
+    public SearchedUserResponse getUser(@RequestParam(value = "userName") String userName) {
         User user = userService.getUser(userName);
         OrganisationUser ou = organisationUserService.getOrganisationUser(user, getCurrentOrganisation());
         SearchedUserResponse response = new SearchedUserResponse();

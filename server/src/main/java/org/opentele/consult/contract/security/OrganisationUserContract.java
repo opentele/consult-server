@@ -9,6 +9,7 @@ public class OrganisationUserContract extends UserContract {
     private UserType userType;
     private ProviderType providerType;
     private String organisationName;
+    private String formIoProjectId;
     private Language language;
 
     public UserType getUserType() {
@@ -43,6 +44,14 @@ public class OrganisationUserContract extends UserContract {
         this.language = language;
     }
 
+    public String getFormIoProjectId() {
+        return formIoProjectId;
+    }
+
+    public void setFormIoProjectId(String formIoProjectId) {
+        this.formIoProjectId = formIoProjectId;
+    }
+
     public static OrganisationUserContract from(OrganisationUser organisationUser) {
         OrganisationUserContract contract = new OrganisationUserContract();
         UserContract.from(organisationUser.getUser(), contract);
@@ -51,6 +60,7 @@ public class OrganisationUserContract extends UserContract {
         contract.setOrganisationName(organisationUser.getOrganisation().getName());
         contract.setProviderType(organisationUser.getProviderType());
         contract.setLanguage(organisationUser.getLanguage());
+        contract.setFormIoProjectId(organisationUser.getOrganisation().getFormIoProjectId());
         return contract;
     }
 }

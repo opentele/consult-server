@@ -1,18 +1,7 @@
-package org.opentele.consult.domain;
+package org.opentele.consult.contract;
 
-import org.opentele.consult.domain.framework.AbstractAuditableEntity;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
-@Entity
-@Table(name = "organisation")
-public class Organisation extends AbstractAuditableEntity {
-    @Column(nullable = false)
+public class OrganisationResponse {
     private String name;
-
-    @Column
     private String formIoProjectId;
 
     public String getName() {

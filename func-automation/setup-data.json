@@ -26,7 +26,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"organisationName\": \"{{EMAIL_USER_ORGANISATION}}\",\n    \"name\": \"Vivek Singh\",\n    \"email\": \"{{EMAIL_USER}}\",\n    \"password\": \"{{EMAIL_USER_PASSWORD}}\"\n}",
+					"raw": "{\n    \"organisationName\": \"{{EMAIL_USER_ORGANISATION}}\",\n    \"name\": \"Vivek Singh\",\n    \"email\": \"{{EMAIL_USER}}\",\n    \"password\": \"{{EMAIL_USER_PASSWORD}}\",\n    \"formIoProjectId\": \"lgubfwddfpyhbhy\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"

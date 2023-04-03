@@ -15,10 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -28,6 +25,7 @@ public class OrganisationController extends BaseController {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final OrganisationService organisationService;
     private final OrganisationUserService ouService;
+    private static final String OrganisationEndpoint = "/api/organisation";
 
     @Autowired
     public OrganisationController(UserService userService, UserSession userSession, BCryptPasswordEncoder bCryptPasswordEncoder, OrganisationService organisationService, OrganisationUserService ouService) {
@@ -37,7 +35,7 @@ public class OrganisationController extends BaseController {
         this.ouService = ouService;
     }
 
-    @RequestMapping(value = "/api/organisation", method = {RequestMethod.PUT})
+    @RequestMapping(value = OrganisationEndpoint, method = {RequestMethod.PUT})
     @Transactional
     public ResponseEntity<String> save(@RequestBody OrganisationAndUserCreateRequest request) {
         String error = userService.validateNewUser(request.getEmail(), request.getMobile());
@@ -45,19 +43,19 @@ public class OrganisationController extends BaseController {
             return new ResponseEntity<>(error, HttpStatus.CONFLICT);
 
         User user = userService.createUser(request.getName(), request.getEmail(), request.getMobile(), bCryptPasswordEncoder.encode(request.getPassword()), userService.getAppUser());
-        Organisation organisation = organisationService.createOrg(request.getOrganisationName(), user);
+        Organisation organisation = organisationService.createOrg(request.getOrganisationName(), user, request.getFormIoProjectId());
         ouService.associateExistingUser(user, UserType.OrgAdmin, ProviderType.Consultant, organisation, request.getLanguage());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/api/organisation/addUsers", method = {RequestMethod.POST, RequestMethod.PUT})
+    @RequestMapping(value = OrganisationEndpoint + "/addUsers", method = {RequestMethod.POST, RequestMethod.PUT})
     @PreAuthorize("hasRole('OrgAdmin')")
     public ResponseEntity<Void> addUsers(@RequestBody List<UserAddRequest> requests) {
         requests.forEach(this::addToOrganisation);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/api/organisation/addUser", method = {RequestMethod.POST})
+    @RequestMapping(value = OrganisationEndpoint + "/addUser", method = {RequestMethod.POST})
     @PreAuthorize("hasRole('OrgAdmin')")
     public ResponseEntity<String> addToOrganisation(@RequestBody UserAddRequest userAddRequest) {
         User user = userService.getUser(userAddRequest.getUserId());
@@ -66,5 +64,12 @@ public class OrganisationController extends BaseController {
 
         userService.addUser(getCurrentOrganisation(), user, UserType.User, ProviderType.valueOf(userAddRequest.getProviderType()));
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping(OrganisationEndpoint)
+    @PreAuthorize("hasRole('User')")
+    public ResponseEntity<Organisation> get() {
+        Organisation currentOrganisation = this.getCurrentOrganisation();
+        return new ResponseEntity<>(currentOrganisation, HttpStatus.OK);
     }
 }
