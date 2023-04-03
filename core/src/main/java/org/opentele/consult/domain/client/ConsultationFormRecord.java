@@ -11,7 +11,7 @@ public class ConsultationFormRecord extends OrganisationalEntity {
     @Column(columnDefinition = "varchar(100) not null")
     private String formId;
 
-    @Column(columnDefinition = "jsonb not null")
+    @Column(columnDefinition = "varchar(100000) not null")
     private String data;
 
     @ManyToOne(targetEntity = ConsultationRoom.class, fetch = FetchType.LAZY)

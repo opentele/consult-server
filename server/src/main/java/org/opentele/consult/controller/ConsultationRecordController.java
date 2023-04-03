@@ -38,7 +38,7 @@ public class ConsultationRecordController extends BaseController {
     private final ApplicationConfig applicationConfig;
     private final ConsultationFormRecordRepository consultationFormRecordRepository;
 
-    private static final String ConsultationSessionRecordBaseEndpoint = "/api/consultationRecord";
+    private static final String ConsultationRecordBaseEndpoint = "/api/consultationRecord";
 
     @Autowired
     public ConsultationRecordController(UserService userService, UserSession userSession, ConsultationSessionRecordRepository consultationSessionRecordRepository, ClientRepository clientRepository, ConsultationRoomRepository consultationRoomRepository, FileUtil fileUtil, ApplicationConfig applicationConfig, ConsultationFormRecordRepository consultationFormRecordRepository) {
@@ -51,12 +51,12 @@ public class ConsultationRecordController extends BaseController {
         this.consultationFormRecordRepository = consultationFormRecordRepository;
     }
 
-    @GetMapping(ConsultationSessionRecordBaseEndpoint + "/{id}")
+    @GetMapping(ConsultationRecordBaseEndpoint + "/{id}")
     public ConsultationSessionRecordResponse getConsultationSessionRecord(@PathVariable("id") long id) {
         return ConsultationSessionRecordResponse.from(consultationSessionRecordRepository.findEntity(id, getCurrentOrganisation()));
     }
 
-    @GetMapping(ConsultationSessionRecordBaseEndpoint + "/{id}/files")
+    @GetMapping(ConsultationRecordBaseEndpoint + "/{id}/files")
     public List<ConsultationSessionRecordFileContract> getConsultationSessionRecordFiles(@PathVariable("id") long id) {
         ConsultationRecord consultationSessionRecord = consultationSessionRecordRepository.findEntity(id, getCurrentOrganisation());
         return ConsultationSessionRecordFileContract.from(consultationSessionRecord.getFiles());
@@ -70,7 +70,7 @@ public class ConsultationRecordController extends BaseController {
     }
 
     @Transactional
-    @RequestMapping(value = ConsultationSessionRecordBaseEndpoint, method = {RequestMethod.POST, RequestMethod.PUT})
+    @RequestMapping(value = ConsultationRecordBaseEndpoint, method = {RequestMethod.POST, RequestMethod.PUT})
     public ResponseEntity save(@RequestBody ConsultationSessionRecordRequest request) throws IOException {
         ConsultationRecord entity = Repository.findByIdOrCreate(request.getId(), getCurrentOrganisation(), consultationSessionRecordRepository, new ConsultationRecord());
         entity.setComplaints(request.getComplaints());
@@ -103,7 +103,7 @@ public class ConsultationRecordController extends BaseController {
     }
 
     @Transactional
-    @RequestMapping(value = ConsultationSessionRecordBaseEndpoint +  "/form", method = {RequestMethod.POST, RequestMethod.PUT})
+    @RequestMapping(value = ConsultationRecordBaseEndpoint +  "/form", method = {RequestMethod.POST, RequestMethod.PUT})
     public ResponseEntity saveForm(@RequestBody ConsultationSessionFormRequest request) {
         ConsultationFormRecord consultationFormRecord = new ConsultationFormRecord();
         consultationFormRecord.setFormId(request.getFormId());
@@ -120,7 +120,6 @@ public class ConsultationRecordController extends BaseController {
             consultationFormRecordRepository.save(consultationFormRecord);
         }
 
-        consultationFormRecordRepository.save(consultationFormRecord);
         return new ResponseEntity<>(consultationFormRecord.getId(), HttpStatus.OK);
     }
 }
