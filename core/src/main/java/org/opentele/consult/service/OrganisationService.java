@@ -6,6 +6,8 @@ import org.opentele.consult.repository.OrganisationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Service
 public class OrganisationService {
     private final OrganisationRepository organisationRepository;
@@ -15,12 +17,13 @@ public class OrganisationService {
         this.organisationRepository = organisationRepository;
     }
 
-    public Organisation createOrg(String organisationName, User user, String formIoProjectId) {
+    public Organisation createOrg(String organisationName, User user, String formIoProjectId, Organisation.FormUsageType formUsageMode) {
         Organisation organisation = new Organisation();
         organisation.setName(organisationName);
         organisation.setFormIoProjectId(formIoProjectId);
         organisation.setCreatedBy(user);
         organisation.setLastModifiedBy(user);
+        organisation.setFormUsageType(Objects.requireNonNullElse(formUsageMode, Organisation.FormUsageType.Native));
         return organisationRepository.save(organisation);
     }
 }

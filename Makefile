@@ -104,7 +104,11 @@ get-super-admin-password:
 	curl http://localhost:6054/api/test/open/passwordHash?password=$(CONSULT_SUPER_ADMIN_PASSWORD)
 
 data-setup:
-	newman run func-automation/setup-data.json -e func-automation/postman-env.json --insecure
+#	newman run func-automation/setup-data.json -e func-automation/postman-env.json --insecure
+	postman collection run 695405-93304eb0-4cb4-40b0-ad48-278cc20b0895 -e func-automation/postman-env.json --insecure
+
+data-setup-verbose:
+	postman collection run 695405-93304eb0-4cb4-40b0-ad48-278cc20b0895 -e func-automation/postman-env.json --insecure --verbose
 #######
 
 

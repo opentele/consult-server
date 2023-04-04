@@ -1,5 +1,6 @@
 package org.opentele.consult.controller;
 
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.opentele.consult.config.ApplicationConfig;
 import org.opentele.consult.domain.client.ConsultationRecord;
 import org.opentele.consult.domain.framework.ConsultationSessionRecordFile;
@@ -69,7 +70,7 @@ public class ConsultationRecordFileController extends BaseController {
             InputStream is = fileUtil.getInputStream(attachmentsLocation, fileName);
             response.setHeader("Content-Type", consultationSessionRecordFile.getMimeType());
             response.setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", consultationSessionRecordFile.getName()));
-            org.apache.commons.io.IOUtils.copy(is, response.getOutputStream());
+            IOUtils.copy(is, response.getOutputStream());
             response.flushBuffer();
         } catch (IOException ex) {
             throw new RuntimeException("IOError writing file to output stream", ex);

@@ -2,9 +2,7 @@ package org.opentele.consult.domain;
 
 import org.opentele.consult.domain.framework.AbstractAuditableEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "organisation")
@@ -14,6 +12,10 @@ public class Organisation extends AbstractAuditableEntity {
 
     @Column
     private String formIoProjectId;
+
+    @Column(columnDefinition = "varchar(10) not null default 'Native'")
+    @Enumerated(EnumType.STRING)
+    private FormUsageType formUsageType;
 
     public String getName() {
         return name;
@@ -29,5 +31,17 @@ public class Organisation extends AbstractAuditableEntity {
 
     public void setFormIoProjectId(String formIoProjectId) {
         this.formIoProjectId = formIoProjectId;
+    }
+
+    public FormUsageType getFormUsageType() {
+        return formUsageType;
+    }
+
+    public void setFormUsageType(FormUsageType formUsageType) {
+        this.formUsageType = formUsageType;
+    }
+
+    public static enum FormUsageType {
+        Native, FormIO, Both
     }
 }

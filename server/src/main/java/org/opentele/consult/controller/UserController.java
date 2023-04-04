@@ -134,7 +134,7 @@ public class UserController extends BaseController {
         if (currentOrganisation != null)
             throw new RuntimeException("The user is already is part of organisation");
         User currentUser = getCurrentUser(principal);
-        Organisation organisation = organisationService.createOrg(request.getName(), currentUser, request.getFormIoProjectId());
+        Organisation organisation = organisationService.createOrg(request.getName(), currentUser, request.getFormIoProjectId(), request.getFormUsageMode());
         OrganisationUser organisationUser = organisationUserService.associateExistingUser(currentUser, UserType.OrgAdmin, ProviderType.None, organisation, Language.en);
         SecurityService.elevateToRole(organisationUser.getUserType());
         setCurrentOrganisationId(organisationUser.getOrganisation().getId());

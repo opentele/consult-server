@@ -43,8 +43,15 @@ public class OrganisationController extends BaseController {
             return new ResponseEntity<>(error, HttpStatus.CONFLICT);
 
         User user = userService.createUser(request.getName(), request.getEmail(), request.getMobile(), bCryptPasswordEncoder.encode(request.getPassword()), userService.getAppUser());
-        Organisation organisation = organisationService.createOrg(request.getOrganisationName(), user, request.getFormIoProjectId());
+        Organisation organisation = organisationService.createOrg(request.getOrganisationName(), user, request.getFormIoProjectId(), request.getFormUsageMode());
         ouService.associateExistingUser(user, UserType.OrgAdmin, ProviderType.Consultant, organisation, request.getLanguage());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = OrganisationEndpoint + "s", method = {RequestMethod.PUT})
+    @Transactional
+    public ResponseEntity<String> save(@RequestBody List<OrganisationAndUserCreateRequest> requests) {
+        requests.forEach(this::save);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
