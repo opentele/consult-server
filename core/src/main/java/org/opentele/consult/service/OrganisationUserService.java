@@ -2,12 +2,15 @@ package org.opentele.consult.service;
 
 import org.opentele.consult.domain.Language;
 import org.opentele.consult.domain.Organisation;
+import org.opentele.consult.domain.framework.OrganisationalEntity;
 import org.opentele.consult.domain.security.*;
 import org.opentele.consult.repository.OrganisationUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Service
 public class OrganisationUserService {
@@ -28,13 +31,17 @@ public class OrganisationUserService {
         return organisationUserRepository.save(organisationUser);
     }
 
-    public OrganisationUser getOrganisationUser(User user) {
+    public Organisation getOrganisation(User user) {
         List<OrganisationUser> organisationUsers = organisationUserRepository.findAllByUser(user);
 //        currently only one org per user is supported
-        if (organisationUsers.size() != 1)
-            return null;
+        List<Organisation> organisations = organisationUsers.stream().map(OrganisationalEntity::getOrganisation).distinct().toList();
+        if (organisations.size() == 0) return null;
+        return organisations.get(0);
+    }
 
-        return organisationUsers.get(0);
+    public OrganisationUser getMostPrivilegedOrganisationUser(User user, Organisation organisation) {
+        List<OrganisationUser> organisationUsers = organisationUserRepository.findAllByUserAndOrganisation(user, organisation);
+        return  organisationUsers.stream().max(Comparator.comparing(o -> o.getUserType().getAccessLevel())).stream().findFirst().orElse(null);
     }
 
     public OrganisationUser getOrganisationUser(User user, Organisation organisation) {

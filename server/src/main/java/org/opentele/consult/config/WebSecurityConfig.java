@@ -1,5 +1,6 @@
 package org.opentele.consult.config;
 
+import org.opentele.consult.domain.Organisation;
 import org.opentele.consult.domain.security.OrganisationUser;
 import org.opentele.consult.domain.security.User;
 import org.opentele.consult.domain.security.UserType;
@@ -78,8 +79,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         registry.anyRequest().authenticated().and().csrf().disable()
                 .formLogin().loginPage("/api/login").successHandler((request, response, authentication) -> {
             User user = userService.getUser(request.getParameter("email"), request.getParameter("mobile"));
-            OrganisationUser organisationUser = organisationUserService.getOrganisationUser(user);
-            if (organisationUser != null && !UserType.User.equals(organisationUser.getUserType())) {
+            Organisation organisation = organisationUserService.getOrganisation(user);
+            OrganisationUser organisationUser = organisationUserService.getMostPrivilegedOrganisationUser(user, organisation);
+            if (organisation != null && !UserType.User.equals(organisationUser.getUserType())) {
                 SecurityService.elevateToRole(organisationUser.getUserType());
             }
             userSession.setCurrentUserId(user.getId());
