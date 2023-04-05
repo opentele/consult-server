@@ -2,7 +2,7 @@ package org.opentele.consult.contract.client;
 
 import org.opentele.consult.domain.client.Client;
 
-public class ClientSearchResponse extends BaseClientContract {
+public class ClientSearchResponse extends ClientResponse {
     private int numberOfSessions;
 
     public static ClientSearchResponse from(Client client) {

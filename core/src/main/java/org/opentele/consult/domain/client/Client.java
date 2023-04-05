@@ -94,4 +94,8 @@ public class Client extends OrganisationalEntity {
     public void setOtherDetails(String otherDetails) {
         this.otherDetails = otherDetails;
     }
+
+    public Set<ConsultationFormRecord> getConsultationFormRecords() {
+        return consultationFormRecords;
+    }
 }

@@ -1,11 +1,11 @@
 package org.opentele.consult.controller;
 
-import org.opentele.consult.contract.client.ClientContract;
-import org.opentele.consult.contract.client.ClientSearchResponse;
-import org.opentele.consult.contract.client.ClientSearchResults;
+import org.opentele.consult.contract.client.*;
 import org.opentele.consult.domain.client.Client;
+import org.opentele.consult.domain.client.ConsultationFormRecord;
 import org.opentele.consult.framework.UserSession;
 import org.opentele.consult.repository.ClientRepository;
+import org.opentele.consult.repository.ConsultationFormRecordRepository;
 import org.opentele.consult.repository.framework.Repository;
 import org.opentele.consult.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,21 +20,23 @@ import java.util.stream.Collectors;
 @PreAuthorize("hasRole('User')")
 public class ClientController extends BaseController {
     private final ClientRepository clientRepository;
+    private ConsultationFormRecordRepository consultationFormRecordRepository;
 
     @Autowired
-    public ClientController(ClientRepository clientRepository, UserService userService, UserSession userSession) {
+    public ClientController(ClientRepository clientRepository, UserService userService, UserSession userSession, ConsultationFormRecordRepository consultationFormRecordRepository) {
         super(userService, userSession);
         this.clientRepository = clientRepository;
+        this.consultationFormRecordRepository = consultationFormRecordRepository;
     }
 
     @RequestMapping(value = "/api/clients", method = {RequestMethod.POST, RequestMethod.PUT})
-    public void createUpdate(@RequestBody List<ClientContract> listContract) {
+    public void createUpdate(@RequestBody List<ClientNativeSessionRecordsResponse> listContract) {
         listContract.forEach(this::createUpdate);
     }
 
     @RequestMapping(value = "/api/client", method = {RequestMethod.POST, RequestMethod.PUT})
     @Transactional
-    public ClientContract createUpdate(@RequestBody ClientContract contract) {
+    public ClientNativeSessionRecordsResponse createUpdate(@RequestBody ClientNativeSessionRecordsResponse contract) {
         Client client = Repository.findByIdOrCreate(contract.getId(), getCurrentOrganisation(), clientRepository, new Client());
         client.setGender(contract.getGender());
         client.setDateOfBirth(contract.getDateOfBirth());
@@ -60,14 +62,26 @@ public class ClientController extends BaseController {
     }
 
     @GetMapping("/api/client/{id}")
-    public ClientContract get(@PathVariable("id") long id) {
+    public ClientNativeSessionRecordsResponse get(@PathVariable("id") long id) {
         Client client = clientRepository.findEntity(id, getCurrentOrganisation());
-        return ClientContract.from(client);
+        return ClientNativeSessionRecordsResponse.from(client);
     }
 
     @GetMapping("/api/client/{id}/full")
-    public ClientContract getFull(@PathVariable("id") long id) {
+    public ClientNativeSessionRecordsResponse getFull(@PathVariable("id") long id) {
         Client client = clientRepository.findEntity(id, getCurrentOrganisation());
-        return ClientContract.fromWithChildren(client);
+        return ClientNativeSessionRecordsResponse.createForSessionRecords(client);
+    }
+
+    @GetMapping("/api/client/{id}/recentForms")
+    public ClientFormSessionRecordsResponse getRecentForms(@PathVariable("id") long id) {
+        Client client = clientRepository.findEntity(id, getCurrentOrganisation());
+        return ClientFormSessionRecordsResponse.createForRecentForms(client);
+    }
+
+    @GetMapping("/api/client/form/{id}")
+    public ConsultationFormRecordResponse getForm(@PathVariable("id") long id) {
+        ConsultationFormRecord entity = consultationFormRecordRepository.findEntity(id, getCurrentOrganisation());
+        return ConsultationFormRecordResponse.create(entity);
     }
 }

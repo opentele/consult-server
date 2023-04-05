@@ -23,4 +23,8 @@ public class BaseEntityContract {
     public void setId(long id) {
         this.id = id;
     }
+
+    protected void populate(AbstractEntity abstractEntity) {
+        this.id = abstractEntity.getId();
+    }
 }
