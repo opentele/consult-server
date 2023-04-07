@@ -8,6 +8,7 @@ import org.opentele.consult.repository.ClientRepository;
 import org.opentele.consult.repository.ConsultationFormRecordRepository;
 import org.opentele.consult.repository.framework.Repository;
 import org.opentele.consult.service.UserService;
+import org.opentele.consult.util.DateTimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.Local;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -101,7 +102,7 @@ public class ClientController extends BaseController {
     @GetMapping("/api/client/{id}/formRecordSummaryByDate")
     public Map<LocalDate, List<FormRecordSummaryResponse>> getFormRecordSummaryByDate(@PathVariable long id) {
         Client client = clientRepository.findEntity(id, getCurrentOrganisation());
-        Map<LocalDate, List<ConsultationFormRecord>> formRecordsGroupedByDate = client.getConsultationFormRecords().stream().collect(Collectors.groupingBy(consultationFormRecord -> LocalDate.from(consultationFormRecord.getCreatedDate().toInstant())));
+        Map<LocalDate, List<ConsultationFormRecord>> formRecordsGroupedByDate = client.getConsultationFormRecords().stream().collect(Collectors.groupingBy(consultationFormRecord -> DateTimeUtil.fromDateToLocal(consultationFormRecord.getCreatedDate())));
         return formRecordsGroupedByDate.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey,
                 localDateListEntry -> localDateListEntry.getValue().stream().map(FormRecordSummaryResponse::new).toList()));
     }

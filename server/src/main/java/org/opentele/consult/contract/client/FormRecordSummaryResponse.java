@@ -1,6 +1,7 @@
 package org.opentele.consult.contract.client;
 
 import org.opentele.consult.domain.client.ConsultationFormRecord;
+import org.opentele.consult.util.DateTimeUtil;
 
 import java.time.LocalDate;
 
@@ -11,7 +12,7 @@ public class FormRecordSummaryResponse {
 
     public FormRecordSummaryResponse(ConsultationFormRecord consultationFormRecord) {
         this.formRecordId = consultationFormRecord.getId();
-        this.creationDate = LocalDate.from(consultationFormRecord.getCreatedDate().toInstant());
+        this.creationDate = DateTimeUtil.fromDateToLocal(consultationFormRecord.getCreatedDate());
         this.formId = consultationFormRecord.getFormId();
     }
 

@@ -1,6 +1,7 @@
 package org.opentele.consult.contract.framework;
 
 import org.opentele.consult.domain.framework.OrganisationalEntity;
+import org.opentele.consult.util.DateTimeUtil;
 
 import java.time.LocalDateTime;
 
@@ -42,7 +43,7 @@ public class BaseEntityResponse extends BaseEntityContract {
         this.createdBy = organisationalEntity.getCreatedBy().getName();
         this.lastModifiedById = organisationalEntity.getLastModifiedBy().getId();
         this.lastModifiedBy = organisationalEntity.getLastModifiedBy().getName();
-        this.createdDateTime = LocalDateTime.from(organisationalEntity.getCreatedDate().toInstant());
-        this.lastModifiedDateTime = LocalDateTime.from(organisationalEntity.getLastModifiedDate().toInstant());
+        this.createdDateTime = LocalDateTime.from(DateTimeUtil.fromDate(organisationalEntity.getCreatedDate()));
+        this.lastModifiedDateTime = LocalDateTime.from(DateTimeUtil.fromDate(organisationalEntity.getLastModifiedDate()));
     }
 }
