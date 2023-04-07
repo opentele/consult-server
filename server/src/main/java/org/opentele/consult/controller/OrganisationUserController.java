@@ -1,9 +1,9 @@
 package org.opentele.consult.controller;
 
-import org.opentele.consult.contract.security.OrganisationUserContract;
+import org.opentele.consult.contract.security.CurrentUserResponse;
+import org.opentele.consult.contract.security.OrganisationUserResponse;
 import org.opentele.consult.contract.security.OrganisationUserPutPostRequest;
 import org.opentele.consult.contract.security.SearchedUserResponse;
-import org.opentele.consult.domain.Language;
 import org.opentele.consult.domain.security.OrganisationUser;
 import org.opentele.consult.domain.security.ProviderType;
 import org.opentele.consult.domain.security.User;
@@ -40,15 +40,15 @@ public class OrganisationUserController extends BaseController {
 
     @RequestMapping(value = "/api/organisationUser", method = {RequestMethod.GET})
     @PreAuthorize("hasRole('User')")
-    public List<OrganisationUserContract> getUsers(@RequestParam(name = "providerType", required = false) ProviderType providerType) {
-        return userService.getOrganisationUsers(getCurrentOrganisation(), providerType).stream().map(OrganisationUserContract::from).collect(Collectors.toList());
+    public List<OrganisationUserResponse> getUsers(@RequestParam(name = "providerType", required = false) ProviderType providerType) {
+        return userService.getOrganisationUsers(getCurrentOrganisation(), providerType).stream().map(OrganisationUserResponse::from).collect(Collectors.toList());
     }
 
     @RequestMapping(value = "/api/organisationUser/{id}", method = {RequestMethod.GET})
     @PreAuthorize("hasRole('User')")
-    public OrganisationUserContract getOrganisationUser(@PathVariable("id") long id) {
+    public OrganisationUserResponse getOrganisationUser(@PathVariable("id") long id) {
         OrganisationUser organisationUser = userService.getOrganisationUser(id, getCurrentOrganisation());
-        return OrganisationUserContract.from(organisationUser);
+        return OrganisationUserResponse.from(organisationUser);
     }
 
     @RequestMapping(value = "/api/organisationUsers", method = {RequestMethod.PUT})
@@ -77,25 +77,25 @@ public class OrganisationUserController extends BaseController {
             user = userService.createUser(request.getName(), request.getEmail(), request.getMobile(), bCryptPasswordEncoder.encode(request.getPassword()), userService.getAppUser());
         }
         organisationUser = organisationUserService.associateExistingUser(user, request.getUserType(), request.getProviderType(), getCurrentOrganisation(), request.getLanguage());
-        return new ResponseEntity<>(OrganisationUserContract.from(organisationUser), HttpStatus.OK);
+        return new ResponseEntity<>(OrganisationUserResponse.from(organisationUser), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/api/organisationUser", method = {RequestMethod.POST})
     @PreAuthorize("hasRole('User')")
-    public OrganisationUserContract updateUser(@RequestBody OrganisationUserPutPostRequest request) {
+    public OrganisationUserResponse updateUser(@RequestBody OrganisationUserPutPostRequest request) {
         User user = userService.getUser(request.getId());
         OrganisationUser organisationUser = organisationUserService.update(user, request.getUserType(), request.getProviderType(), getCurrentOrganisation());
-        return OrganisationUserContract.from(organisationUser);
+        return OrganisationUserResponse.from(organisationUser);
     }
 
     @PreAuthorize("hasAnyRole('User','OrgAdmin')")
     @RequestMapping(value = "/api/organisationUser/current", method = RequestMethod.GET)
-    public OrganisationUserContract getLoggedInUser(Principal principal) {
+    public OrganisationUserResponse getLoggedInUser(Principal principal) {
         try {
             String name = principal.getName();
             User user = userService.getUser(name);
             OrganisationUser organisationUser = organisationUserService.getOrganisationUser(user, getCurrentOrganisation());
-            return OrganisationUserContract.from(organisationUser);
+            return CurrentUserResponse.from(organisationUser);
         } finally {
             logger.info("Returned user info");
         }
@@ -104,7 +104,7 @@ public class OrganisationUserController extends BaseController {
     @PreAuthorize("hasRole('User')")
     @RequestMapping(value = "/api/organisationUser/current", method = RequestMethod.POST)
     @Transactional
-    public OrganisationUserContract updateProfile(@RequestBody OrganisationUserPutPostRequest request) {
+    public OrganisationUserResponse updateProfile(@RequestBody OrganisationUserPutPostRequest request) {
         User user;
         if (StringUtils.hasText(request.getPassword())) {
             user = userService.updateProfile(request.getId(), request.getName(), request.getEmail(), request.getMobile(), bCryptPasswordEncoder.encode(request.getPassword()), request.getIdentification(), request.getQualification());
@@ -112,15 +112,15 @@ public class OrganisationUserController extends BaseController {
             user = userService.updateProfile(request.getId(), request.getName(), request.getEmail(), request.getMobile(), request.getIdentification(), request.getQualification());
         }
         OrganisationUser organisationUser = organisationUserService.update(user, request.getUserType(), request.getProviderType(), getCurrentOrganisation());
-        return OrganisationUserContract.from(organisationUser);
+        return OrganisationUserResponse.from(organisationUser);
     }
 
     @PreAuthorize("hasRole('User')")
     @RequestMapping(value = "/api/organisationUser/current/language", method = RequestMethod.PATCH)
     @Transactional
-    public OrganisationUserContract patchLanguage(@RequestBody OrganisationUserPutPostRequest request, Principal principal) {
+    public OrganisationUserResponse patchLanguage(@RequestBody OrganisationUserPutPostRequest request, Principal principal) {
         OrganisationUser organisationUser = userService.updateLanguagePreference(getCurrentUser(principal), getCurrentOrganisation(), request.getLanguage());
-        return OrganisationUserContract.from(organisationUser);
+        return OrganisationUserResponse.from(organisationUser);
     }
 
     @GetMapping("/api/user")

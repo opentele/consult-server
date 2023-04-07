@@ -123,8 +123,8 @@ public class UserController extends BaseController {
 
     @GetMapping("/api/user/search")
     @PreAuthorize("hasRole('User')")
-    public List<OrganisationUserContract> search(@RequestParam("q") String searchParam) {
-        return userService.findUsers(searchParam, getCurrentOrganisation()).stream().map(OrganisationUserContract::from).collect(Collectors.toList());
+    public List<OrganisationUserResponse> search(@RequestParam("q") String searchParam) {
+        return userService.findUsers(searchParam, getCurrentOrganisation()).stream().map(OrganisationUserResponse::from).collect(Collectors.toList());
     }
 
     @PutMapping("/api/user/organisation")

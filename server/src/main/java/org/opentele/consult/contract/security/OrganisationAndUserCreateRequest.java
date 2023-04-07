@@ -2,7 +2,7 @@ package org.opentele.consult.contract.security;
 
 import org.opentele.consult.domain.Organisation;
 
-public class OrganisationAndUserCreateRequest extends OrganisationUserContract {
+public class OrganisationAndUserCreateRequest extends CurrentUserResponse {
     private String password;
     private String formIoProjectId;
     private Organisation.FormUsageType formUsageMode;
