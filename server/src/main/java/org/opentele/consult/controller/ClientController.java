@@ -9,11 +9,14 @@ import org.opentele.consult.repository.ConsultationFormRecordRepository;
 import org.opentele.consult.repository.framework.Repository;
 import org.opentele.consult.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -73,15 +76,33 @@ public class ClientController extends BaseController {
         return ClientNativeSessionRecordsResponse.createForSessionRecords(client);
     }
 
-    @GetMapping("/api/client/{id}/recentForms")
+    @GetMapping("/api/client/{id}/formRecord/recent")
     public ClientFormSessionRecordsResponse getRecentForms(@PathVariable("id") long id) {
         Client client = clientRepository.findEntity(id, getCurrentOrganisation());
         return ClientFormSessionRecordsResponse.createForRecentForms(client);
     }
 
-    @GetMapping("/api/client/form/{id}")
-    public ConsultationFormRecordResponse getForm(@PathVariable("id") long id) {
+    @GetMapping("/api/client/formRecord/{id}")
+    public ConsultationFormRecordResponse getFormRecord(@PathVariable("id") long id) {
         ConsultationFormRecord entity = consultationFormRecordRepository.findEntity(id, getCurrentOrganisation());
         return ConsultationFormRecordResponse.create(entity);
+    }
+
+    //    Grouping by form
+    @GetMapping("/api/client/{id}/formRecordSummaryByForm")
+    public Map<String, List<FormRecordSummaryResponse>> getFormRecordSummary(@PathVariable long id) {
+        Client client = clientRepository.findEntity(id, getCurrentOrganisation());
+        Map<String, List<ConsultationFormRecord>> formRecordsGroupedByDate = client.getConsultationFormRecords().stream().collect(Collectors.groupingBy(ConsultationFormRecord::getFormId));
+        return formRecordsGroupedByDate.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey,
+                localDateListEntry -> localDateListEntry.getValue().stream().map(FormRecordSummaryResponse::new).toList()));
+    }
+
+    //    Grouping by date
+    @GetMapping("/api/client/{id}/formRecordSummaryByDate")
+    public Map<LocalDate, List<FormRecordSummaryResponse>> getFormRecordSummaryByDate(@PathVariable long id) {
+        Client client = clientRepository.findEntity(id, getCurrentOrganisation());
+        Map<LocalDate, List<ConsultationFormRecord>> formRecordsGroupedByDate = client.getConsultationFormRecords().stream().collect(Collectors.groupingBy(consultationFormRecord -> LocalDate.from(consultationFormRecord.getCreatedDate().toInstant())));
+        return formRecordsGroupedByDate.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey,
+                localDateListEntry -> localDateListEntry.getValue().stream().map(FormRecordSummaryResponse::new).toList()));
     }
 }
