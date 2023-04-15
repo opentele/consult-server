@@ -1,10 +1,10 @@
 package org.opentele.consult.contract.client;
 
-import org.opentele.consult.contract.framework.BaseEntityResponse;
+import org.opentele.consult.contract.framework.BaseAuditableEntityContract;
 import org.opentele.consult.domain.client.ConsultationFormRecord;
 import org.opentele.consult.domain.consultationRoom.ConsultationRoom;
 
-public class ConsultationFormRecordResponse extends BaseEntityResponse {
+public class ConsultationFormRecordResponse extends BaseAuditableEntityContract {
     private String formId;
     private String data;
     private String consultationRoomTitle;

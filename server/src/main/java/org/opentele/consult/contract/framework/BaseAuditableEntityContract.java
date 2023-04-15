@@ -5,7 +5,7 @@ import org.opentele.consult.util.DateTimeUtil;
 
 import java.time.LocalDateTime;
 
-public class BaseEntityResponse extends BaseEntityContract {
+public class BaseAuditableEntityContract extends BaseEntityContract {
     private long createdById;
     private String createdBy;
     private long lastModifiedById;

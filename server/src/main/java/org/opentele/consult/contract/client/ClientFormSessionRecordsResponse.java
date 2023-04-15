@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class ClientFormSessionRecordsResponse extends ClientResponse {
+public class ClientFormSessionRecordsResponse extends ClientContract {
     private final List<ConsultationFormRecordResponse> formRecordResponses = new ArrayList<>();
 
     public static ClientFormSessionRecordsResponse createForRecentForms(Client client) {

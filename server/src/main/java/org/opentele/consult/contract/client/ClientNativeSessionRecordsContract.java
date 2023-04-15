@@ -1,28 +1,27 @@
 package org.opentele.consult.contract.client;
 
 import org.opentele.consult.domain.client.Client;
-import org.opentele.consult.util.DateTimeUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ClientNativeSessionRecordsResponse extends ClientResponse {
+public class ClientNativeSessionRecordsContract extends ClientContract {
     private List<ConsultationSessionRecordContract> consultationSessionRecords = new ArrayList<>();
 
-    public static ClientNativeSessionRecordsResponse createForSessionRecords(Client client) {
-        ClientNativeSessionRecordsResponse contract = from(client);
+    public static ClientNativeSessionRecordsContract createForSessionRecords(Client client) {
+        ClientNativeSessionRecordsContract contract = from(client);
         mapChildren(client, contract);
         return contract;
     }
 
-    public static ClientNativeSessionRecordsResponse from(Client client) {
-        ClientNativeSessionRecordsResponse response = new ClientNativeSessionRecordsResponse();
+    public static ClientNativeSessionRecordsContract from(Client client) {
+        ClientNativeSessionRecordsContract response = new ClientNativeSessionRecordsContract();
         response.populate(client);
         return response;
     }
 
-    public static void mapChildren(Client client, ClientNativeSessionRecordsResponse response) {
+    public static void mapChildren(Client client, ClientNativeSessionRecordsContract response) {
         response.setConsultationSessionRecords(client.getConsultationRecords().stream().map(ConsultationSessionRecordResponse::from).collect(Collectors.toList()));
     }
 

@@ -105,7 +105,7 @@ get-super-admin-password:
 
 data-setup:
 #	newman run func-automation/setup-data.json -e func-automation/postman-env.json --insecure
-	postman collection run 695405-93304eb0-4cb4-40b0-ad48-278cc20b0895 -e func-automation/postman-env.json --insecure
+	postman collection run 695405-93304eb0-4cb4-40b0-ad48-278cc20b0895 -e func-automation/postman-env.json --insecure --verbose
 
 data-setup-verbose:
 	postman collection run 695405-93304eb0-4cb4-40b0-ad48-278cc20b0895 -e func-automation/postman-env.json --insecure --verbose

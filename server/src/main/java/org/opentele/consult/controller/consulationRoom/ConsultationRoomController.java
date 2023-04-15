@@ -82,7 +82,7 @@ public class ConsultationRoomController extends BaseController {
     }
 
     @RequestMapping(value = ConsultationRoomBase, method = {RequestMethod.PUT, RequestMethod.POST})
-    public ResponseEntity<Long> putPost(@RequestBody ConsultationRoomRequest request) {
+    public Long putPost(@RequestBody ConsultationRoomRequest request) {
         ConsultationRoom consultationRoom = Repository.findByIdOrCreate(request.getId(), getCurrentOrganisation(), consultationRoomRepository, new ConsultationRoom());
         consultationRoom.setOrganisation(getCurrentOrganisation());
         consultationRoom.setTitle(request.getTitle());
@@ -102,13 +102,12 @@ public class ConsultationRoomController extends BaseController {
                     return consultationRoomUser;
                 });
         ConsultationRoom saved = consultationRoomRepository.save(consultationRoom);
-        return new ResponseEntity<>(saved.getId(), HttpStatus.OK);
+        return saved.getId();
     }
 
     @RequestMapping(value = ConsultationRoomBase + "s", method = {RequestMethod.PUT, RequestMethod.POST})
-    public ResponseEntity<Long> putPost(@RequestBody List<ConsultationRoomRequest> requests) {
-        requests.forEach(this::putPost);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public List<Long> putPost(@RequestBody List<ConsultationRoomRequest> requests) {
+        return requests.stream().map(this::putPost).collect(Collectors.toList());
     }
 
     @GetMapping(value = ConsultationRoomBase + "/client")

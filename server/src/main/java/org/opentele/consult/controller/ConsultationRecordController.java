@@ -1,10 +1,7 @@
 package org.opentele.consult.controller;
 
 import org.opentele.consult.config.ApplicationConfig;
-import org.opentele.consult.contract.client.ConsultationSessionFormRecordRequest;
-import org.opentele.consult.contract.client.ConsultationSessionRecordFileContract;
-import org.opentele.consult.contract.client.ConsultationSessionRecordRequest;
-import org.opentele.consult.contract.client.ConsultationSessionRecordResponse;
+import org.opentele.consult.contract.client.*;
 import org.opentele.consult.domain.client.Client;
 import org.opentele.consult.domain.client.ConsultationFormRecord;
 import org.opentele.consult.domain.client.ConsultationRecord;
@@ -17,6 +14,7 @@ import org.opentele.consult.repository.ConsultationRoomRepository;
 import org.opentele.consult.repository.ConsultationSessionRecordRepository;
 import org.opentele.consult.repository.framework.Repository;
 import org.opentele.consult.service.UserService;
+import org.opentele.consult.util.DateTimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +23,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -124,5 +124,35 @@ public class ConsultationRecordController extends BaseController {
         });
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping(ConsultationRecordBaseEndpoint + "/{id}/formRecord/recent")
+    public ClientFormSessionRecordsResponse getRecentForms(@PathVariable("id") long id) {
+        Client client = clientRepository.findEntity(id, getCurrentOrganisation());
+        return ClientFormSessionRecordsResponse.createForRecentForms(client);
+    }
+
+    @GetMapping(ConsultationRecordBaseEndpoint + "/formRecord/{id}")
+    public ConsultationFormRecordResponse getFormRecord(@PathVariable("id") long id) {
+        ConsultationFormRecord entity = consultationFormRecordRepository.findEntity(id, getCurrentOrganisation());
+        return ConsultationFormRecordResponse.create(entity);
+    }
+
+    //    Grouping by form
+    @GetMapping(ConsultationRecordBaseEndpoint + "/{id}/formRecordSummaryByForm")
+    public Map<String, List<FormRecordSummaryResponse>> getFormRecordSummary(@PathVariable long id) {
+        Client client = clientRepository.findEntity(id, getCurrentOrganisation());
+        Map<String, List<ConsultationFormRecord>> formRecordsGroupedByDate = client.getConsultationFormRecords().stream().collect(Collectors.groupingBy(ConsultationFormRecord::getFormId));
+        return formRecordsGroupedByDate.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey,
+                localDateListEntry -> localDateListEntry.getValue().stream().map(FormRecordSummaryResponse::new).toList()));
+    }
+
+    //    Grouping by date
+    @GetMapping(ConsultationRecordBaseEndpoint + "/{id}/formRecordSummaryByDate")
+    public Map<LocalDate, List<FormRecordSummaryResponse>> getFormRecordSummaryByDate(@PathVariable long id) {
+        Client client = clientRepository.findEntity(id, getCurrentOrganisation());
+        Map<LocalDate, List<ConsultationFormRecord>> formRecordsGroupedByDate = client.getConsultationFormRecords().stream().collect(Collectors.groupingBy(consultationFormRecord -> DateTimeUtil.fromDateToLocal(consultationFormRecord.getCreatedDate())));
+        return formRecordsGroupedByDate.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey,
+                localDateListEntry -> localDateListEntry.getValue().stream().map(FormRecordSummaryResponse::new).toList()));
     }
 }

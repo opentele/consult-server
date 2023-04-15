@@ -1,13 +1,13 @@
 package org.opentele.consult.contract.client;
 
-import org.opentele.consult.contract.framework.BaseEntityResponse;
+import org.opentele.consult.contract.framework.BaseAuditableEntityContract;
 import org.opentele.consult.domain.client.Client;
 import org.opentele.consult.domain.client.Gender;
 
 import java.time.LocalDate;
 import java.time.Period;
 
-public class ClientResponse extends BaseEntityResponse {
+public class ClientContract extends BaseAuditableEntityContract {
     private String name;
     private String registrationNumber;
     private Gender gender;
