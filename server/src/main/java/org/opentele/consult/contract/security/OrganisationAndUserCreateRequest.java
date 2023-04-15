@@ -5,7 +5,7 @@ import org.opentele.consult.domain.Organisation;
 public class OrganisationAndUserCreateRequest extends CurrentUserResponse {
     private String password;
     private String formIoProjectId;
-    private Organisation.FormUsageType formUsageMode;
+    private Organisation.FormUsageType formUsageType;
 
     public String getPassword() {
         return password;
@@ -23,11 +23,11 @@ public class OrganisationAndUserCreateRequest extends CurrentUserResponse {
         this.formIoProjectId = formIoProjectId;
     }
 
-    public Organisation.FormUsageType getFormUsageMode() {
-        return formUsageMode;
+    public Organisation.FormUsageType getFormUsageType() {
+        return formUsageType;
     }
 
-    public void setFormUsageMode(Organisation.FormUsageType formUsageMode) {
-        this.formUsageMode = formUsageMode;
+    public void setFormUsageType(Organisation.FormUsageType formUsageType) {
+        this.formUsageType = formUsageType;
     }
 }

@@ -43,7 +43,7 @@ public class OrganisationController extends BaseController {
             return new ResponseEntity<>(error, HttpStatus.CONFLICT);
 
         User user = userService.createUser(request.getName(), request.getEmail(), request.getMobile(), bCryptPasswordEncoder.encode(request.getPassword()), userService.getAppUser());
-        Organisation organisation = organisationService.createOrg(request.getOrganisationName(), user, request.getFormIoProjectId(), request.getFormUsageMode());
+        Organisation organisation = organisationService.createOrg(request.getOrganisationName(), user, request.getFormIoProjectId(), request.getFormUsageType());
         ouService.associateExistingUser(user, UserType.OrgAdmin, ProviderType.Consultant, organisation, request.getLanguage());
         return new ResponseEntity<>(HttpStatus.OK);
     }

@@ -1,7 +1,7 @@
 package org.opentele.consult.controller;
 
 import org.opentele.consult.config.ApplicationConfig;
-import org.opentele.consult.contract.client.ConsultationSessionFormRequest;
+import org.opentele.consult.contract.client.ConsultationSessionFormRecordRequest;
 import org.opentele.consult.contract.client.ConsultationSessionRecordFileContract;
 import org.opentele.consult.contract.client.ConsultationSessionRecordRequest;
 import org.opentele.consult.contract.client.ConsultationSessionRecordResponse;
@@ -103,23 +103,26 @@ public class ConsultationRecordController extends BaseController {
     }
 
     @Transactional
-    @RequestMapping(value = ConsultationRecordBaseEndpoint +  "/form", method = {RequestMethod.POST, RequestMethod.PUT})
-    public ResponseEntity saveForm(@RequestBody ConsultationSessionFormRequest request) {
-        ConsultationFormRecord consultationFormRecord = new ConsultationFormRecord();
-        consultationFormRecord.setFormId(request.getFormId());
-        consultationFormRecord.setData(request.getData());
+    @RequestMapping(value = ConsultationRecordBaseEndpoint +  "/formRecords", method = {RequestMethod.POST, RequestMethod.PUT})
+    public ResponseEntity saveFormRecords(@RequestBody ConsultationSessionFormRecordRequest request) {
+        request.getFormRecords().forEach(formRecordRequest -> {
+            ConsultationFormRecord consultationFormRecord = new ConsultationFormRecord();
+            consultationFormRecord.setId(request.getId());
+            consultationFormRecord.setFormId(formRecordRequest.getFormId());
+            consultationFormRecord.setData(formRecordRequest.getData());
 
-        if (request.getConsultationRoomId() > 0)
-            consultationFormRecord.setConsultationRoom(consultationRoomRepository.findEntity(request.getConsultationRoomId(), getCurrentOrganisation()));
-        if (consultationFormRecord.isNew()) {
-            consultationFormRecord.setOrganisation(getCurrentOrganisation());
-            Client client = clientRepository.findEntity(request.getClientId(), getCurrentOrganisation());
-            client.addConsultationFormRecord(consultationFormRecord);
-            clientRepository.save(client);
-        } else {
-            consultationFormRecordRepository.save(consultationFormRecord);
-        }
+            if (request.getConsultationRoomId() > 0)
+                consultationFormRecord.setConsultationRoom(consultationRoomRepository.findEntity(request.getConsultationRoomId(), getCurrentOrganisation()));
+            if (consultationFormRecord.isNew()) {
+                consultationFormRecord.setOrganisation(getCurrentOrganisation());
+                Client client = clientRepository.findEntity(request.getClientId(), getCurrentOrganisation());
+                client.addConsultationFormRecord(consultationFormRecord);
+                clientRepository.save(client);
+            } else {
+                consultationFormRecordRepository.save(consultationFormRecord);
+            }
+        });
 
-        return new ResponseEntity<>(consultationFormRecord.getId(), HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

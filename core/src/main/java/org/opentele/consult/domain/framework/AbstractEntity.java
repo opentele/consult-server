@@ -28,7 +28,7 @@ public abstract class AbstractEntity {
     }
 
     public boolean isNew() {
-        return this.id == null;
+        return this.id == null || this.id == 0;
     }
 
     public AbstractEntity() {

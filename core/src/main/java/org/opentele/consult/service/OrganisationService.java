@@ -17,13 +17,13 @@ public class OrganisationService {
         this.organisationRepository = organisationRepository;
     }
 
-    public Organisation createOrg(String organisationName, User user, String formIoProjectId, Organisation.FormUsageType formUsageMode) {
+    public Organisation createOrg(String organisationName, User user, String formIoProjectId, Organisation.FormUsageType formUsageType) {
         Organisation organisation = new Organisation();
         organisation.setName(organisationName);
         organisation.setFormIoProjectId(formIoProjectId);
         organisation.setCreatedBy(user);
         organisation.setLastModifiedBy(user);
-        organisation.setFormUsageType(Objects.requireNonNullElse(formUsageMode, Organisation.FormUsageType.Native));
+        organisation.setFormUsageType(Objects.requireNonNullElse(formUsageType, Organisation.FormUsageType.Native));
         return organisationRepository.save(organisation);
     }
 }
