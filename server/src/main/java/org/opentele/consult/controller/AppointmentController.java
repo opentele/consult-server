@@ -13,6 +13,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @PreAuthorize("hasRole('User')")
@@ -20,6 +22,8 @@ public class AppointmentController extends BaseController {
     private final ConsultationRoomRepository consultationRoomRepository;
     private final ClientRepository clientRepository;
     private final AppointmentRepository appointmentRepository;
+
+    private static final String AppointmentBaseEndpoint = "/api/appointment";
 
     @Autowired
     public AppointmentController(ConsultationRoomRepository consultationRoomRepository, UserService userService, ClientRepository clientRepository, AppointmentRepository appointmentRepository, UserSession userSession) {
@@ -29,7 +33,7 @@ public class AppointmentController extends BaseController {
         this.appointmentRepository = appointmentRepository;
     }
 
-    @RequestMapping(value = "/api/appointment", method = {RequestMethod.PUT, RequestMethod.POST})
+    @RequestMapping(value = AppointmentBaseEndpoint, method = {RequestMethod.PUT, RequestMethod.POST})
     public AppointmentContract saveAppointment(@RequestBody AppointmentContract request, Principal principal) {
         Appointment appointment = new Appointment();
         appointment.setAppointmentProvider(getCurrentUser(principal));
@@ -49,5 +53,10 @@ public class AppointmentController extends BaseController {
             appointment = appointmentRepository.save(appointment);
         }
         return AppointmentContract.fromEntity(appointment);
+    }
+
+    @RequestMapping(value = AppointmentBaseEndpoint + "s", method = {RequestMethod.PUT, RequestMethod.POST})
+    public List<AppointmentContract> saveAppointments(@RequestBody List<AppointmentContract> requests, Principal principal) {
+        return  requests.stream().map(appointmentContract -> this.saveAppointment(appointmentContract, principal)).collect(Collectors.toList());
     }
 }

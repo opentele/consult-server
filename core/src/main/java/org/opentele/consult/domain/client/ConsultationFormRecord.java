@@ -1,5 +1,9 @@
 package org.opentele.consult.domain.client;
 
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
 import org.opentele.consult.domain.consultationRoom.ConsultationRoom;
 import org.opentele.consult.domain.framework.OrganisationalEntity;
 
@@ -7,11 +11,15 @@ import javax.persistence.*;
 
 @Table(name = "consultation_form_record")
 @Entity
+@TypeDefs({
+        @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
+})
 public class ConsultationFormRecord extends OrganisationalEntity {
     @Column(columnDefinition = "varchar(100) not null")
     private String formId;
 
-    @Column(columnDefinition = "varchar(100000) not null")
+    @Column(columnDefinition = "jsonb not null")
+    @Type(type = "jsonb")
     private String data;
 
     @ManyToOne(targetEntity = ConsultationRoom.class, fetch = FetchType.LAZY)
